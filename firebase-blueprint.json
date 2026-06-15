@@ -1,0 +1,222 @@
+{
+  "entities": {
+    "PastPaper": {
+      "title": "Past Paper",
+      "description": "Information about exam question papers and memos.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "subject": { "type": "string" },
+        "grade": { "type": "number", "enum": [8, 9, 10, 11, 12] },
+        "year": { "type": "number" },
+        "curriculum": { "type": "string", "enum": ["NSC", "IEB"] },
+        "paperNumber": { "type": "string", "enum": ["P1", "P2", "P3", "P4"] },
+        "type": { "type": "string", "enum": ["question", "memo"] },
+        "language": { "type": "string", "enum": ["English", "Afrikaans"] },
+        "fileUrl": { "type": "string" },
+        "fileSize": { "type": "number" },
+        "downloadCount": { "type": "number" },
+        "topics": { "type": "array", "items": { "type": "string" } },
+        "isVerified": { "type": "boolean" },
+        "uploadedBy": { "type": "string" },
+        "createdAt": { "type": "object" }
+      },
+      "required": ["id", "title", "subject", "grade", "year", "curriculum", "paperNumber", "type", "language", "fileUrl", "createdAt"]
+    },
+    "Resource": {
+      "title": "Study Resource",
+      "description": "User uploaded study notes and extra materials.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "subject": { "type": "string" },
+        "grade": { "type": "number", "enum": [8, 9, 10, 11, 12] },
+        "curriculum": { "type": "string", "enum": ["NSC", "IEB", "Both"] },
+        "fileType": { "type": "string", "enum": ["PDF", "PPT", "Image", "Doc", "Other"] },
+        "fileUrl": { "type": "string" },
+        "thumbnailUrl": { "type": "string" },
+        "fileSize": { "type": "number" },
+        "uploaderName": { "type": "string" },
+        "uploaderId": { "type": "string" },
+        "isGuest": { "type": "boolean" },
+        "downloadCount": { "type": "number" },
+        "likeCount": { "type": "number" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "isApproved": { "type": "boolean" },
+        "createdAt": { "type": "object" }
+      },
+      "required": ["id", "title", "subject", "grade", "fileUrl", "uploaderName", "createdAt"]
+    },
+    "DiscussionPost": {
+      "title": "Discussion Post",
+      "description": "A question or discussion thread.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "subject": { "type": "string" },
+        "grade": { "type": "number", "enum": [8, 9, 10, 11, 12] },
+        "curriculum": { "type": "string", "enum": ["NSC", "IEB", "Both"] },
+        "topic": { "type": "string" },
+        "content": { "type": "string" },
+        "authorId": { "type": "string" },
+        "authorName": { "type": "string" },
+        "isGuest": { "type": "boolean" },
+        "imageUrl": { "type": "string" },
+        "replyCount": { "type": "number" },
+        "likeCount": { "type": "number" },
+        "likedBy": { "type": "array", "items": { "type": "string" } },
+        "createdAt": { "type": "object" }
+      },
+      "required": ["id", "subject", "grade", "content", "authorName", "createdAt"]
+    },
+    "DiscussionReply": {
+      "title": "Discussion Reply",
+      "description": "A reply to a discussion post.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "postId": { "type": "string" },
+        "content": { "type": "string" },
+        "authorId": { "type": "string" },
+        "authorName": { "type": "string" },
+        "isGuest": { "type": "boolean" },
+        "createdAt": { "type": "object" }
+      },
+      "required": ["id", "postId", "content", "authorName", "createdAt"]
+    },
+    "VideoLesson": {
+      "title": "Video Lesson",
+      "description": "A educational video from YouTube.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "youtubeId": { "type": "string" },
+        "title": { "type": "string" },
+        "subject": { "type": "string" },
+        "grade": { "type": "number" },
+        "curriculum": { "type": "string" },
+        "topic": { "type": "string" },
+        "duration": { "type": "string" },
+        "channelName": { "type": "string" },
+        "channelId": { "type": "string" },
+        "isVerified": { "type": "boolean" },
+        "thumbnailUrl": { "type": "string" },
+        "playlistId": { "type": "string" },
+        "isShort": { "type": "boolean" },
+        "viewCount": { "type": "number" },
+        "createdAt": { "type": "object" }
+      },
+      "required": ["id", "youtubeId", "title", "subject", "createdAt"]
+    },
+    "StudyPack": {
+      "title": "Study Pack",
+      "description": "A collection of resources, videos, and papers.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "subject": { "type": "string" },
+        "grade": { "type": "number", "enum": [8, 9, 10, 11, 12] },
+        "curriculum": { "type": "string", "enum": ["NSC", "IEB", "Both"] },
+        "items": { "type": "array" },
+        "isPublic": { "type": "boolean" },
+        "creatorName": { "type": "string" },
+        "creatorId": { "type": "string" },
+        "enrollCount": { "type": "number" },
+        "thumbnailUrl": { "type": "string" },
+        "createdAt": { "type": "object" }
+      },
+      "required": ["id", "title", "subject", "grade", "creatorName", "creatorId", "createdAt"]
+    },
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Extended user information.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "displayName": { "type": "string" },
+        "phoneNumber": { "type": "string" },
+        "email": { "type": "string" },
+        "grade": { "type": "number" },
+        "curriculum": { "type": "string" },
+        "subjects": { "type": "array", "items": { "type": "string" } },
+        "tier": { "type": "string", "enum": ["free", "scholar", "pro", "elite", "master"] },
+        "uploadCount": { "type": "number" },
+        "downloadCount": { "type": "number" },
+        "createdAt": { "type": "object" }
+      },
+      "required": ["uid", "displayName", "createdAt"]
+    },
+    "AdminUser": {
+      "title": "Admin User",
+      "description": "Information about administrative users.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "role": { "type": "string", "enum": ["super_admin", "content_admin", "readonly_admin"] },
+        "isActive": { "type": "boolean" },
+        "lastActive": { "type": "object" },
+        "createdAt": { "type": "object" }
+      },
+      "required": ["uid", "email", "role", "isActive"]
+    },
+    "AuditLog": {
+      "title": "Audit Log",
+      "description": "Log of administrative actions.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "action": { "type": "string" },
+        "actorId": { "type": "string" },
+        "actorName": { "type": "string" },
+        "details": { "type": "string" },
+        "timestamp": { "type": "object" }
+      },
+      "required": ["action", "actorId", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/past-papers/{paperId}": {
+      "schema": "PastPaper",
+      "description": "Collection of past papers."
+    },
+    "/resources/{resourceId}": {
+      "schema": "Resource",
+      "description": "Collection of study resources."
+    },
+    "/discussions/{postId}": {
+      "schema": "DiscussionPost",
+      "description": "Collection of discussion posts."
+    },
+    "/discussions/{postId}/replies/{replyId}": {
+      "schema": "DiscussionReply",
+      "description": "Replies to discussion posts."
+    },
+    "/videos/{videoId}": {
+      "schema": "VideoLesson",
+      "description": "Collection of curated video lessons."
+    },
+    "/study-packs/{packId}": {
+      "schema": "StudyPack",
+      "description": "Collection of study packs."
+    },
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profiles and settings."
+    },
+    "/admins/{adminId}": {
+      "schema": "AdminUser",
+      "description": "Administrative users."
+    },
+    "/admin_audit_log/{logId}": {
+      "schema": "AuditLog",
+      "description": "Log of administrative actions."
+    }
+  }
+}

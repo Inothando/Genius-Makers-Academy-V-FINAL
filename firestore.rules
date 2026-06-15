@@ -1,0 +1,147 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // -------------------------------------------------------------------------
+    // ROLE-BASED ACCESS CONTROL HELPERS
+    // -------------------------------------------------------------------------
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function getAdminDoc() {
+      return get(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+    
+    function getAdminByEmailDoc() {
+      return get(/databases/$(database)/documents/admins/$(request.auth.token.email));
+    }
+    
+    function isSuperAdmin() {
+      return isSignedIn() && (
+        (request.auth.token.email in ['contact@salainnovationlabs.com', 'techinfinite.banking@gmail.com']) ||
+        (exists(/databases/$(database)/documents/admins/$(request.auth.uid)) && 
+         get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.role == 'super_admin' && 
+         get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.isActive == true) ||
+        (exists(/databases/$(database)/documents/admins/$(request.auth.token.email)) && 
+         get(/databases/$(database)/documents/admins/$(request.auth.token.email)).data.role == 'super_admin' && 
+         get(/databases/$(database)/documents/admins/$(request.auth.token.email)).data.isActive == true)
+      );
+    }
+    
+    function isContentAdmin() {
+      return isSignedIn() && (
+        (request.auth.token.email in ['contact@salainnovationlabs.com', 'techinfinite.banking@gmail.com']) ||
+        (getAdminDoc().data.role in ['super_admin', 'content_admin'] && getAdminDoc().data.isActive == true) ||
+        (getAdminByEmailDoc().data.role in ['super_admin', 'content_admin'] && getAdminByEmailDoc().data.isActive == true)
+      );
+    }
+    
+    function isAnyAdmin() {
+      return isSignedIn() && (
+        (request.auth.token.email in ['contact@salainnovationlabs.com', 'techinfinite.banking@gmail.com']) ||
+        (getAdminDoc().data.isActive == true) ||
+        (getAdminByEmailDoc().data.isActive == true)
+      );
+    }
+    
+    function hasPermission(perm) {
+      return isSignedIn() && (
+             ((getAdminDoc().data.isActive == true) && (getAdminDoc().data.permissions[perm] == true)) ||
+             ((getAdminByEmailDoc().data.isActive == true) && (getAdminByEmailDoc().data.permissions[perm] == true))
+      );
+    }
+
+    // -------------------------------------------------------------------------
+    // DEFAULT PERMISSIONS & SUPER ADMIN BYPASS
+    // -------------------------------------------------------------------------
+    match /{document=**} {
+      allow read, write: if isSuperAdmin();
+    }
+
+    // -------------------------------------------------------------------------
+    // COLLECTIONS
+    // -------------------------------------------------------------------------
+
+    // ADMINS COLLECTION — super admin only manages this
+    match /admins/{adminId} {
+      allow read: if isSuperAdmin() || isAnyAdmin() || (isSignedIn() && (resource.data.email == request.auth.token.email || adminId == request.auth.uid || adminId == request.auth.token.email));
+      allow write: if isSuperAdmin();
+      allow update: if isSuperAdmin() || (isSignedIn() && (adminId == request.auth.uid || adminId == request.auth.token.email) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['lastActive']));
+    }
+
+    // AUDIT LOG — any admin can create, none can edit/delete
+    match /admin_audit_log/{logId} {
+      allow read: if isAnyAdmin();
+      allow create: if isAnyAdmin();
+      allow update, delete: if false;
+    }
+
+    // PAST PAPERS — content admin can upload, super admin can delete
+    match /past-papers/{paperId} {
+      allow read: if true;
+      allow create: if true;
+      allow update: if true;
+      allow delete: if isSuperAdmin() || hasPermission('canDeleteContent');
+    }
+
+    // PAPERS — new collection from user request
+    match /papers/{paperId} {
+      allow read: if true;
+      allow create: if isSuperAdmin() || isContentAdmin() || hasPermission('canUploadPapers');
+      allow update: if true; // Allow any user to increment download counts on paper cards
+      allow delete: if isSuperAdmin() || hasPermission('canDeleteContent');
+    }
+
+    // RESOURCES — content admin can manage
+    match /resources/{resourceId} {
+      allow read: if true;
+      allow create: if true;
+      allow update: if hasPermission('canUploadResources') || 
+                      (isSignedIn() && request.auth.uid == resource.data.uploaderId) || 
+                      (isSignedIn() && request.resource.data.keys().hasOnly(['downloadCount','likeCount','likedBy']));
+      allow delete: if hasPermission('canDeleteContent') || (isSignedIn() && request.auth.uid == resource.data.uploaderId);
+    }
+
+    // DISCUSSIONS — content admin can moderate (delete)
+    match /discussions/{postId} {
+      allow read: if true;
+      allow create: if true;
+      allow update: if isSignedIn() && request.resource.data.keys().hasOnly(['replyCount','likeCount','likedBy']);
+      allow delete: if hasPermission('canModerateDiscussions') || (isSignedIn() && request.auth.uid == resource.data.authorId);
+      
+      match /replies/{replyId} {
+        allow read: if true;
+        allow create: if true;
+        allow delete: if hasPermission('canModerateDiscussions') || (isSignedIn() && request.auth.uid == resource.data.authorId);
+      }
+    }
+
+    // VIDEOS — content admin uploads, super admin deletes
+    match /videos/{videoId} {
+      allow read: if true;
+      allow create: if hasPermission('canAddVideos');
+      allow update: if hasPermission('canAddVideos');
+      allow delete: if hasPermission('canDeleteContent');
+    }
+
+    // STUDY PACKS
+    match /study-packs/{packId} {
+      allow read: if resource.data.isPublic == true || isAnyAdmin();
+      allow create: if hasPermission('canCreateStudyPacks') || isSignedIn();
+      allow update, delete: if hasPermission('canCreateStudyPacks') || (isSignedIn() && request.auth.uid == resource.data.creatorId);
+    }
+
+    // USERS — only super admin can view all users
+    match /users/{userId} {
+      allow read: if (isSignedIn() && request.auth.uid == userId) || isSuperAdmin();
+      allow write: if isSignedIn() && request.auth.uid == userId;
+    }
+
+    // PLATFORM SETTINGS — super admin only
+    match /settings/{settingId} {
+      allow read: if isAnyAdmin();
+      allow write: if isSuperAdmin();
+    }
+  }
+}

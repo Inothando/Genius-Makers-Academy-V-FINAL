@@ -1,0 +1,6 @@
+{
+  "name": "Genius Makers Academy",
+  "description": "South Africa's most powerful free study platform for Grade 8–12 learners. Access past papers, expert notes, and AI explanations for NSC and IEB curricula. Features a multi-role admin management system.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

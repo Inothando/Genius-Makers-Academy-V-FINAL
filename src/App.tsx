@@ -1,0 +1,68 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { LandingPage } from './pages/LandingPage';
+import { PlaceholderPage } from './pages/PlaceholderPage';
+import { PastPapersPage } from './pages/PastPapersPage';
+import { ResourcesPage } from './pages/ResourcesPage';
+import { DiscussionPage } from './pages/DiscussionPage';
+import { VideosPage } from './pages/VideosPage';
+import { StudyPacksPage } from './pages/StudyPacksPage';
+import { StudyPackDetailPage } from './pages/StudyPackDetailPage';
+import { SignInPage } from './pages/SignInPage';
+import { ProfilePage } from './pages/ProfilePage';
+import { PricingPage } from './pages/PricingPage';
+import { AdminOverviewPage } from './pages/admin/AdminOverviewPage';
+import { AdminPapersPage } from './pages/admin/AdminPapersPage';
+import { AdminResourcesPage } from './pages/admin/AdminResourcesPage';
+import { AdminVideosPage } from './pages/admin/AdminVideosPage';
+import { AdminDiscussionsPage } from './pages/admin/AdminDiscussionsPage';
+import { AdminUsersPage } from './pages/admin/AdminUsersPage';
+import { AdminStudyPacksPage } from './pages/admin/AdminStudyPacksPage';
+import { AddVideoPage } from './pages/admin/AddVideoPage';
+import { AdminLogin } from './pages/admin/AdminLogin';
+import { AdminLayout } from './components/admin/AdminLayout';
+import { AdminManagementPage } from './pages/admin/AdminManagementPage';
+import { AdminContentHub } from './pages/admin/AdminContentHub';
+import { AdminSettingsPage } from './pages/admin/AdminSettingsPage';
+import { AdminAuditLogPage } from './pages/admin/AdminAuditLogPage';
+import { InstallBanner } from './components/ui/InstallBanner';
+
+import { AuthProvider } from './contexts/AuthContext';
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/past-papers" element={<PastPapersPage />} />
+          <Route path="/resources" element={<ResourcesPage />} />
+          <Route path="/discussion" element={<DiscussionPage />} />
+          <Route path="/videos" element={<VideosPage />} />
+          <Route path="/study-packs" element={<StudyPacksPage />} />
+          <Route path="/study-packs/:id" element={<StudyPackDetailPage />} />
+          <Route path="/pricing" element={<PricingPage />} />
+          <Route path="/sign-in" element={<SignInPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          
+          {/* Admin Routes */}
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminOverviewPage />} />
+            <Route path="audit" element={<AdminAuditLogPage />} />
+            <Route path="content" element={<AdminContentHub />} />
+            <Route path="papers" element={<AdminPapersPage />} />
+            <Route path="resources" element={<AdminResourcesPage />} />
+            <Route path="videos" element={<AdminVideosPage />} />
+            <Route path="add-video" element={<AddVideoPage />} />
+            <Route path="discussions" element={<AdminDiscussionsPage />} />
+            <Route path="users" element={<AdminUsersPage />} />
+            <Route path="manage" element={<AdminManagementPage />} />
+            <Route path="study-packs" element={<AdminStudyPacksPage />} />
+            <Route path="settings" element={<AdminSettingsPage />} />
+          </Route>
+        </Routes>
+        <InstallBanner />
+      </Router>
+    </AuthProvider>
+  );
+}
