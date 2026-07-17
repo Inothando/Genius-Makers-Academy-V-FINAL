@@ -125,7 +125,7 @@ export function CreatePostModal({ isOpen, onClose, onSuccess }: CreatePostModalP
               >
                 <div className="text-center mb-8">
                   <h3 className="text-xl font-bold mb-2">How do you want to post?</h3>
-                  <p className="text-text-secondary">Choose your identity for this discussion thread.</p>
+                  <p className="text-lux-text">Choose your identity for this discussion thread.</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -138,14 +138,14 @@ export function CreatePostModal({ isOpen, onClose, onSuccess }: CreatePostModalP
                         : "border-border-subtle hover:border-primary/20"
                     )}
                   >
-                    <div className="w-12 h-12 rounded-2xl bg-surface border border-border-subtle flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                      <Globe size={24} className="text-text-tertiary" />
+                    <div className="w-12 h-12 rounded-2xl sm:rounded-3xl bg-surface border border-border-subtle flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                      <Globe size={24} className="text-lux-text" />
                     </div>
                     <div className="flex items-center justify-between mb-2">
                        <h4 className="font-bold text-lg">Post as Guest</h4>
-                       {formData.postAsGuest && <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center text-white"><Check size={12} /></div>}
+                       {formData.postAsGuest && <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center text-lux-text"><Check size={12} /></div>}
                     </div>
-                    <p className="text-sm text-text-secondary">Fastest way. No account needed. Totally anonymous.</p>
+                    <p className="text-sm text-lux-text">Fastest way. No account needed. Totally anonymous.</p>
                   </button>
 
                   <button
@@ -164,14 +164,14 @@ export function CreatePostModal({ isOpen, onClose, onSuccess }: CreatePostModalP
                         : "border-border-subtle hover:border-primary/20"
                     )}
                   >
-                    <div className="w-12 h-12 rounded-2xl bg-surface border border-border-subtle flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                      <Lock size={24} className="text-text-tertiary" />
+                    <div className="w-12 h-12 rounded-2xl sm:rounded-3xl bg-surface border border-border-subtle flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                      <Lock size={24} className="text-lux-text" />
                     </div>
                     <div className="flex items-center justify-between mb-2">
                        <h4 className="font-bold text-lg">As Member</h4>
-                       {!formData.postAsGuest && <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center text-white"><Check size={12} /></div>}
+                       {!formData.postAsGuest && <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center text-lux-text"><Check size={12} /></div>}
                     </div>
-                    <p className="text-sm text-text-secondary">Build your reputation. Track replies easily.</p>
+                    <p className="text-sm text-lux-text">Build your reputation. Track replies easily.</p>
                   </button>
                 </div>
 
@@ -184,7 +184,7 @@ export function CreatePostModal({ isOpen, onClose, onSuccess }: CreatePostModalP
                     <input 
                       type="text" 
                       placeholder="Your Display Name (e.g. MathsMaster24)"
-                      className="w-full bg-surface border border-border-subtle rounded-2xl px-6 py-4 outline-none focus:border-primary/30 transition-all font-medium"
+                      className="w-full bg-surface border border-border-subtle rounded-2xl sm:rounded-3xl px-6 py-4 outline-none focus:border-primary/30 transition-all font-medium"
                       value={formData.displayName}
                       onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
                     />
@@ -195,14 +195,14 @@ export function CreatePostModal({ isOpen, onClose, onSuccess }: CreatePostModalP
                   <Button 
                     variant="outline"
                     onClick={onClose}
-                    className="flex-1 h-14 rounded-2xl"
+                    className="flex-1 h-14 rounded-2xl sm:rounded-3xl"
                   >
                     Cancel
                   </Button>
                   <Button 
                     onClick={nextStep} 
                     disabled={formData.postAsGuest && !formData.displayName}
-                    className="flex-1 h-14 rounded-2xl"
+                    className="flex-1 h-14 rounded-2xl sm:rounded-3xl"
                   >
                     Continue <ArrowRight size={20} className="ml-2" />
                   </Button>
@@ -220,7 +220,7 @@ export function CreatePostModal({ isOpen, onClose, onSuccess }: CreatePostModalP
               >
                 <div className="grid grid-cols-2 gap-4">
                    <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-wider text-text-tertiary">Subject</label>
+                    <label className="text-xs font-bold uppercase tracking-wider text-lux-text">Subject</label>
                     <select 
                         className="w-full bg-surface border border-border-subtle rounded-xl px-4 py-3 outline-none focus:border-primary/30 transition-all font-medium appearance-none"
                         value={formData.subject}
@@ -233,21 +233,21 @@ export function CreatePostModal({ isOpen, onClose, onSuccess }: CreatePostModalP
                     </select>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-wider text-text-tertiary">Grade</label>
+                    <label className="text-xs font-bold uppercase tracking-wider text-lux-text">Grade</label>
                     <select 
                         className="w-full bg-surface border border-border-subtle rounded-xl px-4 py-3 outline-none focus:border-primary/30 transition-all font-medium appearance-none"
                         value={formData.grade}
                         onChange={(e) => setFormData({ ...formData, grade: parseInt(e.target.value) })}
                     >
                         <option value="12">Grade 12</option>
-                        <option value="11">Grade 11</option>
-                        <option value="10">Grade 10</option>
+                        
+                        
                     </select>
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                   <label className="text-xs font-bold uppercase tracking-wider text-text-tertiary">Topic / Headline</label>
+                   <label className="text-xs font-bold uppercase tracking-wider text-lux-text">Topic / Headline</label>
                    <input 
                       type="text" 
                       placeholder="e.g. Help with Functions or Periodic Table"
@@ -258,31 +258,31 @@ export function CreatePostModal({ isOpen, onClose, onSuccess }: CreatePostModalP
                 </div>
 
                 <div className="space-y-2">
-                   <label className="text-xs font-bold uppercase tracking-wider text-text-tertiary">Your Question</label>
+                   <label className="text-xs font-bold uppercase tracking-wider text-lux-text">Your Question</label>
                    <textarea 
                       rows={5}
                       placeholder="Explain what you're struggling with. Be clinical..."
-                      className="w-full bg-surface border border-border-subtle rounded-2xl p-6 outline-none focus:border-primary/30 transition-all font-medium resize-none shadow-inner"
+                      className="w-full bg-surface border border-border-subtle rounded-2xl sm:rounded-3xl p-6 outline-none focus:border-primary/30 transition-all font-medium resize-none shadow-inner"
                       value={formData.content}
                       onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                     />
                 </div>
 
                 <div className="flex gap-4 mt-8">
-                  <button onClick={prevStep} className="px-6 py-4 bg-surface rounded-2xl font-bold text-text-secondary hover:bg-border-subtle transition-colors flex items-center">
+                  <button onClick={prevStep} className="px-6 py-4 bg-surface rounded-2xl sm:rounded-3xl font-bold text-lux-text hover:bg-border-subtle transition-colors flex items-center">
                     <ArrowLeft size={20} className="mr-2" /> Back
                   </button>
                   <Button 
                     variant="outline"
                     onClick={onClose}
-                    className="px-6 h-14 rounded-2xl font-bold text-text-secondary"
+                    className="px-6 h-14 rounded-2xl sm:rounded-3xl font-bold text-lux-text"
                   >
                     Cancel
                   </Button>
                   <Button 
                     onClick={nextStep} 
                     disabled={!formData.topic || !formData.content}
-                    className="flex-1 h-14 rounded-2xl"
+                    className="flex-1 h-14 rounded-2xl sm:rounded-3xl"
                   >
                     Review <ArrowRight size={20} className="ml-2" />
                   </Button>
@@ -300,17 +300,17 @@ export function CreatePostModal({ isOpen, onClose, onSuccess }: CreatePostModalP
               >
                 <div className="p-6 bg-surface rounded-[32px] border border-dashed border-border-subtle">
                   <div className="flex items-center gap-3 mb-4">
-                     <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold">
+                     <div className="w-8 h-8 rounded-full bg-primary text-lux-text flex items-center justify-center text-xs font-bold">
                         {formData.postAsGuest ? formData.displayName?.[0] : auth.currentUser?.displayName?.[0]}
                      </div>
                      <div>
-                        <p className="text-xs font-bold uppercase tracking-widest text-text-tertiary">Previewing As</p>
+                        <p className="text-xs font-bold uppercase tracking-widest text-lux-text">Previewing As</p>
                         <p className="font-bold text-text-primary">{formData.postAsGuest ? formData.displayName : auth.currentUser?.displayName}</p>
                      </div>
                   </div>
                   
                   <h4 className="text-xl font-serif mb-2">{formData.topic}</h4>
-                  <p className="text-sm text-text-secondary line-clamp-3 mb-4">{formData.content}</p>
+                  <p className="text-sm text-lux-text line-clamp-3 mb-4">{formData.content}</p>
                   
                   <div className="flex gap-2">
                     <span className="px-2 py-1 bg-white rounded text-[10px] font-bold border border-border-subtle">{formData.subject}</span>
@@ -318,25 +318,25 @@ export function CreatePostModal({ isOpen, onClose, onSuccess }: CreatePostModalP
                   </div>
                 </div>
 
-                <div className="text-center p-4 bg-primary/5 rounded-2xl border border-primary/10">
-                  <p className="text-xs font-medium text-text-secondary">By posting, you agree to follow the GMA community guidelines. Keep it clinical and helpful! ✨</p>
+                <div className="text-center p-4 bg-primary/5 rounded-2xl sm:rounded-3xl border border-primary/10">
+                  <p className="text-xs font-medium text-lux-text">By posting, you agree to follow the GMA community guidelines. Keep it clinical and helpful! ✨</p>
                 </div>
 
                 <div className="flex gap-4">
-                  <button onClick={prevStep} className="px-6 py-4 bg-surface rounded-2xl font-bold text-text-secondary hover:bg-border-subtle transition-colors flex items-center">
+                  <button onClick={prevStep} className="px-6 py-4 bg-surface rounded-2xl sm:rounded-3xl font-bold text-lux-text hover:bg-border-subtle transition-colors flex items-center">
                     <ArrowLeft size={20} className="mr-2" /> Back
                   </button>
                   <Button 
                     variant="outline"
                     onClick={onClose}
-                    className="px-6 h-14 rounded-2xl font-bold text-text-secondary"
+                    className="px-6 h-14 rounded-2xl sm:rounded-3xl font-bold text-lux-text"
                   >
                     Cancel
                   </Button>
                   <Button 
                     onClick={handleSubmit} 
                     loading={submitting}
-                    className="flex-1 h-14 rounded-2xl shadow-xl shadow-primary/20"
+                    className="flex-1 h-14 rounded-2xl sm:rounded-3xl shadow-xl shadow-primary/20"
                   >
                     <Send size={20} className="mr-2" />
                     Post

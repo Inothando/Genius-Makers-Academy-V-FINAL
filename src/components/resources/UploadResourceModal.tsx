@@ -15,9 +15,7 @@ interface UploadResourceModalProps {
 }
 
 const SUBJECTS = [
-  'MATHEMATICS', 'PHYSICAL SCIENCES', 'LIFE SCIENCES', 'HISTORY', 'GEOGRAPHY',
-  'ACCOUNTING', 'BUSINESS STUDIES', 'ECONOMICS', 'ENGLISH HL', 'ENGLISH FAL',
-  'AFRIKAANS HT', 'AFRIKAANS EAT', 'MATHS LITERACY'
+  'MATHEMATICS', 'PHYSICAL SCIENCES'
 ];
 
   const GRADES = [12, 11, 10, 9, 8];
@@ -152,23 +150,23 @@ const SUBJECTS = [
         <div className="p-6 space-y-8">
           {/* File Selection */}
           <div className="space-y-4">
-            <label className="text-xs font-bold uppercase tracking-wider text-text-tertiary">1. Select File</label>
+            <label className="text-xs font-bold uppercase tracking-wider text-lux-text">1. Select File</label>
             {!file ? (
-              <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-border-subtle rounded-3xl cursor-pointer hover:border-primary/30 hover:bg-primary/5 transition-all group">
-                <Upload size={32} className="text-text-tertiary mb-2 group-hover:text-primary transition-colors" />
-                <span className="text-sm font-medium text-text-secondary">Click to upload or drag and drop</span>
-                <span className="text-xs text-text-tertiary mt-1">PDF, PPT, DOC, Image (Max 20MB)</span>
+              <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-border-subtle rounded-[2rem] sm:rounded-[3rem] cursor-pointer hover:border-primary/30 hover:bg-primary/5 transition-all group">
+                <Upload size={32} className="text-lux-text mb-2 group-hover:text-primary transition-colors" />
+                <span className="text-sm font-medium text-lux-text">Click to upload or drag and drop</span>
+                <span className="text-xs text-lux-text mt-1">PDF, PPT, DOC, Image (Max 20MB)</span>
                 <input type="file" className="hidden" onChange={onFileChange} accept=".pdf,.ppt,.pptx,.doc,.docx,.png,.jpg,.jpeg" />
               </label>
             ) : (
-              <div className="p-4 bg-surface rounded-2xl border border-border-subtle flex items-center justify-between">
+              <div className="p-4 bg-surface rounded-2xl sm:rounded-3xl border border-border-subtle flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-white border border-border-subtle flex items-center justify-center">
                     <FileIcon size={20} className="text-primary" />
                   </div>
                   <div>
                     <p className="text-sm font-semibold truncate max-w-[200px]">{file.name}</p>
-                    <p className="text-xs text-text-tertiary">{(file.size / (1024 * 1024)).toFixed(2)} MB</p>
+                    <p className="text-xs text-lux-text">{(file.size / (1024 * 1024)).toFixed(2)} MB</p>
                   </div>
                 </div>
                 <button onClick={() => setFile(null)} className="text-xs font-bold text-red-500 hover:underline">Remove</button>
@@ -178,7 +176,7 @@ const SUBJECTS = [
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
-              <label className="text-xs font-bold uppercase tracking-wider text-text-tertiary">2. Resource Details</label>
+              <label className="text-xs font-bold uppercase tracking-wider text-lux-text">2. Resource Details</label>
               <div className="space-y-4">
                 <input 
                   type="text" 
@@ -195,7 +193,7 @@ const SUBJECTS = [
                   {SUBJECTS.map(s => <option key={s} value={s}>{s}</option>)}
                 </select>
                 <div className="space-y-2">
-                  <span className="text-xs font-medium text-text-tertiary">Grade</span>
+                  <span className="text-xs font-medium text-lux-text">Grade</span>
                   <div className="flex gap-2">
                     {GRADES.map(g => (
                       <button
@@ -204,8 +202,8 @@ const SUBJECTS = [
                         className={cn(
                           "w-10 h-10 rounded-xl font-bold transition-all",
                           formData.grade === g 
-                            ? "bg-primary text-white" 
-                            : "bg-surface text-text-secondary border border-border-subtle hover:border-primary/30"
+                            ? "bg-primary text-lux-text" 
+                            : "bg-surface text-lux-text border border-border-subtle hover:border-primary/30"
                         )}
                       >
                         {g}
@@ -218,7 +216,7 @@ const SUBJECTS = [
 
             <div className="space-y-6">
                <div className="space-y-4">
-                <label className="text-xs font-bold uppercase tracking-wider text-text-tertiary">3. Curriculum</label>
+                <label className="text-xs font-bold uppercase tracking-wider text-lux-text">3. Curriculum</label>
                 <div className="flex p-1 bg-surface rounded-xl border border-border-subtle">
                   {['NSC'].map((c) => (
                     <button
@@ -228,7 +226,7 @@ const SUBJECTS = [
                         "flex-1 py-2 text-xs font-bold rounded-lg transition-all",
                         formData.curriculum === c 
                           ? "bg-white text-primary shadow-sm" 
-                          : "text-text-tertiary hover:text-text-secondary"
+                          : "text-lux-text hover:text-lux-text"
                       )}
                     >
                       {c}
@@ -238,7 +236,7 @@ const SUBJECTS = [
               </div>
 
                <div className="space-y-4">
-                <label className="text-xs font-bold uppercase tracking-wider text-text-tertiary">4. Description & Tags</label>
+                <label className="text-xs font-bold uppercase tracking-wider text-lux-text">4. Description & Tags</label>
                 <textarea 
                   placeholder="Explain what's inside... (optional)"
                   className="w-full bg-surface border border-border-subtle rounded-xl px-4 py-3 outline-none focus:border-primary/30 transition-all font-medium resize-none"
@@ -257,10 +255,10 @@ const SUBJECTS = [
             </div>
           </div>
 
-          <div className="p-6 bg-surface rounded-3xl border border-border-subtle space-y-4">
+          <div className="p-6 bg-surface rounded-[2rem] sm:rounded-[3rem] border border-border-subtle space-y-4">
              <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <User size={18} className="text-text-secondary" />
+                <User size={18} className="text-lux-text" />
                 <span className="font-semibold">Identity</span>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
@@ -270,8 +268,8 @@ const SUBJECTS = [
                   checked={formData.postAsGuest}
                   onChange={() => setFormData({ ...formData, postAsGuest: !formData.postAsGuest })}
                 />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                <span className="ml-3 text-sm font-medium text-text-secondary">Post as Guest</span>
+                <div className="w-11 h-6 bg-lux-surface00 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-lux-green-950 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-lux-border after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                <span className="ml-3 text-sm font-medium text-lux-text">Post as Guest</span>
               </label>
             </div>
 
@@ -299,7 +297,7 @@ const SUBJECTS = [
                 </div>
                 <div>
                   <p className="text-sm font-bold">{auth.currentUser?.displayName || 'Signed In Member'}</p>
-                  <p className="text-xs text-text-tertiary">Verified Contributor</p>
+                  <p className="text-xs text-lux-text">Verified Contributor</p>
                 </div>
               </div>
             )}
@@ -310,7 +308,7 @@ const SUBJECTS = [
               <Button 
                 variant="outline" 
                 onClick={onClose}
-                className="flex-1 h-14 text-lg rounded-2xl"
+                className="flex-1 h-14 text-lg rounded-2xl sm:rounded-3xl"
               >
                 Cancel
               </Button>
@@ -333,7 +331,7 @@ const SUBJECTS = [
               <Button 
                 onClick={handleUpload}
                 disabled={!file || !formData.title || (formData.postAsGuest && !formData.displayName)}
-                className="flex-[2] h-14 text-lg rounded-2xl shadow-lg shadow-primary/20"
+                className="flex-[2] h-14 text-lg rounded-2xl sm:rounded-3xl shadow-lg shadow-primary/20"
               >
                 <Sparkles size={20} className="mr-2" />
                 Upload Resource

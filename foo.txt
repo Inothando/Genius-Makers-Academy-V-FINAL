@@ -1,0 +1,33 @@
+        </div>
+      </div>
+
+      {/* Actions and Stats Footer */}
+      <div className="mt-auto space-y-3.5">
+        <div className="flex gap-3">
+          <Button 
+            className="flex-1 font-sans font-semibold text-xs py-2 h-10 border-gray-250 hover:border-[var(--color-lux-green-500)] hover:text-[var(--color-lux-green-500)]" 
+            variant="outline" 
+            onClick={() => onView(currentPaper)}
+          >
+            <Eye size={15} className="mr-1.5" />
+            View Premium
+          </Button>
+          <Button 
+            className="flex-1 font-sans font-semibold text-xs py-2 h-10 bg-[var(--color-lux-green-500)] hover:bg-[var(--color-lux-green-800)]" 
+            onClick={() => onDownload(currentPaper)}
+            disabled={isDownloading}
+          >
+            <Download size={15} className="mr-1.5" />
+            {isDownloading ? 'Downloading...' : 'Download'}
+          </Button>
+        </div>
+        <div className="flex items-center justify-between text-[11px] text-lux-text font-sans font-semibold">
+          <span>Format: Document (PDF)</span>
+          <span className="bg-lux-surface0 px-2 py-0.5 border border-lux-border rounded text-lux-text">
+            {currentPaper.downloadCount || 0} reads & downloads
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}

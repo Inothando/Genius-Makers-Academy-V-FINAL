@@ -14,20 +14,30 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID || firebaseAppletConfig.appId,
 };
 
-// Initialize Firebase
-const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
-const databaseId = import.meta.env.VITE_FIREBASE_DATABASE_ID || firebaseAppletConfig.firestoreDatabaseId;
+// Initialize Firebase only if we have a valid config
+let app;
+let db: any;
+let auth: any;
+let storage: any;
+let defaultStorage: any;
 
-// Initialize Firestore with specific database ID and experimental force long polling for stability in preview env
-const db = initializeFirestore(app, {
-  experimentalForceLongPolling: true,
-}, databaseId || '(default)');
-const auth = getAuth(app);
-const storage = getStorage(app, "gs://genius-makers-academy");
-const defaultStorage = getStorage(app);
+try {
+  app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+  const databaseId = import.meta.env.VITE_FIREBASE_DATABASE_ID || firebaseAppletConfig.firestoreDatabaseId;
 
-console.log('Firebase initialized with Project ID:', firebaseConfig.projectId);
-console.log('Firestore Database ID:', databaseId);
+  // Initialize Firestore with specific database ID and experimental force long polling for stability in preview env
+  db = initializeFirestore(app, {
+    experimentalForceLongPolling: true,
+  }, databaseId || '(default)');
+  auth = getAuth(app);
+  storage = getStorage(app);
+  defaultStorage = getStorage(app);
+
+  console.log('Firebase initialized with Project ID:', firebaseConfig.projectId);
+  console.log('Firestore Database ID:', databaseId);
+} catch (e: any) {
+  console.error("Firebase initialization failed:", e.message);
+}
 
 // Removed testConnection to prevent false positive offline console errors from the SDK.
 export { app, db, auth, storage, defaultStorage };

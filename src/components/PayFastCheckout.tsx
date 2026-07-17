@@ -67,7 +67,7 @@ export function PayFastCheckout({
       <button
         onClick={handleCheckout}
         disabled={loading}
-        className={`px-6 py-3 bg-[#1D9E75] hover:bg-[#168a65] text-white font-medium rounded-xl transition-all duration-200 flex items-center justify-center gap-2 ${className} disabled:opacity-70 disabled:cursor-not-allowed`}
+        className={`px-6 py-3 bg-[var(--color-lux-green-500)] hover:bg-[var(--color-lux-green-800)] text-lux-text font-medium rounded-xl transition-all duration-200 flex items-center justify-center gap-2 ${className} disabled:opacity-70 disabled:cursor-not-allowed`}
       >
         {loading ? (
           <>

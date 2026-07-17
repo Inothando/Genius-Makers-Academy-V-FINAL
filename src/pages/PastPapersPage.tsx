@@ -33,23 +33,14 @@ import { useAuth } from '../contexts/AuthContext';
 import { ref, listAll, getDownloadURL } from 'firebase/storage';
 import { collection, getDocs, addDoc, serverTimestamp, writeBatch, doc } from 'firebase/firestore';
 import { db, storage, defaultStorage } from '../lib/firebase';
+import { ExamCountdownWidget } from '../components/ExamCountdownWidget';
 
 const SUBJECT_OPTIONS = [
   'Mathematics',
-  'Physical Sciences',
-  'Life Sciences',
-  'Mathematical Literacy',
-  'Accounting',
-  'Business Studies',
-  'Economics',
-  'History',
-  'Geography',
-  'English Home Language',
-  'English First Additional Language',
-  'Afrikaans Huistaal'
+  'Physical Sciences'
 ];
 
-const GRADE_OPTIONS = ['12', '11', '10', '9', '8'];
+const GRADE_OPTIONS = ['12'];
 const YEAR_OPTIONS = Array.from({ length: 12 }, (_, i) => (2025 - i).toString());
 
 const SESSION_OPTIONS = [
@@ -577,16 +568,31 @@ export function PastPapersPage() {
   const [questionLoading, setQuestionLoading] = useState(true);
   const [memoLoading, setMemoLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
+  const [dismissedCountdown, setDismissedCountdown] = useState(false);
+  const { user } = useAuth();
 
   useEffect(() => {
+    let timer: NodeJS.Timeout;
     if (viewPaper) {
       setActiveDocType(viewPaper.type === 'memo' ? 'memo' : 'question');
       setQuestionLoading(true);
       setMemoLoading(true);
-    }
-  }, [viewPaper]);
 
-  const { user } = useAuth();
+      timer = setTimeout(() => {
+        if (user) {
+          fetch('/api/activity/record', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ uid: user.uid, action: 'view_paper' })
+          }).catch(console.error);
+        }
+      }, 30000);
+    }
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [viewPaper, user]);
+
   const BOOTSTRAP_ADMIN_EMAILS = ['techinfinite.banking@gmail.com', 'contact@salainnovationlabs.com'];
   const isAdmin = !!(user && user.email && BOOTSTRAP_ADMIN_EMAILS.includes(user.email));
 
@@ -697,7 +703,7 @@ export function PastPapersPage() {
         }
       };
 
-      await crawlWithStorage(storage, "genius-makers-academy bucket");
+      await crawlWithStorage(storage, "picshare-vdg8u bucket");
       await crawlWithStorage(defaultStorage, "default bucket");
       
       addLog(`Scan finished. Discovered ${discoveredFiles.length} physical file assets in Firebase Storage.`);
@@ -913,89 +919,69 @@ export function PastPapersPage() {
     <div className="min-h-screen bg-lux-bg flex flex-col font-sans">
       <Navbar />
 
-      {/* Admin Quick Sync Banner */}
-      {isAdmin && (
-        <div className="bg-lux-green-900/5 border-b border-lux-green-900/10 py-4 mt-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-lux-surface text-lux-green-950 rounded-xl border border-lux-border">
-                <Database size={20} className="animate-bounce" />
-              </div>
-              <div>
-                <h4 className="text-sm font-bold text-lux-green-950">Administrator Dashboard Synchronizer Detected</h4>
-                <p className="text-xs text-lux-muted font-medium">Reconcile past papers inside the Firestore DB directly from Storage! Currently website tracks <strong className="text-lux-green-900">{papers.length}</strong> items.</p>
-              </div>
-            </div>
-            <Button
-              onClick={() => {
-                setShowSyncModal(true);
-                setSyncStatus('idle');
-                setSyncLogs([]);
-              }}
-              className="bg-lux-green-950 hover:bg-lux-green-900 text-lux-gold-light font-extrabold text-xs shadow-sm cursor-pointer w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl"
-            >
-              <Database size={14} /> Sync Storage Vault
-            </Button>
-          </div>
-        </div>
-      )}
-
       {/* Slim Header Section */}
-      <div className="bg-lux-green-950 border-b border-lux-gold/20 pt-24 pb-8 mt-16 md:mt-0 shadow-xl relative z-10 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] mix-blend-overlay"></div>
-        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-lux-gold/10 blur-[100px] rounded-full translate-x-1/3 -translate-y-1/2 pointer-events-none" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row md:items-end justify-between gap-4 relative z-10">
-          <div>
-            <div className="inline-flex items-center gap-2 mb-3">
-              <span className="w-8 h-[1px] bg-lux-gold"></span>
-              <span className="text-[10px] font-bold uppercase tracking-widest text-lux-gold">Academic Library</span>
+      <div className="relative pt-32 pb-12 overflow-hidden bg-lux-bg">
+        <div className="absolute top-0 right-0 w-[60%] h-[70%] -z-0" style={{ background: 'radial-gradient(circle at 80% 20%, rgba(38, 122, 74, 0.08) 0%, transparent 60%)' }} />
+        <div className="absolute bottom-0 left-0 w-[50%] h-[50%] -z-0" style={{ background: 'radial-gradient(circle at 20% 80%, rgba(10, 38, 22, 0.1) 0%, transparent 60%)' }} />
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row md:items-end justify-between gap-6 relative z-10">
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center gap-3 mb-4">
+              <span className="w-12 h-[2px] bg-lux-green-500 rounded-full"></span>
+              <span className="text-[11px] font-black uppercase tracking-[0.2em] text-lux-green-500">Academic Library</span>
             </div>
-            <h1 className="text-4xl font-serif font-medium text-lux-surface tracking-tight">
+            <h1 className="text-4xl md:text-5xl font-serif font-medium text-lux-text tracking-tight mb-4">
               The Past Papers Vault
             </h1>
-            <p className="text-sm text-lux-surface/70 mt-2 font-light tracking-wide max-w-lg">A meticulously curated archive of official NSC examination papers, memoranda, and study resources.</p>
+            <p className="text-base md:text-lg text-lux-text/80 font-light tracking-wide leading-relaxed">
+              A meticulously curated archive of official NSC examination papers, memoranda, and study resources.
+            </p>
           </div>
-          <div className="flex items-center gap-2 text-[10px] uppercase font-bold tracking-widest text-lux-gold bg-lux-green-900 border border-lux-gold/30 px-4 py-2.5 rounded-lg shadow-sm self-start md:self-auto backdrop-blur-sm">
-            <BookOpen size={14} className="text-lux-gold" />
-            {loading ? 'Analyzing Archive...' : `${papers.length} Verified Resources`}
+          
+          <div className="flex items-center gap-2.5 text-[11px] uppercase font-bold tracking-widest text-lux-text bg-lux-surface/60 border border-white/20 dark:border-white/10 px-5 py-3 rounded-2xl shadow-xl self-start md:self-auto backdrop-blur-xl ring-1 ring-black/5 dark:ring-white/5 transition-all">
+            <div className="bg-lux-green-500/10 p-1.5 rounded-lg">
+              <BookOpen size={16} className="text-lux-green-500" />
+            </div>
+            <span className="text-lux-text/90">
+              {loading ? 'Analyzing Archive...' : `${papers.length} Verified Resources`}
+            </span>
           </div>
         </div>
       </div>
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col gap-8 bg-[#1e4431] relative rounded-[2.5rem] border border-lux-gold/30 shadow-2xl my-8">
-        <div className="absolute inset-0 overflow-hidden rounded-[2.5rem] pointer-events-none">
-          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.05] mix-blend-overlay"></div>
-          <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-lux-gold/20 blur-[150px] rounded-full translate-x-1/3 -translate-y-1/2 pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-lux-gold/15 blur-[120px] rounded-full -translate-x-1/3 translate-y-1/3 pointer-events-none" />
-        </div>
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 flex flex-col gap-8 relative z-10">
         
-        <div className="relative z-10 flex flex-col gap-6">
-        {/* Compact Integrated Bento Filtration Console */}
-        <div className="bg-lux-surface border border-lux-border rounded-[1.5rem] p-3 md:p-4 shadow-lux-sm flex flex-col gap-3 relative overflow-hidden backdrop-blur-md sticky top-24 z-50">
-          {/* Subtle responsive background graphics */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-slate-100 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-20 -left-20 w-50 h-50 bg-slate-50 rounded-full blur-2xl pointer-events-none" />
+        
+        {filters.subject !== 'All' && !dismissedCountdown && (
+           <ExamCountdownWidget 
+              subject={filters.subject} 
+              onDismiss={() => setDismissedCountdown(true)} 
+           />
+        )}
+
+        {/* Floating Glass Filtration Console */}
+        <div className="bg-white/40 dark:bg-black/40 border border-white/50 dark:border-white/20 rounded-2xl p-2 md:p-3 shadow-[0_8px_32px_0_rgba(0,0,0,0.15)] flex flex-col gap-2 relative overflow-hidden backdrop-blur-[60px] backdrop-saturate-[2.0] sticky top-24 z-50 transition-all duration-300">
 
           {/* Top Row: Compact Search & Active Stats/Actions */}
-          <div className={`flex flex-col md:flex-row md:items-center justify-between gap-3 ${showFilters ? 'pb-3 border-b border-slate-100' : ''}`}>
+          <div className={`flex flex-col md:flex-row md:items-center justify-between gap-2 relative z-10 ${showFilters ? 'pb-2 border-b border-white/10 dark:border-white/5' : ''}`}>
             {/* Left: Compact Title & Input */}
-            <div className="flex-1 flex flex-col sm:flex-row gap-3 sm:items-center">
+            <div className="flex-1 flex flex-col sm:flex-row gap-2 sm:items-center">
               <button 
                 onClick={() => setShowFilters(!showFilters)}
-                className="flex items-center justify-center sm:justify-start gap-1.5 text-slate-800 bg-slate-100 hover:bg-slate-200 px-4 py-2 sm:px-3 sm:py-1.5 rounded-xl cursor-pointer transition-colors shadow-sm border border-slate-200/50 shrink-0"
+                className="flex items-center justify-center sm:justify-start gap-1.5 text-lux-text bg-lux-surface/40 hover:bg-lux-surface/60 backdrop-blur-md px-3 py-1.5 sm:px-3 sm:py-2 rounded-xl cursor-pointer transition-all shadow-sm border border-white/20 dark:border-white/10 shrink-0"
                 title={showFilters ? "Hide Filters" : "Show Filters"}
               >
-                <SlidersHorizontal size={13} className={showFilters ? "text-lux-gold" : ""} />
+                <SlidersHorizontal size={14} className={showFilters ? "text-lux-green-500" : "text-lux-text/80"} />
                 <span className="text-[10px] font-extrabold uppercase tracking-widest">{showFilters ? "Hide Filters" : "Filters"}</span>
               </button>
               
               <div className="relative group flex-1 max-w-sm">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-slate-900 transition-colors" size={14} />
+                <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 text-lux-text/60 group-focus-within:text-lux-green-500 transition-colors" size={14} />
                 <input
                   type="text"
                   placeholder="Search by topic, keyword, or year..."
-                  className="w-full bg-lux-bg border border-lux-border/50 focus:border-lux-gold focus:bg-lux-surface focus:ring-1 focus:ring-lux-gold/30 rounded-xl py-2 pl-9 pr-3 text-[11px] uppercase tracking-widest font-bold outline-none transition-all placeholder:text-lux-muted placeholder:normal-case placeholder:tracking-normal placeholder:font-medium text-lux-green-950 shadow-inner"
+                  className="w-full bg-lux-surface/40 backdrop-blur-md border border-white/20 dark:border-white/10 focus:border-lux-green-500 focus:bg-lux-surface/60 focus:ring-1 focus:ring-lux-green-500/30 rounded-xl py-1.5 pl-8 pr-3 text-[10px] uppercase tracking-widest font-bold outline-none transition-all placeholder:text-lux-text/50 placeholder:normal-case placeholder:tracking-normal placeholder:font-medium text-lux-text shadow-inner"
                   value={filters.search}
                   onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
                 />
@@ -1003,11 +989,11 @@ export function PastPapersPage() {
             </div>
 
             {/* Right: DB Index Count & Reset */}
-            <div className="flex items-center justify-between md:justify-end gap-3 shrink-0">
+            <div className="flex items-center justify-between md:justify-end gap-4 shrink-0">
               <div className="text-left md:text-right hidden md:block">
-                <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 block">Total Volume</span>
-                <span className="flex items-center md:justify-end gap-1 text-[11px] font-bold text-slate-800 mt-0.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-slate-800 animate-ping" />
+                <span className="text-[9px] font-black uppercase tracking-widest text-lux-text/60 block mb-0.5">Total Volume</span>
+                <span className="flex items-center md:justify-end gap-1.5 text-[11px] font-bold text-lux-text bg-lux-surface/40 backdrop-blur-md border border-white/10 dark:border-white/5 px-2.5 py-1 rounded-lg shadow-inner">
+                  <span className="h-1.5 w-1.5 rounded-full bg-lux-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
                   {loading ? 'Analyzing...' : `${papers.length} files`}
                 </span>
               </div>
@@ -1016,9 +1002,9 @@ export function PastPapersPage() {
                 <button
                   type="button"
                   onClick={handleResetFilters}
-                  className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-xl text-[10px] font-bold text-slate-800 transition-all flex items-center gap-1 cursor-pointer shadow-sm"
+                  className="px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 hover:border-red-500/30 rounded-xl text-[10px] font-bold text-red-500 transition-all flex items-center gap-1.5 cursor-pointer shadow-sm backdrop-blur-md"
                 >
-                  <RefreshCw size={10} className="animate-spin" style={{ animationDuration: '6s' }} />
+                  <RefreshCw size={11} className="animate-spin" style={{ animationDuration: '4s' }} />
                   Clear ({activeFiltersCount})
                 </button>
               )}
@@ -1026,141 +1012,138 @@ export function PastPapersPage() {
           </div>
 
           {showFilters && (
-            <div className="animate-in slide-in-from-top-2 fade-in duration-200 flex flex-col gap-3">
+            <div className="animate-in slide-in-from-top-2 fade-in duration-300 flex flex-col gap-2 relative z-10">
               {/* Grid Selection Filters: Grade, Subject, Term, Year */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
-            {/* Grade Level */}
-            <div className="space-y-1">
-              <label className="text-[9px] font-bold uppercase tracking-wider text-gray-400 block px-0.5">Grade Level</label>
-              <div className="relative">
-                <SlidersHorizontal className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={11} />
-                <select
-                  value={filters.grade}
-                  onChange={(e) => setFilters(prev => ({ ...prev, grade: e.target.value }))}
-                  className="w-full bg-lux-bg border border-lux-border/50 focus:border-lux-gold focus:bg-lux-surface rounded-lg py-2 pl-7 pr-6 text-[10px] uppercase font-bold tracking-widest text-lux-green-950 outline-none cursor-pointer appearance-none transition-all shadow-inner"
-                >
-                  <option value="All">All Grades (8–12)</option>
-                  {GRADE_OPTIONS.map(g => (
-                    <option key={g} value={g}>Grade {g}</option>
-                  ))}
-                </select>
-                <div className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 text-[9px]">▼</div>
-              </div>
-            </div>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
+                {/* Grade Level */}
+                <div className="space-y-1.5">
+                  <label className="text-[9px] font-bold uppercase tracking-wider text-lux-text/70 block px-1">Grade Level</label>
+                  <div className="relative">
+                    <SlidersHorizontal className="absolute left-2 top-1/2 -translate-y-1/2 text-lux-text/60 pointer-events-none" size={12} />
+                    <select
+                      value={filters.grade}
+                      onChange={(e) => setFilters(prev => ({ ...prev, grade: e.target.value }))}
+                      className="w-full bg-lux-surface/40 backdrop-blur-md border border-white/20 dark:border-white/10 focus:border-lux-green-500 focus:bg-lux-surface/60 rounded-lg py-1.5 pl-7 pr-6 text-[10px] uppercase font-bold tracking-widest text-lux-text outline-none cursor-pointer appearance-none transition-all shadow-inner"
+                    >
+                      <option value="All">Grade 12 Only</option>
+                      {GRADE_OPTIONS.map(g => (
+                        <option key={g} value={g}>Grade {g}</option>
+                      ))}
+                    </select>
+                    <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-lux-text/50 text-[9px]">▼</div>
+                  </div>
+                </div>
 
-            {/* Subject Area */}
-            <div className="space-y-1">
-              <label className="text-[9px] font-bold uppercase tracking-wider text-gray-400 block px-0.5">Subject Area</label>
-              <div className="relative">
-                <BookOpen className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={11} />
-                <select
-                  value={filters.subject}
-                  onChange={(e) => setFilters(prev => ({ ...prev, subject: e.target.value }))}
-                  className="w-full bg-lux-bg border border-lux-border/50 focus:border-lux-gold focus:bg-lux-surface rounded-lg py-2 pl-7 pr-6 text-[10px] uppercase font-bold tracking-widest text-lux-green-950 outline-none cursor-pointer appearance-none transition-all shadow-inner"
-                >
-                  <option value="All">All Subjects</option>
-                  {SUBJECT_OPTIONS.map(s => (
-                    <option key={s} value={s}>{s}</option>
-                  ))}
-                </select>
-                <div className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 text-[9px]">▼</div>
-              </div>
-            </div>
+                {/* Subject Area */}
+                <div className="space-y-1.5">
+                  <label className="text-[9px] font-bold uppercase tracking-wider text-lux-text/70 block px-1">Subject Area</label>
+                  <div className="relative">
+                    <BookOpen className="absolute left-2 top-1/2 -translate-y-1/2 text-lux-text/60 pointer-events-none" size={12} />
+                    <select
+                      value={filters.subject}
+                      onChange={(e) => setFilters(prev => ({ ...prev, subject: e.target.value }))}
+                      className="w-full bg-lux-surface/40 backdrop-blur-md border border-white/20 dark:border-white/10 focus:border-lux-green-500 focus:bg-lux-surface/60 rounded-lg py-1.5 pl-7 pr-6 text-[10px] uppercase font-bold tracking-widest text-lux-text outline-none cursor-pointer appearance-none transition-all shadow-inner"
+                    >
+                      <option value="All">All Subjects</option>
+                      {SUBJECT_OPTIONS.map(s => (
+                        <option key={s} value={s}>{s}</option>
+                      ))}
+                    </select>
+                    <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-lux-text/50 text-[9px]">▼</div>
+                  </div>
+                </div>
 
-            {/* Term/Session */}
-            <div className="space-y-1">
-              <label className="text-[9px] font-bold uppercase tracking-wider text-gray-400 block px-0.5">Exam Session</label>
-              <div className="relative">
-                <ClipboardList className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={11} />
-                <select
-                  value={filters.session}
-                  onChange={(e) => setFilters(prev => ({ ...prev, session: e.target.value }))}
-                  className="w-full bg-lux-bg border border-lux-border/50 focus:border-lux-gold focus:bg-lux-surface rounded-lg py-2 pl-7 pr-6 text-[10px] uppercase font-bold tracking-widest text-lux-green-950 outline-none cursor-pointer appearance-none transition-all shadow-inner"
-                >
-                  <option value="All">All Sessions</option>
-                  {SESSION_OPTIONS.map(s => (
-                    <option key={s.value} value={s.value}>{s.label}</option>
-                  ))}
-                </select>
-                <div className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 text-[9px]">▼</div>
-              </div>
-            </div>
+                {/* Term/Session */}
+                <div className="space-y-1.5">
+                  <label className="text-[9px] font-bold uppercase tracking-wider text-lux-text/70 block px-1">Exam Session</label>
+                  <div className="relative">
+                    <ClipboardList className="absolute left-2 top-1/2 -translate-y-1/2 text-lux-text/60 pointer-events-none" size={12} />
+                    <select
+                      value={filters.session}
+                      onChange={(e) => setFilters(prev => ({ ...prev, session: e.target.value }))}
+                      className="w-full bg-lux-surface/40 backdrop-blur-md border border-white/20 dark:border-white/10 focus:border-lux-green-500 focus:bg-lux-surface/60 rounded-lg py-1.5 pl-7 pr-6 text-[10px] uppercase font-bold tracking-widest text-lux-text outline-none cursor-pointer appearance-none transition-all shadow-inner"
+                    >
+                      <option value="All">All Sessions</option>
+                      {SESSION_OPTIONS.map(s => (
+                        <option key={s.value} value={s.value}>{s.label}</option>
+                      ))}
+                    </select>
+                    <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-lux-text/50 text-[9px]">▼</div>
+                  </div>
+                </div>
 
-            {/* Publication Year */}
-            <div className="space-y-1">
-              <label className="text-[9px] font-bold uppercase tracking-wider text-gray-400 block px-0.5">Publication Year</label>
-              <div className="relative">
-                <Calendar className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={11} />
-                <select
-                  value={filters.year}
-                  onChange={(e) => setFilters(prev => ({ ...prev, year: e.target.value }))}
-                  className="w-full bg-lux-bg border border-lux-border/50 focus:border-lux-gold focus:bg-lux-surface rounded-lg py-2 pl-7 pr-6 text-[10px] uppercase font-bold tracking-widest text-lux-green-950 outline-none cursor-pointer appearance-none transition-all shadow-inner"
-                >
-                  <option value="All">All Years</option>
-                  {YEAR_OPTIONS.map(y => (
-                    <option key={y} value={y}>{y}</option>
-                  ))}
-                </select>
-                <div className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 text-[9px]">▼</div>
+                {/* Publication Year */}
+                <div className="space-y-1.5">
+                  <label className="text-[9px] font-bold uppercase tracking-wider text-lux-text/70 block px-1">Publication Year</label>
+                  <div className="relative">
+                    <Calendar className="absolute left-2 top-1/2 -translate-y-1/2 text-lux-text/60 pointer-events-none" size={12} />
+                    <select
+                      value={filters.year}
+                      onChange={(e) => setFilters(prev => ({ ...prev, year: e.target.value }))}
+                      className="w-full bg-lux-surface/40 backdrop-blur-md border border-white/20 dark:border-white/10 focus:border-lux-green-500 focus:bg-lux-surface/60 rounded-lg py-1.5 pl-7 pr-6 text-[10px] uppercase font-bold tracking-widest text-lux-text outline-none cursor-pointer appearance-none transition-all shadow-inner"
+                    >
+                      <option value="All">All Years</option>
+                      {YEAR_OPTIONS.map(y => (
+                        <option key={y} value={y}>{y}</option>
+                      ))}
+                    </select>
+                    <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-lux-text/50 text-[9px]">▼</div>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
 
-          {/* Integrated Document Categories & Quick Subject Filters */}
-          <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 pt-3.5 border-t border-gray-100/80">
-            {/* Category selection */}
-            <div className="flex items-center gap-2">
-              <span className="text-[9px] font-black uppercase tracking-wider text-gray-400 shrink-0">Doc Category</span>
-              <div className="bg-gray-100 p-0.5 rounded-lg flex items-center border border-gray-200 shadow-xs">
-                {[
-                  { val: 'All', label: 'All Docs' },
-                  { val: 'question', label: 'Papers' },
-                  { val: 'memo', label: 'Memos' },
-                ].map(t => (
-                  <button
-                    key={t.val}
-                    type="button"
-                    onClick={() => setFilters(prev => ({ ...prev, type: t.val }))}
-                    className={`px-3 py-1 text-[10px] font-bold uppercase tracking-wide rounded-md transition-all cursor-pointer leading-none ${
-                      filters.type === t.val
-                        ? 'bg-slate-900 text-white shadow-xs'
-                        : 'text-slate-500 hover:text-slate-800'
-                    }`}
-                  >
-                    {t.label}
-                  </button>
-                ))}
+              {/* Integrated Document Categories & Quick Subject Filters */}
+              <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-2 pt-2 border-t border-white/10 dark:border-white/5">
+                {/* Category selection */}
+                <div className="flex items-center gap-3">
+                  <span className="text-[9px] font-black uppercase tracking-wider text-lux-text/70 shrink-0">Doc Category</span>
+                  <div className="bg-lux-surface/30 backdrop-blur-md p-1 rounded-xl flex items-center border border-white/10 shadow-inner">
+                    {[
+                      { val: 'All', label: 'All Docs' },
+                      { val: 'question', label: 'Papers' },
+                      { val: 'memo', label: 'Memos' },
+                    ].map(t => (
+                      <button
+                        key={t.val}
+                        type="button"
+                        onClick={() => setFilters(prev => ({ ...prev, type: t.val }))}
+                        className={`px-3 py-1 text-[9px] font-bold uppercase tracking-wider rounded-md transition-all cursor-pointer leading-none ${
+                          filters.type === t.val 
+                            ? 'bg-lux-surface shadow-md text-lux-green-500 border border-white/20 dark:border-white/5' 
+                            : 'text-lux-text/70 hover:text-lux-text hover:bg-lux-surface/40 border border-transparent'
+                        }`}
+                      >
+                        {t.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Quick Subject Chips Merged Seamlessly right inside the panel */}
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-[9px] font-black uppercase tracking-wider text-lux-text/70 mr-1 block">Quick Subjects</span>
+                  {[
+                    { name: 'Mathematics', label: 'Math 🧮', color: 'bg-lux-surface/40 text-lux-text hover:bg-lux-surface/60 border-white/10 dark:border-white/5' },
+                    { name: 'Physical Sciences', label: 'Physics ⚛️', color: 'bg-lux-surface/40 text-lux-text hover:bg-lux-surface/60 border-white/10 dark:border-white/5' },
+                  ].map((sub) => {
+                    const isSelected = filters.subject === sub.name;
+                    return (
+                      <button
+                        key={sub.name}
+                        type="button"
+                        onClick={() => setFilters(prev => ({ ...prev, subject: isSelected ? 'All' : sub.name }))}
+                        className={`px-3 py-1.5 rounded-xl text-[11px] font-semibold border transition-all duration-200 cursor-pointer backdrop-blur-md ${
+                          isSelected
+                            ? 'bg-lux-green-500/10 text-lux-green-500 border-lux-green-500/30 shadow-sm'
+                            : `${sub.color}`
+                        }`}
+                      >
+                        {sub.label} {isSelected && '✓'}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-
-            {/* Quick Subject Chips Merged Seamlessly right inside the panel */}
-            <div className="flex flex-wrap items-center gap-1.5">
-              <span className="text-[9px] font-black uppercase tracking-wider text-gray-400 mr-1 block">Quick Subjects</span>
-              {[
-                { name: 'Mathematics', label: 'Math 🧮', color: 'bg-slate-100 text-slate-800 hover:bg-slate-200 border-slate-200' },
-                { name: 'Physical Sciences', label: 'Physics ⚛️', color: 'bg-slate-100 text-slate-800 hover:bg-slate-200 border-slate-200' },
-                { name: 'Life Sciences', label: 'Life Sci 🧬', color: 'bg-slate-100 text-slate-800 hover:bg-slate-200 border-slate-200' },
-                { name: 'Accounting', label: 'Accounting 📊', color: 'bg-slate-100 text-slate-800 hover:bg-slate-200 border-slate-200' },
-                { name: 'English Home Language', label: 'English HL 📖', color: 'bg-slate-100 text-slate-800 hover:bg-slate-200 border-slate-200' },
-              ].map((sub) => {
-                const isSelected = filters.subject === sub.name;
-                return (
-                  <button
-                    key={sub.name}
-                    type="button"
-                    onClick={() => setFilters(prev => ({ ...prev, subject: isSelected ? 'All' : sub.name }))}
-                    className={`px-2.5 py-1 rounded-full text-[11px] font-semibold border transition-all duration-200 cursor-pointer ${
-                      isSelected
-                        ? 'bg-slate-900 text-white border-slate-900 shadow-xs'
-                        : `${sub.color}`
-                    }`}
-                  >
-                    {sub.label} {isSelected && '✓'}
-                  </button>
-                );
-              })}
-            </div>
-            </div>
             </div>
           )}
         </div>
@@ -1172,28 +1155,28 @@ export function PastPapersPage() {
           {loading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
               {[1, 2, 3, 4, 5, 8].map((idx) => (
-                <div key={idx} className="bg-lux-surface border border-lux-border rounded-[2rem] p-6 shadow-lux-sm h-88 flex flex-col justify-between animate-pulse">
+                <div key={idx} className="glass-panel p-6 shadow-lux-sm h-88 flex flex-col justify-between animate-pulse">
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
-                      <div className="h-6 w-20 bg-gray-100 rounded-full" />
-                      <div className="h-6 w-24 bg-gray-100 rounded-full" />
+                      <div className="h-6 w-20 bg-lux-border rounded-full" />
+                      <div className="h-6 w-24 bg-lux-border rounded-full" />
                     </div>
-                    <div className="h-3 w-32 bg-gray-100 rounded" />
-                    <div className="h-7 w-full bg-gray-100 rounded-lg" />
-                    <div className="h-7 w-2/3 bg-gray-100 rounded-lg" />
+                    <div className="h-3 w-32 bg-lux-border rounded" />
+                    <div className="h-7 w-full bg-lux-border rounded-lg" />
+                    <div className="h-7 w-2/3 bg-lux-border rounded-lg" />
                   </div>
                   <div className="space-y-2 mt-4">
-                    <div className="h-1 bg-gray-100 rounded" />
+                    <div className="h-1 bg-lux-border rounded" />
                     <div className="flex gap-3 mt-2">
-                      <div className="h-10 bg-gray-100 rounded-xl flex-1" />
-                      <div className="h-10 bg-gray-100 rounded-xl flex-1" />
+                      <div className="h-10 bg-lux-border rounded-xl flex-1" />
+                      <div className="h-10 bg-lux-border rounded-xl flex-1" />
                     </div>
                   </div>
                 </div>
               ))}
             </div>
           ) : error ? (
-            <div className="bg-red-50 border border-red-100 rounded-2xl p-6 text-center space-y-3">
+            <div className="bg-red-50 border border-red-100 rounded-2xl sm:rounded-3xl p-6 text-center space-y-3">
               <AlertCircle size={36} className="text-red-500 mx-auto" />
               <h3 className="text-lg font-bold text-red-900">Unable to load past papers</h3>
               <p className="text-red-600 text-sm max-w-md mx-auto">{error}</p>
@@ -1230,10 +1213,10 @@ export function PastPapersPage() {
                 onAction={handleResetFilters}
               />
               {isAdmin && (
-                <div className="bg-[#1D9E75]/5 border border-[#1D9E75]/20 rounded-3xl p-6 text-center max-w-lg mx-auto space-y-4">
-                  <Database size={32} className="text-[#1D9E75] mx-auto animate-pulse" />
-                  <h3 className="text-sm font-bold text-gray-900">Import Past Papers from Storage Vault</h3>
-                  <p className="text-xs text-gray-500 leading-relaxed">
+                <div className="bg-[var(--color-lux-green-500)]/5 border border-[var(--color-lux-green-500)]/20 rounded-[2rem] sm:rounded-[3rem] p-6 text-center max-w-lg mx-auto space-y-4">
+                  <Database size={32} className="text-[var(--color-lux-green-500)] mx-auto animate-pulse" />
+                  <h3 className="text-sm font-bold text-lux-text">Import Past Papers from Storage Vault</h3>
+                  <p className="text-xs text-lux-text leading-relaxed">
                     You are logged in as an Administrator. There are currently 0 indexed papers in search lists but thousands are pre-loaded in your Firebase Storage. Reconcile them instantly!
                   </p>
                   <Button
@@ -1242,7 +1225,7 @@ export function PastPapersPage() {
                       setSyncStatus('idle');
                       setSyncLogs([]);
                     }}
-                    className="bg-[#1D9E75] hover:bg-[#157c5b] cursor-pointer"
+                    className="bg-[var(--color-lux-green-500)] hover:bg-[var(--color-lux-green-800)] cursor-pointer"
                   >
                     Start Scanner Sync
                   </Button>
@@ -1251,7 +1234,6 @@ export function PastPapersPage() {
             </div>
           )}
         </section>
-        </div>
       </main>
 
       {/* MOBILE DRAWER DIALOG FOR FILTERS (Retractable bottom drawer) */}
@@ -1272,28 +1254,28 @@ export function PastPapersPage() {
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
               className="fixed bottom-0 left-0 right-0 max-h-[90vh] bg-white rounded-t-[32px] overflow-y-auto p-6 z-50 shadow-2xl pb-10"
             >
-              <div className="flex items-center justify-between border-b border-gray-100 pb-4 mb-5">
-                <h3 className="font-serif font-black text-xl text-gray-900 flex items-center gap-2">
-                  <SlidersHorizontal size={18} className="text-[#1D9E75]" /> Filter Library
+              <div className="flex items-center justify-between border-b border-lux-border pb-4 mb-5">
+                <h3 className="font-serif font-black text-xl text-lux-text flex items-center gap-2">
+                  <SlidersHorizontal size={18} className="text-[var(--color-lux-green-500)]" /> Filter Library
                 </h3>
                 <button 
                   onClick={() => setIsMobileFiltersOpen(false)}
-                  className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                  className="p-1 hover:bg-lux-border rounded-full transition-colors"
                 >
-                  <X size={20} className="text-gray-500" />
+                  <X size={20} className="text-lux-text" />
                 </button>
               </div>
 
               <div className="space-y-5">
                 {/* Search bar */}
                 <div className="space-y-1">
-                  <label className="text-xs font-black uppercase tracking-wider text-gray-400">Search Keywords</label>
+                  <label className="text-xs font-black uppercase tracking-wider text-lux-text">Search Keywords</label>
                   <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-lux-muted" size={16} />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-lux-text" size={16} />
                     <input
                       type="text"
                       placeholder="e.g. Calculus, Newton laws"
-                      className="w-full bg-lux-surface border border-lux-border/50 rounded-xl py-2 pl-9 pr-4 text-[11px] uppercase tracking-widest font-bold outline-none focus:border-lux-gold focus:bg-lux-bg transition-all placeholder:text-lux-muted placeholder:normal-case placeholder:tracking-normal placeholder:font-medium text-lux-green-950 shadow-inner"
+                      className="w-full bg-lux-surface border border-lux-border/50 rounded-xl py-2 pl-9 pr-4 text-[11px] uppercase tracking-widest font-bold outline-none focus:border-lux-green-500 focus:bg-lux-bg transition-all placeholder:text-lux-text placeholder:normal-case placeholder:tracking-normal placeholder:font-medium text-lux-text shadow-inner"
                       value={filters.search}
                       onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
                     />
@@ -1302,13 +1284,13 @@ export function PastPapersPage() {
 
                 {/* Grade Selector */}
                 <div className="space-y-1">
-                  <label className="text-xs font-black uppercase tracking-wider text-gray-400">Grade Level</label>
+                  <label className="text-xs font-black uppercase tracking-wider text-lux-text">Grade Level</label>
                   <select
                     value={filters.grade}
                     onChange={(e) => setFilters(prev => ({ ...prev, grade: e.target.value }))}
-                    className="w-full bg-gray-50 border border-gray-205 rounded-xl py-2.5 px-3 text-sm font-semibold text-gray-700 outline-none"
+                    className="w-full bg-lux-surface-alt border border-gray-205 rounded-xl py-2.5 px-3 text-sm font-semibold text-lux-text outline-none"
                   >
-                    <option value="All">All Grades (8 - 12)</option>
+                    <option value="All">Grade 12 Only</option>
                     {GRADE_OPTIONS.map(g => (
                       <option key={g} value={g}>Grade {g}</option>
                     ))}
@@ -1317,11 +1299,11 @@ export function PastPapersPage() {
 
                 {/* Subject Selector */}
                 <div className="space-y-1">
-                  <label className="text-xs font-black uppercase tracking-wider text-gray-400">Subject</label>
+                  <label className="text-xs font-black uppercase tracking-wider text-lux-text">Subject</label>
                   <select
                     value={filters.subject}
                     onChange={(e) => setFilters(prev => ({ ...prev, subject: e.target.value }))}
-                    className="w-full bg-gray-50 border border-gray-205 rounded-xl py-2.5 px-3 text-sm font-semibold text-gray-700 outline-none"
+                    className="w-full bg-lux-surface-alt border border-gray-205 rounded-xl py-2.5 px-3 text-sm font-semibold text-lux-text outline-none"
                   >
                     <option value="All">All Subjects</option>
                     {SUBJECT_OPTIONS.map(s => (
@@ -1332,11 +1314,11 @@ export function PastPapersPage() {
 
                 {/* Year Selector */}
                 <div className="space-y-1">
-                  <label className="text-xs font-black uppercase tracking-wider text-gray-400">Exam Year</label>
+                  <label className="text-xs font-black uppercase tracking-wider text-lux-text">Exam Year</label>
                   <select
                     value={filters.year}
                     onChange={(e) => setFilters(prev => ({ ...prev, year: e.target.value }))}
-                    className="w-full bg-gray-50 border border-gray-205 rounded-xl py-2.5 px-3 text-sm font-semibold text-gray-700 outline-none"
+                    className="w-full bg-lux-surface-alt border border-gray-205 rounded-xl py-2.5 px-3 text-sm font-semibold text-lux-text outline-none"
                   >
                     <option value="All">All Years (2025 - 2014)</option>
                     {YEAR_OPTIONS.map(y => (
@@ -1347,11 +1329,11 @@ export function PastPapersPage() {
 
                 {/* Session Selector */}
                 <div className="space-y-1">
-                  <label className="text-xs font-black uppercase tracking-wider text-gray-400 block">Exam Session</label>
+                  <label className="text-xs font-black uppercase tracking-wider text-lux-text block">Exam Session</label>
                   <select
                     value={filters.session}
                     onChange={(e) => setFilters(prev => ({ ...prev, session: e.target.value }))}
-                    className="w-full bg-gray-50 border border-gray-205 rounded-xl py-2.5 px-3 text-sm font-semibold text-gray-700 outline-none"
+                    className="w-full bg-lux-surface-alt border border-gray-205 rounded-xl py-2.5 px-3 text-sm font-semibold text-lux-text outline-none"
                   >
                     <option value="All">All Sessions</option>
                     {SESSION_OPTIONS.map(s => (
@@ -1362,11 +1344,11 @@ export function PastPapersPage() {
 
                 {/* Type Selector (Paper vs Memo) */}
                 <div className="space-y-1">
-                  <label className="text-xs font-black uppercase tracking-wider text-gray-400 block">Document Type</label>
+                  <label className="text-xs font-black uppercase tracking-wider text-lux-text block">Document Type</label>
                   <select
                     value={filters.type}
                     onChange={(e) => setFilters(prev => ({ ...prev, type: e.target.value }))}
-                    className="w-full bg-gray-50 border border-gray-205 rounded-xl py-2.5 px-3 text-sm font-semibold text-gray-700 outline-none"
+                    className="w-full bg-lux-surface-alt border border-gray-205 rounded-xl py-2.5 px-3 text-sm font-semibold text-lux-text outline-none"
                   >
                     <option value="All">All Types (Paper + Memo)</option>
                     {TYPE_OPTIONS.map(t => (
@@ -1377,14 +1359,14 @@ export function PastPapersPage() {
 
                 <div className="pt-2 flex gap-4">
                   <Button
-                    className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800"
+                    className="flex-1 bg-lux-border hover:bg-lux-surface00 text-lux-text"
                     variant="outline"
                     onClick={handleResetFilters}
                   >
                     Reset
                   </Button>
                   <Button
-                    className="flex-1 bg-[#1D9E75] hover:bg-[#157c5b]"
+                    className="flex-1 bg-[var(--color-lux-green-500)] hover:bg-[var(--color-lux-green-800)]"
                     onClick={() => setIsMobileFiltersOpen(false)}
                   >
                     Apply Filter
@@ -1411,16 +1393,16 @@ export function PastPapersPage() {
               className="fixed inset-0 z-50 bg-black/95 flex flex-col pointer-events-auto h-screen w-screen"
             >
               {/* Modal Navigation Header Controls */}
-              <div className="px-6 py-4 bg-gray-900 border-b border-gray-800 flex flex-col md:flex-row items-center justify-between text-white shrink-0 gap-4">
+              <div className="px-6 py-4 bg-lux-bg border-b border-lux-border flex flex-col md:flex-row items-center justify-between text-lux-text shrink-0 gap-4">
                 <div className="flex items-center gap-3 min-w-0 self-start md:self-auto">
-                  <div className="w-10 h-10 bg-[#1D9E75]/10 border border-[#1D9E75]/30 rounded-xl flex items-center justify-center text-[#1D9E75] shrink-0">
+                  <div className="w-10 h-10 bg-[var(--color-lux-green-500)]/10 border border-[var(--color-lux-green-500)]/30 rounded-xl flex items-center justify-center text-[var(--color-lux-green-500)] shrink-0">
                     <Bookmark size={20} />
                   </div>
                   <div className="min-w-0">
-                    <h2 className="text-base md:text-lg font-bold truncate pr-4 font-serif text-white">
+                    <h2 className="text-base md:text-lg font-bold truncate pr-4 font-serif text-lux-text">
                       {activeDocObj.title || `${activeDocObj.subject} ${activeDocObj.year}`}
                     </h2>
-                    <div className="flex items-center gap-2 text-xs text-gray-400 font-sans font-semibold">
+                    <div className="flex items-center gap-2 text-xs text-lux-text font-sans font-semibold">
                       <span>Grade {activeDocObj.grade}</span>
                       <span>•</span>
                       <span>{activeDocObj.paperNumber} ({activeDocObj.type === 'memo' ? 'Memo' : 'Question'})</span>
@@ -1432,13 +1414,13 @@ export function PastPapersPage() {
 
                 {/* Instant Fullscreen Companion Switcher */}
                 {fullscreenCompanion && (
-                  <div className="bg-gray-950 p-1 rounded-xl flex items-center border border-gray-800 shrink-0 shadow-inner">
+                  <div className="bg-gray-950 p-1 rounded-xl flex items-center border border-lux-border shrink-0 shadow-inner">
                     <button
                       onClick={() => setActiveDocType('question')}
                       className={`flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold font-sans rounded-lg transition-all cursor-pointer ${
                         activeDocType === 'question'
-                          ? 'bg-[#1D9E75] text-white shadow font-black'
-                          : 'text-gray-400 hover:text-white'
+                          ? 'bg-[var(--color-lux-green-500)] text-lux-text shadow font-black'
+                          : 'text-lux-text hover:text-lux-text'
                       }`}
                     >
                       Question Paper
@@ -1447,8 +1429,8 @@ export function PastPapersPage() {
                       onClick={() => setActiveDocType('memo')}
                       className={`flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold font-sans rounded-lg transition-all cursor-pointer ${
                         activeDocType === 'memo'
-                          ? 'bg-[#1D9E75] text-white shadow font-black'
-                          : 'text-gray-400 hover:text-white'
+                          ? 'bg-[var(--color-lux-green-500)] text-lux-text shadow font-black'
+                          : 'text-lux-text hover:text-lux-text'
                       }`}
                     >
                       Memorandum
@@ -1459,7 +1441,7 @@ export function PastPapersPage() {
                 <div className="flex items-center gap-3 shrink-0 self-end md:self-auto">
                   <Button 
                     size="sm" 
-                    className="bg-[#1D9E75] hover:bg-[#157c5b] text-white py-1.5 h-9 font-semibold text-xs font-sans px-3"
+                    className="bg-[var(--color-lux-green-500)] hover:bg-[var(--color-lux-green-800)] text-lux-text py-1.5 h-9 font-semibold text-xs font-sans px-3"
                     onClick={() => handleDownload(activeDocObj)}
                     disabled={downloadingId === activeDocObj.id}
                   >
@@ -1468,7 +1450,7 @@ export function PastPapersPage() {
                   </Button>
                   <button 
                     onClick={() => setViewPaper(null)}
-                    className="p-2 hover:bg-gray-800 rounded-full text-gray-300 hover:text-white transition-colors h-9 w-9 flex items-center justify-center border border-gray-700"
+                    className="p-2 hover:bg-lux-surface-alt rounded-full text-lux-text hover:text-lux-text transition-colors h-9 w-9 flex items-center justify-center border border-lux-border"
                     aria-label="Close View Mode"
                   >
                     <X size={18} />
@@ -1481,15 +1463,15 @@ export function PastPapersPage() {
                 {/* Elegant Custom Skeleton for IFrame Documents */}
                 {((activeDocType === 'question' && questionLoading && questionPaperObj) || 
                   (activeDocType === 'memo' && memoLoading && memoPaperObj)) && (
-                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-950 text-gray-400 z-20 pointer-events-none animate-fade-in">
+                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-950 text-lux-text z-20 pointer-events-none animate-fade-in">
                     <div className="relative flex items-center justify-center mb-4">
-                      <div className="absolute h-12 w-12 rounded-full border border-gray-800 animate-ping"></div>
-                      <div className="animate-spin rounded-full h-10 w-10 border-2 border-[#1D9E75] border-t-transparent shadow-inner"></div>
+                      <div className="absolute h-12 w-12 rounded-full border border-lux-border animate-ping"></div>
+                      <div className="animate-spin rounded-full h-10 w-10 border-2 border-[var(--color-lux-green-500)] border-t-transparent shadow-inner"></div>
                     </div>
-                    <p className="text-sm font-sans font-semibold text-gray-350 tracking-wide animate-pulse">
+                    <p className="text-sm font-sans font-semibold text-lux-text tracking-wide animate-pulse">
                       Loading PDF Document securely...
                     </p>
-                    <p className="text-xs text-gray-500 mt-1 max-w-xs text-center leading-relaxed">
+                    <p className="text-xs text-lux-text mt-1 max-w-xs text-center leading-relaxed">
                       Powered by secure cloud storage vault
                     </p>
                   </div>
@@ -1501,7 +1483,7 @@ export function PastPapersPage() {
                     <iframe 
                       src={`https://docs.google.com/viewer?url=${encodeURIComponent(questionPaperObj.fileUrl)}&embedded=true`} 
                       onLoad={() => setQuestionLoading(false)}
-                      className={`absolute inset-0 w-full h-full rounded-2xl border border-lux-border shadow-lux-sm bg-lux-surface transition-all duration-300 ${
+                      className={`absolute inset-0 w-full h-full rounded-2xl sm:rounded-3xl border border-lux-border shadow-lux-sm bg-lux-surface transition-all duration-300 ${
                         activeDocType === 'question' 
                           ? 'opacity-100 scale-100 translate-y-0 pointer-events-auto z-10' 
                           : 'opacity-0 scale-95 translate-y-4 pointer-events-none z-0'
@@ -1517,7 +1499,7 @@ export function PastPapersPage() {
                     <iframe 
                       src={`https://docs.google.com/viewer?url=${encodeURIComponent(memoPaperObj.fileUrl)}&embedded=true`} 
                       onLoad={() => setMemoLoading(false)}
-                      className={`absolute inset-0 w-full h-full rounded-2xl border border-lux-border shadow-lux-sm bg-lux-surface transition-all duration-300 ${
+                      className={`absolute inset-0 w-full h-full rounded-2xl sm:rounded-3xl border border-lux-border shadow-lux-sm bg-lux-surface transition-all duration-300 ${
                         activeDocType === 'memo' 
                           ? 'opacity-100 scale-100 translate-y-0 pointer-events-auto z-10' 
                           : 'opacity-0 scale-95 translate-y-4 pointer-events-none z-0'
@@ -1537,21 +1519,21 @@ export function PastPapersPage() {
       {/* DATABASE STORAGE SYNCHRONIZATION MODAL */}
       {showSyncModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fade-in">
-          <div className="relative w-full max-w-2xl bg-[#0d0d0d] border border-gray-800 rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+          <div className="relative w-full max-w-2xl bg-[#0d0d0d] border border-lux-border rounded-[2rem] sm:rounded-[3rem] overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
             {/* Header */}
-            <div className="p-6 border-b border-gray-800 flex items-center justify-between bg-black/40">
+            <div className="p-6 border-b border-lux-border flex items-center justify-between bg-black/40">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-[#1D9E75]/10 text-[#1D9E75] rounded-xl font-bold">
+                <div className="p-2 bg-[var(--color-lux-green-500)]/10 text-[var(--color-lux-green-500)] rounded-xl font-bold">
                   <Database size={20} className="animate-pulse" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white">Database & Storage Sync Utility</h3>
-                  <p className="text-xs text-gray-500">Reconcile Storage Vault files into website's Firestore database</p>
+                  <h3 className="text-lg font-bold text-lux-text">Database & Storage Sync Utility</h3>
+                  <p className="text-xs text-lux-text">Reconcile Storage Vault files into website's Firestore database</p>
                 </div>
               </div>
               <button 
                 onClick={() => setShowSyncModal(false)}
-                className="p-1.5 text-gray-500 hover:text-white hover:bg-gray-900 rounded-lg transition-colors disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+                className="p-1.5 text-lux-text hover:text-lux-text hover:bg-lux-bg rounded-lg transition-colors disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
               >
                 <X size={20} />
               </button>
@@ -1561,16 +1543,16 @@ export function PastPapersPage() {
             <div className="p-6 overflow-y-auto space-y-6 flex-1 custom-scrollbar">
               {syncStatus === 'idle' ? (
                 <div className="space-y-4">
-                  <p className="text-sm text-gray-300 leading-relaxed">
-                    This scanning suite traverses your Firebase Storage <code className="bg-black text-[#1D9E75] px-1.5 py-0.5 rounded font-mono text-xs font-bold">/past-papers</code> bucket directories and cross-examines every physical file against registered indices inside your Firestore database.
+                  <p className="text-sm text-lux-text leading-relaxed">
+                    This scanning suite traverses your Firebase Storage <code className="bg-black text-[var(--color-lux-green-500)] px-1.5 py-0.5 rounded font-mono text-xs font-bold">/past-papers</code> bucket directories and cross-examines every physical file against registered indices inside your Firestore database.
                   </p>
-                  <p className="text-sm text-gray-300 leading-relaxed">
+                  <p className="text-sm text-lux-text leading-relaxed">
                     Any paper, memorandum, or booklet discovered in Storage that hasn't been listed on the website yet will be imported in batches. Attributes like subject, curriculum alignment, grade, year, and paper type are automatically deduced with smart heuristic algorithms!
                   </p>
-                  <div className="p-4 bg-[#111111] border border-gray-800 rounded-2xl flex items-start gap-3">
-                    <AlertCircle className="text-[#1D9E75] shrink-0 mt-0.5" size={18} />
-                    <div className="text-xs text-gray-400 space-y-1">
-                      <p className="font-bold text-gray-300">Important details:</p>
+                  <div className="p-4 bg-[#111111] border border-lux-border rounded-2xl sm:rounded-3xl flex items-start gap-3">
+                    <AlertCircle className="text-[var(--color-lux-green-500)] shrink-0 mt-0.5" size={18} />
+                    <div className="text-xs text-lux-text space-y-1">
+                      <p className="font-bold text-lux-text">Important details:</p>
                       <p>• Avoid closing this tab or putting your browser to sleep during synchronization.</p>
                       <p>• Existing indexes with matching URLs or file paths are fully protected and will not duplicate.</p>
                       <p>• Expected Storage scope of files: 3,000+ items</p>
@@ -1581,48 +1563,48 @@ export function PastPapersPage() {
                 <div className="space-y-6">
                   {/* Active Step Indicator */}
                   <div className="flex items-center justify-between pb-2">
-                    <span className="text-xs font-bold uppercase tracking-widest text-[#1D9E75]">
+                    <span className="text-xs font-bold uppercase tracking-widest text-[var(--color-lux-green-500)]">
                       CURRENT STEP: {syncStep || 'Processing...'}
                     </span>
                     {syncStatus === 'running' && (
-                      <span className="text-xs text-gray-500 flex items-center gap-2">
-                        <Loader2 size={12} className="animate-spin text-[#1D9E75]" /> Sync active...
+                      <span className="text-xs text-lux-text flex items-center gap-2">
+                        <Loader2 size={12} className="animate-spin text-[var(--color-lux-green-500)]" /> Sync active...
                       </span>
                     )}
                   </div>
 
                   {/* Progress grid indices */}
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                    <div className="p-4 bg-black border border-gray-800 rounded-2xl text-center">
-                      <span className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Storage Scanned</span>
-                      <div className="text-xl font-black text-white mt-1">{syncCount.scanned}</div>
+                    <div className="p-4 bg-black border border-lux-border rounded-2xl sm:rounded-3xl text-center">
+                      <span className="text-[10px] uppercase font-bold text-lux-text tracking-wider">Storage Scanned</span>
+                      <div className="text-xl font-black text-lux-text mt-1">{syncCount.scanned}</div>
                     </div>
-                    <div className="p-4 bg-black border border-gray-800 rounded-2xl text-center">
-                      <span className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Database Checked</span>
-                      <div className="text-xl font-black text-white mt-1">{syncCount.checked}</div>
+                    <div className="p-4 bg-black border border-lux-border rounded-2xl sm:rounded-3xl text-center">
+                      <span className="text-[10px] uppercase font-bold text-lux-text tracking-wider">Database Checked</span>
+                      <div className="text-xl font-black text-lux-text mt-1">{syncCount.checked}</div>
                     </div>
-                    <div className="p-4 bg-black border border-gray-800 rounded-2xl text-center">
-                      <span className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">To Import</span>
-                      <div className="text-xl font-black text-[#1D9E75] mt-1">{syncCount.totalToSync}</div>
+                    <div className="p-4 bg-black border border-lux-border rounded-2xl sm:rounded-3xl text-center">
+                      <span className="text-[10px] uppercase font-bold text-lux-text tracking-wider">To Import</span>
+                      <div className="text-xl font-black text-[var(--color-lux-green-500)] mt-1">{syncCount.totalToSync}</div>
                     </div>
-                    <div className="p-4 bg-black border border-gray-800 rounded-2xl text-center border-[#1D9E75]/20 bg-[#1D9E75]/5">
-                      <span className="text-[10px] uppercase font-bold text-[#1D9E75]/70 tracking-wider">Successfully Added</span>
-                      <div className="text-xl font-black text-white mt-1">{syncCount.added}</div>
+                    <div className="p-4 bg-black border border-lux-border rounded-2xl sm:rounded-3xl text-center border-[var(--color-lux-green-500)]/20 bg-[var(--color-lux-green-500)]/5">
+                      <span className="text-[10px] uppercase font-bold text-[var(--color-lux-green-500)]/70 tracking-wider">Successfully Added</span>
+                      <div className="text-xl font-black text-lux-text mt-1">{syncCount.added}</div>
                     </div>
                   </div>
 
                   {/* Sync progress bar */}
                   {syncStatus === 'running' && syncCount.totalToSync > 0 && (
                     <div className="space-y-2">
-                      <div className="flex items-center justify-between text-xs text-gray-400">
+                      <div className="flex items-center justify-between text-xs text-lux-text">
                         <span>Writing Indexed past-papers to Firestore...</span>
-                        <span className="font-bold text-white">
+                        <span className="font-bold text-lux-text">
                           {Math.round((syncCount.added / syncCount.totalToSync) * 100)}%
                         </span>
                       </div>
-                      <div className="w-full h-2.5 bg-black rounded-full overflow-hidden border border-gray-800">
+                      <div className="w-full h-2.5 bg-black rounded-full overflow-hidden border border-lux-border">
                         <div 
-                          className="h-full bg-gradient-to-r from-teal-500 to-[#1D9E75] transition-all duration-300"
+                          className="h-full bg-gradient-to-r from-teal-500 to-[var(--color-lux-green-500)] transition-all duration-300"
                           style={{ width: `${Math.round((syncCount.added / syncCount.totalToSync) * 100)}%` }}
                         />
                       </div>
@@ -1631,16 +1613,16 @@ export function PastPapersPage() {
 
                   {/* Streaming Activity Logs Terminal */}
                   <div className="space-y-2">
-                    <div className="flex items-center justify-between text-xs text-gray-500">
+                    <div className="flex items-center justify-between text-xs text-lux-text">
                       <span className="flex items-center gap-1.5 font-bold"><Terminal size={14} /> SYSTEM FEED</span>
                       <span className="font-mono text-[10px]">CWD: ~/storage/past-papers</span>
                     </div>
                     <div 
                       ref={logContainerRef}
-                      className="p-4 bg-black border border-gray-800 rounded-2xl h-64 overflow-y-auto font-mono text-[10px] text-green-400 space-y-1.5 custom-scrollbar"
+                      className="p-4 bg-black border border-lux-border rounded-2xl sm:rounded-3xl h-64 overflow-y-auto font-mono text-[10px] text-green-400 space-y-1.5 custom-scrollbar"
                     >
                       {syncLogs.length === 0 ? (
-                        <div className="text-gray-600 italic">No output. Waiting for engine...</div>
+                        <div className="text-lux-text italic">No output. Waiting for engine...</div>
                       ) : (
                         syncLogs.map((log, lidx) => (
                           <div key={lidx} className="leading-relaxed break-all">
@@ -1655,18 +1637,18 @@ export function PastPapersPage() {
             </div>
 
             {/* Footer */}
-            <div className="p-6 border-t border-gray-800 bg-black/40 flex items-center justify-end gap-3">
+            <div className="p-6 border-t border-lux-border bg-black/40 flex items-center justify-end gap-3">
               {syncStatus === 'idle' ? (
                 <>
                   <button 
                     onClick={() => setShowSyncModal(false)}
-                    className="px-5 py-2.5 rounded-xl border border-gray-800 hover:bg-gray-900 text-sm font-bold text-gray-400 hover:text-white transition-colors cursor-pointer"
+                    className="px-5 py-2.5 rounded-xl border border-lux-border hover:bg-lux-bg text-sm font-bold text-lux-text hover:text-lux-text transition-colors cursor-pointer"
                   >
                     Close
                   </button>
                   <button 
                     onClick={handleSyncStorage}
-                    className="px-6 py-2.5 rounded-xl bg-[#1D9E75] hover:bg-[#178562] text-sm font-bold text-white transition-all shadow-md flex items-center gap-2 cursor-pointer"
+                    className="px-6 py-2.5 rounded-xl bg-[var(--color-lux-green-500)] hover:bg-[#178562] text-sm font-bold text-lux-text transition-all shadow-md flex items-center gap-2 cursor-pointer"
                   >
                     <Database size={16} /> Start Live Scan & Sync
                   </button>
@@ -1675,15 +1657,15 @@ export function PastPapersPage() {
                 <>
                   <button 
                     onClick={() => setShowSyncModal(false)}
-                    className="px-5 py-2.5 rounded-xl border border-gray-800 hover:bg-gray-900 text-sm font-bold text-gray-400 hover:text-white transition-colors cursor-pointer"
+                    className="px-5 py-2.5 rounded-xl border border-lux-border hover:bg-lux-bg text-sm font-bold text-lux-text hover:text-lux-text transition-colors cursor-pointer"
                   >
                     Hide
                   </button>
                   <button 
                     disabled
-                    className="px-6 py-2.5 rounded-xl bg-gray-900 text-gray-500 text-sm font-bold flex items-center gap-2 border border-gray-800"
+                    className="px-6 py-2.5 rounded-xl bg-lux-bg text-lux-text text-sm font-bold flex items-center gap-2 border border-lux-border"
                   >
-                    <Loader2 size={16} className="animate-spin text-[#1D9E75]" /> Reconciling in progress...
+                    <Loader2 size={16} className="animate-spin text-[var(--color-lux-green-500)]" /> Reconciling in progress...
                   </button>
                 </>
               ) : syncStatus === 'completed' ? (
@@ -1692,7 +1674,7 @@ export function PastPapersPage() {
                     setShowSyncModal(false);
                     setSyncStatus('idle');
                   }}
-                  className="px-6 py-2.5 rounded-xl bg-[#1D9E75] hover:bg-[#178562] text-sm font-bold text-white transition-all shadow-md flex items-center gap-2 cursor-pointer"
+                  className="px-6 py-2.5 rounded-xl bg-[var(--color-lux-green-500)] hover:bg-[#178562] text-sm font-bold text-lux-text transition-all shadow-md flex items-center gap-2 cursor-pointer"
                 >
                   <Check size={16} /> Finish & Done
                 </button>
@@ -1703,13 +1685,13 @@ export function PastPapersPage() {
                       setShowSyncModal(false);
                       setSyncStatus('idle');
                     }}
-                    className="px-5 py-2.5 rounded-xl border border-gray-800 hover:bg-gray-900 text-sm font-bold text-gray-400 hover:text-white transition-colors cursor-pointer"
+                    className="px-5 py-2.5 rounded-xl border border-lux-border hover:bg-lux-bg text-sm font-bold text-lux-text hover:text-lux-text transition-colors cursor-pointer"
                   >
                     Close
                   </button>
                   <button 
                     onClick={handleSyncStorage}
-                    className="px-6 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-sm font-bold text-white transition-colors cursor-pointer"
+                    className="px-6 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-sm font-bold text-lux-text transition-colors cursor-pointer"
                   >
                     Retry sync
                   </button>

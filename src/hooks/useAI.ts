@@ -10,6 +10,7 @@ export interface AIStatus {
   limit: number;
   remaining: number;
   canQuery: boolean;
+  byFeature?: Record<string, number>;
 }
 
 export interface AIResponse {
@@ -51,7 +52,8 @@ export function useAI() {
       question: string,
       subject?: string,
       grade?: string,
-      paperContext?: string
+      paperContext?: string,
+      image?: string
     ): Promise<AIResponse | AIError> => {
       if (!user?.uid) {
         return { error: "Please sign in to use the AI tutor.", upgradeUrl: "/sign-in" };
@@ -68,6 +70,7 @@ export function useAI() {
             subject,
             grade,
             paperContext,
+            image,
           }),
         });
 
@@ -121,7 +124,7 @@ export function useAI() {
         if (!res.ok) return data as AIError;
 
         setStatus((prev) =>
-          prev ? { ...prev, remaining: data.remaining, canQuery: data.remaining > 0 } : null
+          prev ? { ...prev, used: prev.limit - data.remaining, remaining: data.remaining, canQuery: data.remaining > 0 } : null
         );
         return data;
       } catch {

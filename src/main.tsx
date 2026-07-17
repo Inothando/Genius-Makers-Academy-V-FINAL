@@ -4,14 +4,22 @@ import App from './App.tsx';
 import './index.css';
 import { registerSW } from 'virtual:pwa-register';
 
-// Register global error interceptors for resilient third-party embedded widgets (Google Docs viewer)
+window.onerror = function (msg, url, lineNo, columnNo, error) {
+  if (msg === 'Script error.' || String(msg).includes('Script error.')) {
+    return true;
+  }
+  return false;
+};
+
+// Register global error interceptors
 window.addEventListener('error', (event) => {
   const msg = event?.message || '';
   if (msg && (
     msg.includes("measure' on 'Performance'") || 
     msg.includes("Data cannot be cloned") || 
     msg.includes("should not already be working") || 
-    msg.includes("Should not already be working")
+    msg.includes("Should not already be working") ||
+    msg === "Script error."
   )) {
     event.preventDefault();
     event.stopPropagation();

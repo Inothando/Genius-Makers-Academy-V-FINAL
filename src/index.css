@@ -1,92 +1,133 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=JetBrains+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 @theme {
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Playfair Display", ui-serif, Georgia, serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 
-  /* Luxurious palette */
-  --color-lux-bg: #FCFAF8;
-  --color-lux-surface: #FFFFFF;
-  --color-lux-border: #E8E5DF;
-  --color-lux-green-950: #06150D;
-  --color-lux-green-900: #0C2B1B;
-  --color-lux-green-800: #13422A;
-  --color-lux-green-500: #206F46;
-  --color-lux-green-100: #E6F3EB;
-  --color-lux-gold: #C29D59;
-  --color-lux-gold-light: #DFCDA8;
-  --color-lux-text: #1C2321;
-  --color-lux-muted: #848A87;
+  --color-lux-bg: var(--color-bg);
+  --color-lux-surface: var(--color-surface);
+  --color-lux-surface-alt: var(--color-surface-alt);
+  --color-lux-border: var(--color-border);
   
-  /* Fallbacks keeping existing variables alive for compatibility but overriding their look */
-  --color-primary: var(--color-lux-green-900);
-  --color-primary-dark: var(--color-lux-green-950);
-  --color-primary-light: var(--color-lux-green-100);
+  --color-lux-green-950: var(--color-contrast-950);
+  --color-lux-green-900: var(--color-contrast-900);
+  --color-lux-green-800: var(--color-contrast-800);
+  --color-lux-green-500: var(--color-accent-primary);
+  --color-lux-green-100: var(--color-accent-primary-light);
   
-  --color-text-primary: var(--color-lux-text);
-  --color-text-secondary: var(--color-lux-muted);
-  --color-border-subtle: var(--color-lux-border);
+  --color-lux-gold: var(--color-accent-secondary);
+  --color-lux-gold-light: var(--color-accent-secondary-light);
+  
+  --color-lux-text: var(--color-text);
+  --color-lux-muted: var(--color-text-muted);
+  
+  --shadow-lux-sm: var(--shadow-sm-custom);
+  --shadow-lux-lg: var(--shadow-lg-custom);
+}
 
-  --shadow-lux-sm: 0 4px 20px -2px rgba(12, 43, 27, 0.05);
-  --shadow-lux-lg: 0 20px 40px -4px rgba(12, 43, 27, 0.08);
+:root {
+  /* Soft Bright Mode */
+  --color-bg: #FDFCF8; /* Soft warm cream */
+  --color-surface: #FFFFFF; /* Pure white for clean cards */
+  --color-surface-alt: #F6F4EF; /* Subtle contrast */
+  --color-border: #EBE8E0; /* Very soft border */
+  
+  --color-contrast-950: #000000; /* Raw black */
+  --color-contrast-900: #111111;
+  --color-contrast-800: #222222;
+  
+  --color-accent-primary: #267A4A; /* Gentle Soft Sage */
+  --color-accent-primary-light: rgba(133, 166, 155, 0.15);
+  
+  --color-accent-secondary: #C05640; /* Soft Dusty Peach */
+  --color-accent-secondary-light: rgba(227, 168, 153, 0.15);
+  
+  --color-text: #000000; /* Raw black */
+  --color-text-muted: #333333; /* Darker grey */
+  
+  --shadow-sm-custom: 0 4px 20px rgba(133, 166, 155, 0.04);
+  --shadow-lg-custom: 0 16px 40px rgba(133, 166, 155, 0.08);
+  
+  --body-bg-gradient: radial-gradient(circle at 10% 0%, rgba(133, 166, 155, 0.06), transparent 50%),
+                      radial-gradient(circle at 90% 100%, rgba(227, 168, 153, 0.06), transparent 50%);
+}
+
+.dark {
+  /* Soft Dim Mode */
+  --color-bg: #211F1D;
+  --color-surface: #2A2826;
+  --color-surface-alt: #35322F;
+  --color-border: #44413D;
+  
+  --color-contrast-950: #FFFFFF;
+  --color-contrast-900: #EEEEEE;
+  --color-contrast-800: #DDDDDD;
+  
+  --color-accent-primary: #4ADE80; 
+  --color-accent-primary-light: rgba(148, 181, 170, 0.15);
+  
+  --color-accent-secondary: #F87171;
+  --color-accent-secondary-light: rgba(238, 181, 166, 0.15);
+  
+  --color-text: #FFFFFF;
+  --color-text-muted: #CCCCCC;
+  
+  --shadow-sm-custom: 0 4px 20px rgba(0, 0, 0, 0.15);
+  --shadow-lg-custom: 0 16px 40px rgba(0, 0, 0, 0.25);
+  
+  --body-bg-gradient: radial-gradient(circle at 10% 0%, rgba(148, 181, 170, 0.03), transparent 50%),
+                      radial-gradient(circle at 90% 100%, rgba(238, 181, 166, 0.03), transparent 50%);
 }
 
 @layer base {
-  html {
-    scroll-behavior: smooth;
-  }
-
   body {
-    background-color: var(--color-lux-bg);
-    color: var(--color-lux-text);
-    @apply font-sans antialiased;
-  }
-
-  ::selection {
-    background-color: var(--color-lux-gold);
-    color: white;
-  }
-
-  /* Custom scrollbar */
-  ::-webkit-scrollbar {
-    width: 6px;
-  }
-  ::-webkit-scrollbar-track {
-    background-color: var(--color-lux-bg);
-  }
-  ::-webkit-scrollbar-thumb {
-    background-color: var(--color-lux-border);
-    @apply rounded-full transition-colors;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background-color: var(--color-lux-gold);
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    background-image: var(--body-bg-gradient);
+    background-attachment: fixed;
+    font-family: var(--font-sans);
+    transition: background-color 0.4s ease, color 0.4s ease;
   }
 }
 
 @layer utilities {
-  .bento-card {
-    background-color: var(--color-lux-surface);
-    border: 1px solid var(--color-lux-border);
-    @apply rounded-2xl transition-all duration-500;
+  .text-gradient {
+    background: linear-gradient(135deg, var(--color-accent-primary) 0%, var(--color-accent-secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
   }
-  .bento-card:hover {
-    @apply shadow-lux-lg;
-    border-color: var(--color-lux-gold-light);
+  
+  .glass-panel {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-sm-custom);
+    backdrop-filter: blur(12px);
+    transition: all 0.3s ease;
   }
-
-  .focus-ring {
-    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lux-gold focus-visible:ring-offset-2;
+  
+  .glass-button {
+    background-color: var(--color-accent-primary);
+    color: #FFFFFF;
+    font-weight: 500;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 12px var(--color-accent-primary-light);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
-}
-
-@keyframes float {
-  0% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-8px) rotate(1deg); }
-  100% { transform: translateY(0px) rotate(0deg); }
-}
-
-.animate-float {
-  animation: float 8s ease-in-out infinite;
+  
+  .glass-button:hover {
+    background-color: var(--color-contrast-900);
+    color: var(--color-bg);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  }
+  
+  /* Additional soft utilites */
+  .soft-ring {
+    box-shadow: 0 0 0 2px var(--color-border), 0 0 0 4px var(--color-accent-primary-light);
+  }
 }

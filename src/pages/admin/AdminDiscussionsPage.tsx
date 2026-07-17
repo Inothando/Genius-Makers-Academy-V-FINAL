@@ -142,24 +142,24 @@ export function AdminDiscussionsPage() {
     <div className="space-y-6 max-w-[1600px] mx-auto">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white mb-1">Moderation</h1>
-          <p className="text-sm text-gray-500 font-medium uppercase tracking-wider flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-lux-text mb-1">Moderation</h1>
+          <p className="text-sm text-lux-text font-medium uppercase tracking-wider flex items-center gap-2">
             Discussion posts from the community {loading && <Loader2 size={12} className="animate-spin" />}
           </p>
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="bg-[#111111] border border-gray-800 rounded-xl flex items-center px-4 py-2 text-[10px] font-bold text-amber-500 uppercase tracking-widest gap-2">
+          <div className="bg-[#111111] border border-lux-border rounded-xl flex items-center px-4 py-2 text-[10px] font-bold text-amber-500 uppercase tracking-widest gap-2">
             <AlertTriangle size={14} />
             {posts.filter(p => isFlagged(p.content, p.topic)).length} Flagged
           </div>
           
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600" size={16} />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-lux-text" size={16} />
             <input 
               type="text" 
               placeholder="Search forum..." 
-              className="bg-[#111111] border border-gray-800 rounded-xl py-2.5 pl-10 pr-4 text-xs text-white focus:border-[#1D9E75] outline-none transition-all w-64 shadow-lg shadow-black/20"
+              className="bg-[#111111] border border-lux-border rounded-xl py-2.5 pl-10 pr-4 text-xs text-lux-text focus:border-[var(--color-lux-green-500)] outline-none transition-all w-64 shadow-lg shadow-black/20"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -168,20 +168,20 @@ export function AdminDiscussionsPage() {
       </div>
 
       {selectedIds.length > 0 && (
-        <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-2xl flex items-center justify-between animate-in slide-in-from-top-4 duration-300">
+        <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-2xl sm:rounded-3xl flex items-center justify-between animate-in slide-in-from-top-4 duration-300">
            <div className="flex items-center gap-3">
               <span className="text-sm font-bold text-red-500">{selectedIds.length} posts selected for removal</span>
            </div>
            <div className="flex items-center gap-2">
               <button 
                 onClick={() => setSelectedIds([])}
-                className="px-4 py-2 text-xs font-bold text-gray-400 hover:text-white"
+                className="px-4 py-2 text-xs font-bold text-lux-text hover:text-lux-text"
               >
                 Cancel
               </button>
               <button 
                 onClick={handleBulkDelete}
-                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs font-bold transition-all shadow-lg shadow-red-600/20 flex items-center gap-2"
+                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-lux-text rounded-lg text-xs font-bold transition-all shadow-lg shadow-red-600/20 flex items-center gap-2"
               >
                 <Trash2 size={14} /> Delete Selected
               </button>
@@ -189,21 +189,21 @@ export function AdminDiscussionsPage() {
         </div>
       )}
 
-      <div className="bg-[#111111] border border-gray-800 rounded-2xl overflow-hidden min-h-[600px] shadow-2xl">
+      <div className="bg-[#111111] border border-lux-border rounded-2xl sm:rounded-3xl overflow-hidden min-h-[600px] shadow-2xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
-              <tr className="border-b border-gray-800 bg-gray-900/20">
+              <tr className="border-b border-lux-border bg-lux-bg/20">
                 <th className="px-6 py-4 w-12">
-                   <button onClick={selectAll} className="text-gray-600 hover:text-[#1D9E75] transition-colors">
-                      {selectedIds.length === filteredPosts.length && filteredPosts.length > 0 ? <CheckSquare size={18} className="text-[#1D9E75]" /> : <Square size={18} />}
+                   <button onClick={selectAll} className="text-lux-text hover:text-[var(--color-lux-green-500)] transition-colors">
+                      {selectedIds.length === filteredPosts.length && filteredPosts.length > 0 ? <CheckSquare size={18} className="text-[var(--color-lux-green-500)]" /> : <Square size={18} />}
                    </button>
                 </th>
-                <th className="px-6 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Author</th>
-                <th className="px-6 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Context</th>
-                <th className="px-6 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Post Content</th>
-                <th className="px-6 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest text-center">Engagement</th>
-                <th className="px-6 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest text-right">Actions</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-lux-text uppercase tracking-widest">Author</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-lux-text uppercase tracking-widest">Context</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-lux-text uppercase tracking-widest">Post Content</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-lux-text uppercase tracking-widest text-center">Engagement</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-lux-text uppercase tracking-widest text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-800/40">
@@ -213,12 +213,12 @@ export function AdminDiscussionsPage() {
                   const isSelected = selectedIds.includes(p.id);
                   return (
                     <tr key={p.id} className={cn(
-                      "hover:bg-gray-900/30 transition-all group",
+                      "hover:bg-lux-bg/30 transition-all group",
                       flagged ? "bg-amber-500/[0.03]" : "",
-                      isSelected ? "bg-[#1D9E75]/5" : ""
+                      isSelected ? "bg-[var(--color-lux-green-500)]/5" : ""
                     )}>
                       <td className="px-6 py-4">
-                         <button onClick={() => toggleSelect(p.id)} className={cn("transition-colors", isSelected ? "text-[#1D9E75]" : "text-gray-800 hover:text-gray-600")}>
+                         <button onClick={() => toggleSelect(p.id)} className={cn("transition-colors", isSelected ? "text-[var(--color-lux-green-500)]" : "text-lux-text hover:text-lux-text")}>
                             {isSelected ? <CheckSquare size={18} /> : <Square size={18} />}
                          </button>
                       </td>
@@ -226,33 +226,33 @@ export function AdminDiscussionsPage() {
                         <div className="flex items-center gap-3">
                           <div className={cn(
                             "w-10 h-10 rounded-full border flex items-center justify-center font-bold text-xs",
-                            flagged ? "bg-amber-500/10 border-amber-500/20 text-amber-500" : "bg-gray-800 border-gray-700 text-gray-400"
+                            flagged ? "bg-amber-500/10 border-amber-500/20 text-amber-500" : "bg-lux-surface-alt border-lux-border text-lux-text"
                           )}>
                             {p.authorName.charAt(0)}
                           </div>
                           <div className="flex flex-col">
-                            <span className="text-sm font-bold text-white mb-0.5">{p.authorName}</span>
-                            <span className="text-[10px] text-gray-600 font-medium uppercase tracking-widest">{p.isGuest ? 'Guest' : 'Scholar'}</span>
+                            <span className="text-sm font-bold text-lux-text mb-0.5">{p.authorName}</span>
+                            <span className="text-[10px] text-lux-text font-medium uppercase tracking-widest">{p.isGuest ? 'Guest' : 'Scholar'}</span>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex flex-col gap-1">
-                          <span className="text-[10px] font-bold text-[#1D9E75] uppercase tracking-widest">{p.subject}</span>
-                          <span className="text-[10px] text-gray-600 whitespace-nowrap">Grade {p.grade} • {p.curriculum}</span>
+                          <span className="text-[10px] font-bold text-[var(--color-lux-green-500)] uppercase tracking-widest">{p.subject}</span>
+                          <span className="text-[10px] text-lux-text whitespace-nowrap">Grade {p.grade} • {p.curriculum}</span>
                         </div>
                       </td>
                       <td className="px-6 py-4">
                          <div className="max-w-md">
                             <div className="flex items-center gap-2 mb-1.5">
-                               <h4 className="text-sm font-bold text-white truncate">{p.topic}</h4>
+                               <h4 className="text-sm font-bold text-lux-text truncate">{p.topic}</h4>
                                {flagged && (
                                  <span className="flex items-center gap-1 px-1.5 py-0.5 bg-amber-500/10 text-amber-500 text-[8px] font-black uppercase rounded border border-amber-500/20">
                                    <AlertTriangle size={8} /> Flagged
                                  </span>
                                )}
                             </div>
-                            <p className="text-xs text-gray-400 italic line-clamp-2 leading-relaxed">
+                            <p className="text-xs text-lux-text italic line-clamp-2 leading-relaxed">
                                "{p.content}"
                             </p>
                          </div>
@@ -260,23 +260,23 @@ export function AdminDiscussionsPage() {
                       <td className="px-6 py-4">
                          <div className="flex items-center justify-center gap-6">
                             <div className="flex flex-col items-center">
-                               <span className="text-xs font-bold text-white">{p.replyCount}</span>
-                               <span className="text-[8px] text-gray-600 font-black uppercase">Replies</span>
+                               <span className="text-xs font-bold text-lux-text">{p.replyCount}</span>
+                               <span className="text-[8px] text-lux-text font-black uppercase">Replies</span>
                             </div>
                             <div className="flex flex-col items-center text-primary/70">
-                               <span className="text-xs font-bold text-white">{p.likeCount}</span>
-                               <span className="text-[8px] text-gray-600 font-black uppercase">Likes</span>
+                               <span className="text-xs font-bold text-lux-text">{p.likeCount}</span>
+                               <span className="text-[8px] text-lux-text font-black uppercase">Likes</span>
                             </div>
                          </div>
                       </td>
                       <td className="px-6 py-4 text-right">
                          <div className="flex items-center justify-end gap-2 pr-2">
-                           <button className="p-2 text-gray-600 hover:text-white hover:bg-white/5 rounded-lg transition-all" title="View Full Thread">
+                           <button className="p-2 text-lux-text hover:text-lux-text hover:bg-lux-surface-alt rounded-lg transition-all" title="View Full Thread">
                               <Eye size={18} />
                            </button>
                            <button 
                              onClick={() => handleDelete(p.id, p.authorName)}
-                             className="p-2 text-gray-600 hover:text-red-500 hover:bg-red-500/5 rounded-lg transition-all" 
+                             className="p-2 text-lux-text hover:text-red-500 hover:bg-red-500/5 rounded-lg transition-all" 
                              title="Delete Post"
                            >
                               <Trash2 size={18} />
@@ -289,8 +289,8 @@ export function AdminDiscussionsPage() {
               ) : (
                 <tr>
                    <td colSpan={6} className="py-20 text-center">
-                      <MessageSquare size={48} className="mx-auto text-gray-800 mb-4 opacity-20" />
-                      <p className="text-sm text-gray-600 italic">No forum threads found</p>
+                      <MessageSquare size={48} className="mx-auto text-lux-text mb-4 opacity-20" />
+                      <p className="text-sm text-lux-text italic">No forum threads found</p>
                    </td>
                 </tr>
               )}

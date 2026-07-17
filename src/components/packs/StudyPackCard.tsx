@@ -36,11 +36,11 @@ export function StudyPackCard({ pack, onClick }: StudyPackCardProps) {
       {/* Thumbnail */}
       <div className={cn("relative aspect-[16/10] bg-gradient-to-br flex items-end p-6 overflow-hidden", gradient)}>
         {/* Glow effect */}
-        <div className="absolute top-0 right-0 w-32 h-32 bg-white/20 blur-3xl rounded-full translate-x-16 -translate-y-16" />
+        <div className="absolute top-0 right-0 w-32 h-32 bg-lux-surface00 blur-3xl rounded-full translate-x-16 -translate-y-16" />
         
         <div className="relative z-10">
-          <h3 className="text-xl font-serif text-white mb-1 leading-tight">{pack.title}</h3>
-          <p className="text-[10px] font-black uppercase tracking-widest text-white/60">{pack.subject}</p>
+          <h3 className="text-xl font-serif text-lux-text mb-1 leading-tight">{pack.title}</h3>
+          <p className="text-[10px] font-black uppercase tracking-widest text-lux-text">{pack.subject}</p>
         </div>
 
         {/* Floating Badges */}
@@ -64,7 +64,7 @@ export function StudyPackCard({ pack, onClick }: StudyPackCardProps) {
           <CurriculumTag type={pack.curriculum} />
         </div>
 
-        <p className="text-text-secondary text-sm mb-6 line-clamp-2 leading-relaxed">
+        <p className="text-lux-text text-sm mb-6 line-clamp-2 leading-relaxed">
           {pack.description}
         </p>
 
@@ -74,20 +74,20 @@ export function StudyPackCard({ pack, onClick }: StudyPackCardProps) {
               {pack.creatorName.charAt(0)}
             </div>
             <div className="min-w-0">
-               <p className="text-[10px] font-black uppercase tracking-widest text-text-tertiary mb-0.5">Created by</p>
+               <p className="text-[10px] font-black uppercase tracking-widest text-lux-text mb-0.5">Created by</p>
                <p className="text-xs font-bold text-text-primary truncate">{pack.creatorName}</p>
             </div>
           </div>
 
           <div className="flex flex-col items-end">
-            <div className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-text-tertiary">
+            <div className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-lux-text">
               <Users size={10} />
               <span>{pack.enrollCount} Enrolled</span>
             </div>
           </div>
         </div>
 
-        <div className="mt-4 flex items-center justify-center py-3 bg-surface group-hover:bg-primary/5 rounded-2xl border border-transparent group-hover:border-primary/20 transition-all">
+        <div className="mt-4 flex items-center justify-center py-3 bg-surface group-hover:bg-primary/5 rounded-2xl sm:rounded-3xl border border-transparent group-hover:border-primary/20 transition-all">
           <span className="text-xs font-bold text-text-primary group-hover:text-primary transition-colors flex items-center gap-2">
             View Pack <ArrowRight size={14} />
           </span>

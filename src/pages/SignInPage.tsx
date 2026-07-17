@@ -199,28 +199,28 @@ export function SignInPage() {
       
       <div className="flex-1 flex flex-col lg:flex-row mt-20">
         {/* Left Panel */}
-        <div className="hidden lg:flex w-1/2 bg-lux-green-950 p-24 flex-col justify-between relative overflow-hidden">
-           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] mix-blend-overlay"></div>
-           <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-lux-gold/10 blur-[120px] rounded-full translate-x-1/2 -translate-y-1/2"></div>
+        <div className="hidden lg:flex w-1/2 bg-lux-green-950 text-lux-bg text-lux-surface p-24 flex-col justify-between relative overflow-hidden">
+           <div className="absolute inset-0 hidden opacity-[0.03] mix-blend-multiply"></div>
+           <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-lux-green-500/10 blur-[120px] rounded-full translate-x-1/2 -translate-y-1/2"></div>
            
            <div className="relative z-10">
              <div className="flex items-center gap-3 text-lux-surface mb-24">
-                <div className="w-12 h-12 bg-lux-surface/10 border border-lux-gold/20 rounded-xl backdrop-blur-md flex items-center justify-center font-serif text-2xl font-medium text-lux-gold">G</div>
+                <div className="w-12 h-12 bg-lux-surface/10 border border-lux-border rounded-xl backdrop-blur-md flex items-center justify-center font-serif text-2xl font-medium text-lux-green-500">G</div>
                 <span className="text-xl font-medium tracking-tight font-serif">Genius Makers Academy</span>
              </div>
 
              <div className="max-w-lg">
-               <Quote className="text-lux-gold/30 mb-8" size={48} fill="currentColor" />
-               <h2 className="text-4xl lg:text-5xl font-serif text-lux-surface mb-10 leading-[1.2] italic font-light">
+               <Quote className="text-lux-green-500/30 mb-8" size={48} fill="currentColor" />
+               <h2 className="text-4xl lg:text-5xl font-serif text-lux-text mb-10 leading-[1.2] italic font-light">
                  "Engineered by top scholars for South African learners. Excellence is no longer a privilege—it's accessible."
                </h2>
                <div className="flex items-center gap-5">
-                  <div className="w-14 h-14 rounded-full border border-lux-gold/30 bg-lux-green-900 overflow-hidden flex items-center justify-center">
-                    <span className="font-serif text-xl text-lux-gold italic">SA</span>
+                  <div className="w-14 h-14 rounded-full border border-lux-border bg-lux-bg overflow-hidden flex items-center justify-center">
+                    <span className="font-serif text-xl text-lux-green-500 italic">SA</span>
                   </div>
                   <div>
-                    <p className="text-lux-gold-light font-medium tracking-wide">National Archive Platform</p>
-                    <p className="text-lux-muted text-xs uppercase tracking-widest mt-1">
+                    <p className="text-lux-text font-medium tracking-wide">National Archive Platform</p>
+                    <p className="text-lux-text text-xs uppercase tracking-widest mt-1">
                       South African Syllabus Standards
                     </p>
                   </div>
@@ -228,18 +228,18 @@ export function SignInPage() {
              </div>
            </div>
 
-           <div className="grid grid-cols-3 gap-8 relative z-10 border-t border-lux-green-900 pt-12">
+           <div className="grid grid-cols-3 gap-8 relative z-10 border-t border-lux-border pt-12">
               <div>
-                <p className="text-4xl font-serif text-lux-gold mb-2">3.5k<span className="text-lux-gold/50 text-2xl">+</span></p>
-                <p className="text-lux-surface/60 text-[9px] font-bold uppercase tracking-widest">Archived Papers</p>
+                <p className="text-4xl font-serif text-lux-green-500 mb-2">3.5k<span className="text-lux-green-500/80 text-2xl">+</span></p>
+                <p className="text-lux-text text-[9px] font-bold uppercase tracking-widest">Archived Papers</p>
               </div>
               <div>
-                <p className="text-4xl font-serif text-lux-gold mb-2">10k<span className="text-lux-gold/50 text-2xl">+</span></p>
-                <p className="text-lux-surface/60 text-[9px] font-bold uppercase tracking-widest">Active Learners</p>
+                <p className="text-4xl font-serif text-lux-green-500 mb-2">10k<span className="text-lux-green-500/80 text-2xl">+</span></p>
+                <p className="text-lux-text text-[9px] font-bold uppercase tracking-widest">Active Learners</p>
               </div>
               <div>
-                <p className="text-4xl font-serif text-lux-gold mb-2">CAPS</p>
-                <p className="text-lux-surface/60 text-[9px] font-bold uppercase tracking-widest">Standard Alignment</p>
+                <p className="text-4xl font-serif text-lux-green-500 mb-2">CAPS</p>
+                <p className="text-lux-text text-[9px] font-bold uppercase tracking-widest">Standard Alignment</p>
               </div>
            </div>
         </div>
@@ -249,15 +249,15 @@ export function SignInPage() {
           <div className="w-full max-w-[440px] relative z-10">
              <div className="mb-12 text-center lg:text-left">
                <div className="inline-flex items-center gap-2 mb-4">
-                 <span className="w-6 h-[1px] bg-lux-gold"></span>
-                 <span className="text-[9px] font-bold uppercase tracking-widest text-lux-gold">Secure Entry</span>
+                 <span className="w-6 h-[1px] bg-lux-green-500"></span>
+                 <span className="text-[9px] font-bold uppercase tracking-widest text-lux-green-500">Secure Entry</span>
                </div>
-               <h1 className="text-4xl font-serif text-lux-green-950 mb-4 tracking-tight">Access The Archive</h1>
-               <p className="text-lux-muted font-light tracking-wide text-sm">Join using your South African mobile number. Free forever.</p>
+               <h1 className="text-4xl font-serif text-lux-text mb-4 tracking-tight">Access The Archive</h1>
+               <p className="text-lux-text font-light tracking-wide text-sm">Join using your South African mobile number. Free forever.</p>
              </div>
 
              {error && (
-               <div className="mb-8 p-4 bg-red-50/50 border border-red-200/50 rounded-2xl flex items-start gap-4 shadow-sm">
+               <div className="mb-8 p-4 bg-red-50/50 border border-red-200/50 rounded-2xl sm:rounded-3xl flex items-start gap-4 shadow-sm">
                  <div className="w-6 h-6 rounded-full bg-red-100 text-red-800 flex items-center justify-center shrink-0 mt-0.5 border border-red-200">
                    <span className="text-xs font-bold">!</span>
                  </div>
@@ -265,28 +265,28 @@ export function SignInPage() {
                </div>
              )}
              
-             <div className="bg-lux-surface border border-lux-border rounded-[2.5rem] p-8 md:p-10 shadow-lux-sm">
+             <div className="glass-panel p-6 sm:p-8 md:p-10 shadow-lux-sm">
                 {method === 'phone' ? (
                   <div className="space-y-8">
                     {!verificationId ? (
                       <div>
-                        <label className="text-[10px] font-bold uppercase tracking-widest text-lux-muted mb-3 block ml-1">Mobile Number</label>
+                        <label className="text-[10px] font-bold uppercase tracking-widest text-lux-text mb-3 block ml-1">Mobile Number</label>
                         <div className="flex items-center gap-3">
-                          <div className="px-5 py-4 bg-lux-bg border border-lux-border rounded-2xl flex items-center gap-3 shadow-inner">
+                          <div className="px-5 py-4 bg-lux-bg border border-lux-border rounded-2xl sm:rounded-3xl flex items-center gap-3 shadow-inner">
                              <img src="https://flagcdn.com/w20/za.png" alt="ZA" className="w-[22px] rounded-sm shadow-sm" />
-                             <span className="font-bold text-lux-green-950 tracking-wider">+27</span>
+                             <span className="font-bold text-lux-text tracking-wider">+27</span>
                           </div>
                           <input 
                             type="tel"
                             maxLength={9}
                             placeholder="71 234 5678"
-                            className="flex-1 px-6 py-4 bg-lux-bg border border-lux-border rounded-2xl text-lg font-bold text-lux-green-950 outline-none focus:border-lux-gold transition-all shadow-inner tracking-wider"
+                            className="flex-1 px-6 py-4 bg-lux-bg border border-lux-border rounded-2xl sm:rounded-3xl text-lg font-bold text-lux-text outline-none focus:border-lux-green-500 transition-all shadow-inner tracking-wider"
                             value={phoneNumber}
                             onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, ''))}
                           />
                         </div>
                         <Button 
-                          className="w-full mt-8 h-14 rounded-2xl text-[11px] uppercase tracking-widest font-bold bg-lux-green-950 hover:bg-lux-green-900 text-lux-gold-light shadow-lux-lg active:scale-95 transition-all"
+                          className="w-full mt-8 h-14 rounded-2xl sm:rounded-3xl text-[11px] uppercase tracking-widest font-bold bg-lux-green-950 text-lux-bg hover:bg-lux-green-900 text-lux-surface shadow-lux-lg active:scale-95 transition-all"
                           onClick={handleSendOTP}
                           disabled={loading || phoneNumber.length !== 9}
                         >
@@ -296,7 +296,7 @@ export function SignInPage() {
                       </div>
                     ) : (
                       <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.4, ease: "easeOut" }}>
-                        <label className="text-[10px] font-bold uppercase tracking-widest text-lux-muted mb-5 block text-center">Enter 6-digit confirmation code</label>
+                        <label className="text-[10px] font-bold uppercase tracking-widest text-lux-text mb-5 block text-center">Enter 6-digit confirmation code</label>
                         <div className="flex justify-between gap-3 mb-8">
                           {otp.map((digit, idx) => (
                             <input 
@@ -304,7 +304,7 @@ export function SignInPage() {
                               ref={(el) => { otpInputs.current[idx] = el; }}
                               type="text"
                               maxLength={1}
-                              className="w-full h-16 bg-lux-bg border border-lux-border rounded-2xl text-2xl font-bold text-lux-green-950 text-center outline-none focus:border-lux-gold transition-all shadow-inner"
+                              className="w-full h-16 bg-lux-bg border border-lux-border rounded-2xl sm:rounded-3xl text-2xl font-bold text-lux-text text-center outline-none focus:border-lux-green-500 transition-all shadow-inner"
                               value={digit}
                               onChange={(e) => handleOtpChange(idx, e.target.value)}
                               onKeyDown={(e) => handleKeyDown(idx, e)}
@@ -312,7 +312,7 @@ export function SignInPage() {
                           ))}
                         </div>
                         <Button 
-                          className="w-full h-14 rounded-2xl text-[11px] uppercase tracking-widest font-bold bg-lux-gold hover:bg-lux-gold-light text-lux-green-950 shadow-lux-lg active:scale-95 transition-all mb-6"
+                          className="w-full h-14 rounded-2xl sm:rounded-3xl text-[11px] uppercase tracking-widest font-bold bg-lux-green-500 hover:bg-lux-green-500 hover:text-lux-text hover:border-lux-green-500-light text-lux-text shadow-lux-lg active:scale-95 transition-all mb-6"
                           onClick={handleVerifyOTP}
                           disabled={loading || otp.join('').length !== 6}
                         >
@@ -321,11 +321,11 @@ export function SignInPage() {
                         
                         <div className="text-center">
                            {timer > 0 ? (
-                             <p className="text-[10px] font-bold uppercase tracking-widest text-lux-muted">Resend code in <span className="text-lux-gold">{timer}s</span></p>
+                             <p className="text-[10px] font-bold uppercase tracking-widest text-lux-text">Resend code in <span className="text-lux-green-500">{timer}s</span></p>
                            ) : (
                              <button 
                                 onClick={() => { setVerificationId(null); setOtp(['','','','','','']); handleSendOTP(); }}
-                                className="text-[10px] font-bold uppercase tracking-widest text-lux-green-900 border-b border-lux-green-900/30 hover:border-lux-gold hover:text-lux-gold transition-colors pb-1"
+                                className="text-[10px] font-bold uppercase tracking-widest text-lux-green-900 border-b border-lux-border/30 hover:border-lux-green-500 hover:text-lux-green-500 transition-colors pb-1"
                               >
                                 Resend Verification Code
                               </button>
@@ -338,11 +338,11 @@ export function SignInPage() {
                   <form onSubmit={handleEmailAuth} className="space-y-6">
                     {isRegistering && (
                       <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }}>
-                        <label className="text-[10px] font-bold uppercase tracking-widest text-lux-muted mb-2 block ml-1">Full Name</label>
+                        <label className="text-[10px] font-bold uppercase tracking-widest text-lux-text mb-2 block ml-1">Full Name</label>
                         <input 
                           type="text"
                           required={isRegistering}
-                          className="w-full px-6 py-4 bg-lux-bg border border-lux-border rounded-2xl text-base font-medium text-lux-green-950 outline-none focus:border-lux-gold transition-all shadow-inner placeholder:text-lux-muted/40"
+                          className="w-full px-6 py-4 bg-lux-bg border border-lux-border rounded-2xl sm:rounded-3xl text-base font-medium text-lux-text outline-none focus:border-lux-green-500 transition-all shadow-inner placeholder:text-lux-text"
                           placeholder="Name and Surname"
                           value={fullName}
                           onChange={(e) => setFullName(e.target.value)}
@@ -350,22 +350,22 @@ export function SignInPage() {
                       </motion.div>
                     )}
                     <div>
-                      <label className="text-[10px] font-bold uppercase tracking-widest text-lux-muted mb-2 block ml-1">Email Address (Optional)</label>
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-lux-text mb-2 block ml-1">Email Address (Optional)</label>
                       <input 
                         type="email"
                         required
-                        className="w-full px-6 py-4 bg-lux-bg border border-lux-border rounded-2xl text-base font-medium text-lux-green-950 outline-none focus:border-lux-gold transition-all shadow-inner placeholder:text-lux-muted/40"
+                        className="w-full px-6 py-4 bg-lux-bg border border-lux-border rounded-2xl sm:rounded-3xl text-base font-medium text-lux-text outline-none focus:border-lux-green-500 transition-all shadow-inner placeholder:text-lux-text"
                         placeholder="scholar@example.com"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                       />
                     </div>
                     <div>
-                      <label className="text-[10px] font-bold uppercase tracking-widest text-lux-muted mb-2 block ml-1">Passphrase</label>
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-lux-text mb-2 block ml-1">Passphrase</label>
                       <input 
                         type="password"
                         required
-                        className="w-full px-6 py-4 bg-lux-bg border border-lux-border rounded-2xl text-base font-medium text-lux-green-950 outline-none focus:border-lux-gold transition-all shadow-inner placeholder:text-lux-muted/40"
+                        className="w-full px-6 py-4 bg-lux-bg border border-lux-border rounded-2xl sm:rounded-3xl text-base font-medium text-lux-text outline-none focus:border-lux-green-500 transition-all shadow-inner placeholder:text-lux-text"
                         placeholder="••••••••"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
@@ -373,7 +373,7 @@ export function SignInPage() {
                     </div>
                     <Button 
                       type="submit"
-                      className="w-full h-14 mt-4 rounded-2xl text-[11px] uppercase tracking-widest font-bold bg-lux-green-950 hover:bg-lux-green-900 text-lux-gold-light shadow-lux-lg active:scale-95 transition-all"
+                      className="w-full h-14 mt-4 rounded-2xl sm:rounded-3xl text-[11px] uppercase tracking-widest font-bold bg-lux-green-950 text-lux-bg hover:bg-lux-green-900 text-lux-surface shadow-lux-lg active:scale-95 transition-all"
                       disabled={loading}
                     >
                       {loading ? <Loader2 className="animate-spin mr-3" /> : isRegistering ? 'Enroll Account' : 'Authenticate'}
@@ -382,7 +382,7 @@ export function SignInPage() {
                     <button 
                       type="button"
                       onClick={() => { setIsRegistering(!isRegistering); setError(null); }}
-                      className="w-full text-center text-[10px] font-bold uppercase tracking-widest text-lux-muted hover:text-lux-gold transition-colors mt-2"
+                      className="w-full text-center text-[10px] font-bold uppercase tracking-widest text-lux-text hover:text-lux-green-500 transition-colors mt-2"
                     >
                       {isRegistering ? 'Existing scholar? Authenticate' : 'New enrollment? Create account'}
                     </button>
@@ -394,14 +394,14 @@ export function SignInPage() {
                      <div className="w-full border-t border-lux-border"></div>
                    </div>
                    <div className="relative flex justify-center">
-                     <span className="bg-lux-surface px-4 text-[9px] uppercase tracking-widest font-bold text-lux-muted">Alternative Access</span>
+                     <span className="bg-lux-surface px-4 text-[9px] uppercase tracking-widest font-bold text-lux-text">Alternative Access</span>
                    </div>
                 </div>
 
                 <div className="space-y-4">
                   <Button 
                     variant="outline"
-                    className="w-full h-14 rounded-2xl flex items-center justify-center gap-3 border-lux-border hover:bg-lux-bg hover:border-lux-gold/30 text-[11px] uppercase tracking-widest font-bold text-lux-green-950 transition-all"
+                    className="w-full h-14 rounded-2xl sm:rounded-3xl flex items-center justify-center gap-3 border-lux-border hover:bg-lux-bg hover:border-lux-border text-[11px] uppercase tracking-widest font-bold text-lux-text transition-all"
                     onClick={handleGoogleSignIn}
                     disabled={loading}
                   >
@@ -416,7 +416,7 @@ export function SignInPage() {
                   
                   <button 
                     onClick={() => navigate('/past-papers')}
-                    className="w-full h-14 border border-lux-border border-dashed rounded-2xl text-[11px] uppercase tracking-widest font-bold text-lux-muted hover:bg-lux-bg hover:text-lux-green-950 transition-all flex items-center justify-center gap-3 group"
+                    className="w-full h-14 border border-lux-border border-dashed rounded-2xl sm:rounded-3xl text-[11px] uppercase tracking-widest font-bold text-lux-text hover:bg-lux-bg hover:text-lux-text transition-all flex items-center justify-center gap-3 group"
                   >
                     Enter as Guest <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                   </button>

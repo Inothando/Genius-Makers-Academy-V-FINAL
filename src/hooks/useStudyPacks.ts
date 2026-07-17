@@ -8,16 +8,19 @@ import {
 } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { StudyPack, StudyPackFilters } from '../types';
+import { useTierGating } from './useTierGating';
 
 // Global memory cache for study packs query results to enable instant page loads and seamless back-and-forth transitions.
 const packsCache = new Map<string, StudyPack[]>();
 const packsPromiseCache = new Map<string, Promise<StudyPack[]>>();
 
 export function useStudyPacks(filters: StudyPackFilters) {
+  const { filterIEBContent } = useTierGating();
+  
   // Generate a distinct cache key based on non-search filter parameters
   const cacheKey = `${filters.grade}_${filters.curriculum}_${filters.subject}`;
   
-  const [packs, setPacks] = useState<StudyPack[]>(packsCache.get(cacheKey) || []);
+  const [packs, setPacks] = useState<StudyPack[]>(filterIEBContent(packsCache.get(cacheKey) || []));
   const [loading, setLoading] = useState(!packsCache.has(cacheKey));
 
   useEffect(() => {
@@ -38,6 +41,7 @@ export function useStudyPacks(filters: StudyPackFilters) {
               p.description.toLowerCase().includes(searchLower)
             );
           }
+          filtered = filterIEBContent(filtered);
           setPacks(filtered);
           setLoading(false);
         }
@@ -95,7 +99,7 @@ export function useStudyPacks(filters: StudyPackFilters) {
           );
         }
 
-        setPacks(displayResults);
+        setPacks(filterIEBContent(displayResults));
       } catch (err) {
         console.error("Error fetching study packs:", err);
       } finally {
@@ -112,7 +116,7 @@ export function useStudyPacks(filters: StudyPackFilters) {
     return () => {
       active = false;
     };
-  }, [cacheKey, filters.search]);
+  }, [cacheKey, filters.search, filterIEBContent]);
 
   return { packs, loading };
 }

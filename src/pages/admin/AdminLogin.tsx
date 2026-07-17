@@ -97,31 +97,31 @@ export function AdminLogin() {
         className="w-full max-w-md"
       >
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-[#1D9E75] mx-auto mb-4">
+          <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-[var(--color-lux-green-500)] mx-auto mb-4">
             <span className="text-2xl font-bold">G</span>
           </div>
-          <h1 className="text-2xl font-bold text-white mb-2">GMA Admin Portal</h1>
-          <p className="text-gray-500">Restricted access. Authorised personnel only.</p>
+          <h1 className="text-2xl font-bold text-lux-text mb-2">GMA Admin Portal</h1>
+          <p className="text-lux-text">Restricted access. Authorised personnel only.</p>
         </div>
 
-        <div className="bg-gray-900 border border-gray-800 rounded-3xl p-8 shadow-2xl">
+        <div className="bg-lux-bg border border-lux-border rounded-[2rem] sm:rounded-[3rem] p-8 shadow-2xl">
           <form onSubmit={handleLogin} className="space-y-6">
             {error && (
-              <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-center gap-3 text-red-500 text-sm">
+              <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-2xl sm:rounded-3xl flex items-center gap-3 text-red-500 text-sm">
                 <AlertCircle size={18} />
                 {error}
               </div>
             )}
 
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">Email Address</label>
+              <label className="block text-sm font-medium text-lux-text mb-2">Email Address</label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" size={20} />
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-lux-text" size={20} />
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-black border border-gray-800 rounded-2xl py-4 pl-12 pr-4 text-white placeholder:text-gray-700 focus:border-[#1D9E75] focus:ring-1 focus:ring-[#1D9E75] outline-none transition-all"
+                  className="w-full bg-black border border-lux-border rounded-2xl sm:rounded-3xl py-4 pl-12 pr-4 text-lux-text placeholder:text-lux-text focus:border-[var(--color-lux-green-500)] focus:ring-1 focus:ring-[var(--color-lux-green-500)] outline-none transition-all"
                   placeholder="admin@geniusmakers.co.za"
                   required
                 />
@@ -129,14 +129,14 @@ export function AdminLogin() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">Password</label>
+              <label className="block text-sm font-medium text-lux-text mb-2">Password</label>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" size={20} />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-lux-text" size={20} />
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-black border border-gray-800 rounded-2xl py-4 pl-12 pr-4 text-white placeholder:text-gray-700 focus:border-[#1D9E75] focus:ring-1 focus:ring-[#1D9E75] outline-none transition-all"
+                  className="w-full bg-black border border-lux-border rounded-2xl sm:rounded-3xl py-4 pl-12 pr-4 text-lux-text placeholder:text-lux-text focus:border-[var(--color-lux-green-500)] focus:ring-1 focus:ring-[var(--color-lux-green-500)] outline-none transition-all"
                   placeholder="••••••••"
                   required
                 />
@@ -145,7 +145,7 @@ export function AdminLogin() {
 
             <Button 
               type="submit" 
-              className="w-full h-14 bg-[#1D9E75] hover:bg-[#166B51] text-white rounded-2xl font-bold text-lg"
+              className="w-full h-14 bg-[var(--color-lux-green-500)] hover:bg-[#166B51] text-lux-text rounded-2xl sm:rounded-3xl font-bold text-lg"
               disabled={loading}
             >
               {loading ? (

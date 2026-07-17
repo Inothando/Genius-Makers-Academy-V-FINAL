@@ -138,6 +138,7 @@ export function useAdminAuth() {
         canModerateDiscussions: true,
         canDeleteContent: true,
         canViewUsers: true,
+        canManageExamTimetables: true,
         canManageAdmins: true,
         canViewRevenue: true,
         canChangePlatformSettings: true
@@ -166,6 +167,7 @@ export function useAdminAuth() {
         canModerateDiscussions: true,
         canDeleteContent: true,
         canViewUsers: true,
+        canManageExamTimetables: true,
         canManageAdmins: true,
         canViewRevenue: true,
         canChangePlatformSettings: true

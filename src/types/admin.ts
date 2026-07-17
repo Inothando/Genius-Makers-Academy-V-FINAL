@@ -10,9 +10,32 @@ export interface AdminPermissions {
   canModerateDiscussions: boolean;
   canDeleteContent: boolean;
   canViewUsers: boolean;
+  canManageExamTimetables: boolean;
   canManageAdmins: boolean;    // ONLY super_admin = true
   canViewRevenue: boolean;     // ONLY super_admin = true
   canChangePlatformSettings: boolean;  // ONLY super_admin = true
+  canReviewRoomSafety: boolean;
+}
+
+export interface ExamTimetableEntry {
+  subject: string;
+  grade: number;
+  paperNumber: "P1" | "P2" | "P3" | "P4";
+  examDate: Timestamp;
+  startTime: string;      // e.g. "09:00"
+  durationMinutes: number;
+}
+
+export interface ExamTimetable {
+  id?: string;
+  term: "Term1" | "Term2" | "Term3" | "Term4";
+  year: number;
+  province: string;
+  curriculum: "NSC" | "IEB";
+  entries: ExamTimetableEntry[];
+  uploadedBy: string;
+  uploadedAt: Timestamp;
+  isActive: boolean;
 }
 
 export interface AdminUser {

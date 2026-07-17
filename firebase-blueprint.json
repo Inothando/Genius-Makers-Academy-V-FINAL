@@ -111,6 +111,23 @@
       },
       "required": ["id", "youtubeId", "title", "subject", "createdAt"]
     },
+    "VideoComment": {
+      "title": "Video Comment",
+      "description": "A user-submitted comment or reply, with support for AI assistance.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "videoId": { "type": "string" },
+        "content": { "type": "string" },
+        "authorId": { "type": "string" },
+        "authorName": { "type": "string" },
+        "isGuest": { "type": "boolean" },
+        "isAi": { "type": "boolean" },
+        "parentId": { "type": "string" },
+        "createdAt": { "type": "object" }
+      },
+      "required": ["id", "videoId", "content", "authorName", "createdAt"]
+    },
     "StudyPack": {
       "title": "Study Pack",
       "description": "A collection of resources, videos, and papers.",
@@ -201,6 +218,10 @@
     "/videos/{videoId}": {
       "schema": "VideoLesson",
       "description": "Collection of curated video lessons."
+    },
+    "/videos/{videoId}/comments/{commentId}": {
+      "schema": "VideoComment",
+      "description": "User comments and AI replies on curated videos."
     },
     "/study-packs/{packId}": {
       "schema": "StudyPack",

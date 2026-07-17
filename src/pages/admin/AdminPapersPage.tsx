@@ -866,16 +866,16 @@ export function AdminPapersPage() {
   return (
     <div className="space-y-12">
         {/* Upload Section */}
-        <section className="bg-white border border-border-subtle rounded-[32px] sm:rounded-[40px] p-6 sm:p-10 shadow-sm overflow-hidden relative text-black">
-          <div className="relative z-10 text-black">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-8 text-black">
+        <section className="bg-white border border-border-subtle rounded-[32px] sm:rounded-[40px] p-6 sm:p-10 shadow-sm overflow-hidden relative text-lux-bg">
+          <div className="relative z-10 text-lux-bg">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-8 text-lux-bg">
                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary shrink-0">
+                  <div className="w-12 h-12 bg-primary/10 rounded-2xl sm:rounded-3xl flex items-center justify-center text-primary shrink-0">
                     <Upload size={24} />
                   </div>
                   <div>
                     <h3 className="text-xl font-serif text-text-primary">Bulk Paper Upload</h3>
-                    <p className="text-xs text-text-tertiary font-bold uppercase tracking-widest">PDFs only • Max 50MB</p>
+                    <p className="text-xs text-lux-text font-bold uppercase tracking-widest">PDFs only • Max 50MB</p>
                   </div>
                </div>
                {uploadingFiles.length > 0 && (
@@ -894,13 +894,13 @@ export function AdminPapersPage() {
                 <Plus size={32} className="text-primary" />
               </div>
               <p className="text-lg font-serif text-text-primary mb-2">Drag files here or click to browse</p>
-              <p className="text-sm text-text-tertiary">Files will be auto-analysed by name</p>
+              <p className="text-sm text-lux-text">Files will be auto-analysed by name</p>
             </div>
 
             {uploadingFiles.length > 0 && (
               <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
                  {uploadingFiles.map((uFile, idx) => (
-                   <div key={uFile.id} className="p-6 bg-surface border border-border-subtle rounded-2xl">
+                   <div key={uFile.id} className="p-6 bg-surface border border-border-subtle rounded-2xl sm:rounded-3xl">
                       <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-4">
                           <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-primary shadow-sm">
@@ -908,7 +908,7 @@ export function AdminPapersPage() {
                           </div>
                           <div>
                             <p className="text-sm font-bold text-text-primary">{uFile.file.name}</p>
-                            <p className="text-[10px] font-medium text-text-tertiary">{(uFile.file.size / (1024 * 1024)).toFixed(2)} MB</p>
+                            <p className="text-[10px] font-medium text-lux-text">{(uFile.file.size / (1024 * 1024)).toFixed(2)} MB</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-4">
@@ -923,7 +923,7 @@ export function AdminPapersPage() {
                            ) : (
                              <button 
                                onClick={() => setUploadingFiles(prev => prev.filter(f => f.id !== uFile.id))}
-                               className="p-2 hover:bg-red-50 text-text-tertiary hover:text-red-500 rounded-lg transition-all"
+                               className="p-2 hover:bg-red-50 text-lux-text hover:text-red-500 rounded-lg transition-all"
                              >
                                <X size={18} />
                              </button>
@@ -933,7 +933,7 @@ export function AdminPapersPage() {
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-7 gap-4">
                          <div className="space-y-1.5">
-                            <label className="text-[10px] font-black uppercase text-text-tertiary">Subject</label>
+                            <label className="text-[10px] font-black uppercase text-lux-text">Subject</label>
                             <select 
                               value={uFile.subject} 
                               onChange={(e) => setUploadingFiles(prev => prev.map(f => f.id === uFile.id ? { ...f, subject: e.target.value } : f))}
@@ -943,17 +943,17 @@ export function AdminPapersPage() {
                             </select>
                          </div>
                          <div className="space-y-1.5">
-                            <label className="text-[10px] font-black uppercase text-text-tertiary">Grade</label>
+                            <label className="text-[10px] font-black uppercase text-lux-text">Grade</label>
                             <select 
                               value={uFile.grade}
                               onChange={(e) => setUploadingFiles(prev => prev.map(f => f.id === uFile.id ? { ...f, grade: parseInt(e.target.value) } : f))}
                               className="w-full p-2 bg-white border border-border-subtle rounded-lg text-[10px] font-bold outline-none"
                             >
-                               {[8, 9, 10, 11, 12].map(g => <option key={g} value={g}>Grade {g}</option>)}
+                               {[12].map(g => <option key={g} value={g}>Grade {g}</option>)}
                             </select>
                          </div>
                          <div className="space-y-1.5">
-                            <label className="text-[10px] font-black uppercase text-text-tertiary">Year</label>
+                            <label className="text-[10px] font-black uppercase text-lux-text">Year</label>
                             <select 
                                value={uFile.year}
                                onChange={(e) => setUploadingFiles(prev => prev.map(f => f.id === uFile.id ? { ...f, year: parseInt(e.target.value) } : f))}
@@ -963,7 +963,7 @@ export function AdminPapersPage() {
                             </select>
                          </div>
                          <div className="space-y-1.5">
-                            <label className="text-[10px] font-black uppercase text-text-tertiary">Curriculum</label>
+                            <label className="text-[10px] font-black uppercase text-lux-text">Curriculum</label>
                             <select 
                                value={uFile.curriculum}
                                onChange={(e) => setUploadingFiles(prev => prev.map(f => f.id === uFile.id ? { ...f, curriculum: e.target.value as any } : f))}
@@ -974,7 +974,7 @@ export function AdminPapersPage() {
                             </select>
                          </div>
                          <div className="space-y-1.5">
-                            <label className="text-[10px] font-black uppercase text-text-tertiary">Paper</label>
+                            <label className="text-[10px] font-black uppercase text-lux-text">Paper</label>
                             <select 
                                value={uFile.paperNumber}
                                onChange={(e) => setUploadingFiles(prev => prev.map(f => f.id === uFile.id ? { ...f, paperNumber: e.target.value as any } : f))}
@@ -986,7 +986,7 @@ export function AdminPapersPage() {
                             </select>
                          </div>
                          <div className="space-y-1.5">
-                            <label className="text-[10px] font-black uppercase text-text-tertiary">Type</label>
+                            <label className="text-[10px] font-black uppercase text-lux-text">Type</label>
                             <select 
                                value={uFile.type}
                                onChange={(e) => setUploadingFiles(prev => prev.map(f => f.id === uFile.id ? { ...f, type: e.target.value as any } : f))}
@@ -997,7 +997,7 @@ export function AdminPapersPage() {
                             </select>
                          </div>
                          <div className="space-y-1.5">
-                            <label className="text-[10px] font-black uppercase text-text-tertiary">Language</label>
+                            <label className="text-[10px] font-black uppercase text-lux-text">Language</label>
                             <select 
                                value={uFile.language}
                                onChange={(e) => setUploadingFiles(prev => prev.map(f => f.id === uFile.id ? { ...f, language: e.target.value as any } : f))}
@@ -1022,7 +1022,7 @@ export function AdminPapersPage() {
               <div className="flex flex-col sm:flex-row sm:items-center gap-6 flex-1">
                  <h3 className="text-xl font-serif text-text-primary shrink-0">Manage Vault</h3>
                   {syncStatus === 'running' && (
-                    <div className="flex-1 w-full max-w-lg flex items-center gap-3 py-2 px-4 bg-gray-950 border border-gray-800 rounded-2xl text-[11px] text-green-400 font-mono animate-pulse shadow-inner min-w-0">
+                    <div className="flex-1 w-full max-w-lg flex items-center gap-3 py-2 px-4 bg-gray-950 border border-lux-border rounded-2xl sm:rounded-3xl text-[11px] text-green-400 font-mono animate-pulse shadow-inner min-w-0">
                       <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-ping shrink-0" />
                       <span className="truncate">
                         <strong>
@@ -1033,11 +1033,11 @@ export function AdminPapersPage() {
                     </div>
                   )}
                  <div className="relative flex-1 w-full max-w-md">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-text-tertiary" size={18} />
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-lux-text" size={18} />
                     <input 
                       type="text" 
                       placeholder="Filter by subject or year..." 
-                      className="w-full pl-12 pr-4 py-3 bg-surface border border-border-subtle rounded-2xl text-xs font-bold outline-none focus:border-primary/30 shadow-inner"
+                      className="w-full pl-12 pr-4 py-3 bg-surface border border-border-subtle rounded-2xl sm:rounded-3xl text-xs font-bold outline-none focus:border-primary/30 shadow-inner"
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                     />
@@ -1049,33 +1049,33 @@ export function AdminPapersPage() {
                      <div className="relative group w-full sm:w-auto">
                        <Button variant="outline" onClick={handleBulkRepair}
                           disabled={syncStatus === 'running'}
-                          className={`w-full sm:w-auto text-lux-gold border-lux-gold/20 hover:bg-lux-gold/10 hover:text-white ${
-                            syncStatus === 'running' && syncType === 'repair' ? 'animate-pulse text-lux-gold bg-lux-gold/20' : ''
+                          className={`w-full sm:w-auto text-lux-green-500 border-lux-border hover:bg-lux-green-500/10 hover:text-lux-text ${
+                            syncStatus === 'running' && syncType === 'repair' ? 'animate-pulse text-lux-green-500 bg-lux-green-500/20' : ''
                           }`}
                         >
                           {syncStatus === 'running' && syncType === 'repair' ? (
                             <>
-                              <Loader2 className="animate-spin text-lux-gold" size={16} />
+                              <Loader2 className="animate-spin text-lux-green-500" size={16} />
                               AI Repairing ({syncCount.added}/{syncCount.totalToSync})...
                             </>
                           ) : (
                             <>AI Repair Meta ({selectedPapers.length})</>
                           )}
                         </Button>
-                       <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 hidden group-hover:block w-72 p-4 bg-gray-950 text-white rounded-2xl text-xs font-medium border border-gray-800 shadow-2xl z-40">
-                         <div className="flex items-center gap-2 text-lux-gold font-bold mb-1.5 font-sans">
-                           <span className="w-2 h-2 rounded-full bg-lux-gold animate-pulse" />
+                       <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 hidden group-hover:block w-72 p-4 bg-gray-950 text-lux-text rounded-2xl sm:rounded-3xl text-xs font-medium border border-lux-border shadow-2xl z-40">
+                         <div className="flex items-center gap-2 text-lux-green-500 font-bold mb-1.5 font-sans">
+                           <span className="w-2 h-2 rounded-full bg-lux-green-500 animate-pulse" />
                            <span>AI Metadata Repair Tool</span>
                          </div>
-                         <p className="text-gray-300 leading-relaxed text-[11px] mb-1 font-sans">
+                         <p className="text-lux-text leading-relaxed text-[11px] mb-1 font-sans">
                            <strong>Triggers Gemini AI models to:</strong>
                          </p>
-                         <ul className="list-disc pl-4 text-gray-400 space-y-1 text-[11px] font-sans">
+                         <ul className="list-disc pl-4 text-lux-text space-y-1 text-[11px] font-sans">
                            <li>Deconstruct the file names and text contents for the <strong>{selectedPapers.length} selected documents</strong>.</li>
                            <li>Automatically rebuild or repair unverified descriptors (e.g. correct subject, year, grade, curriculum alignment).</li>
                            <li>Commit refined, verified index properties directly to Firestore.</li>
                          </ul>
-                         <div className="mt-2 text-[10px] text-gray-500 italic font-sans border-t border-gray-800 pt-2">
+                         <div className="mt-2 text-[10px] text-lux-text italic font-sans border-t border-lux-border pt-2">
                            A live step-by-step console logs all modifications.
                          </div>
                        </div>
@@ -1095,18 +1095,18 @@ export function AdminPapersPage() {
                       disabled={syncStatus === 'running'}
                       className={`w-full sm:w-auto font-bold flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl cursor-pointer transition-all ${
                         syncStatus === 'running' && (syncType === 'sync' || syncType === 'bootstrap')
-                          ? 'bg-amber-600 text-white animate-pulse'
-                          : 'bg-[#1D9E75] hover:bg-[#178562] text-white'
+                          ? 'bg-amber-600 text-lux-text animate-pulse'
+                          : 'bg-[var(--color-lux-green-500)] hover:bg-[#178562] text-lux-text'
                       }`}
                     >
                       {syncStatus === 'running' && syncType === 'bootstrap' ? (
                         <>
-                          <Loader2 className="animate-spin text-white" size={16} />
+                          <Loader2 className="animate-spin text-lux-text" size={16} />
                           Seeding JSON ({syncCount.added}/{syncCount.totalToSync})...
                         </>
                       ) : syncStatus === 'running' && syncType === 'sync' ? (
                         <>
-                          <Loader2 className="animate-spin text-white" size={16} />
+                          <Loader2 className="animate-spin text-lux-text" size={16} />
                           Syncing Storage...
                         </>
                       ) : (
@@ -1115,26 +1115,26 @@ export function AdminPapersPage() {
                         </>
                       )}
                     </Button>
-                   <div className="absolute top-full right-0 mt-2 hidden group-hover:block w-80 p-4 bg-gray-950 text-white rounded-2xl text-xs font-medium border border-gray-800 shadow-2xl z-40">
-                     <div className="flex items-center gap-2 text-[#1D9E75] font-bold mb-1.5 font-sans">
-                       <span className="w-2 h-2 rounded-full bg-[#1D9E75] animate-pulse" />
+                   <div className="absolute top-full right-0 mt-2 hidden group-hover:block w-80 p-4 bg-gray-950 text-lux-text rounded-2xl sm:rounded-3xl text-xs font-medium border border-lux-border shadow-2xl z-40">
+                     <div className="flex items-center gap-2 text-[var(--color-lux-green-500)] font-bold mb-1.5 font-sans">
+                       <span className="w-2 h-2 rounded-full bg-[var(--color-lux-green-500)] animate-pulse" />
                        <span>Live Sync & Scan Utility</span>
                      </div>
-                     <p className="text-gray-300 leading-relaxed text-[11px] mb-1 font-sans">
+                     <p className="text-lux-text leading-relaxed text-[11px] mb-1 font-sans">
                        <strong>Clicking this button reveals a live console that shows you:</strong>
                      </p>
-                     <ul className="list-disc pl-4 text-gray-400 space-y-1 text-[11px] font-sans">
-                       <li>Raw folder scans of your online Firebase Storage bucket (<code className="text-[#1D9E75] font-mono">/Past-papers/</code>).</li>
+                     <ul className="list-disc pl-4 text-lux-text space-y-1 text-[11px] font-sans">
+                       <li>Raw folder scans of your online Firebase Storage bucket (<code className="text-[var(--color-lux-green-500)] font-mono">/Past-papers/</code>).</li>
                        <li>Folder scans of your local codebase assets directory (<code className="text-purple-400 font-mono">/public/papers/</code>).</li>
                        <li>Active reconciliation, indicating which files exist in physical storage but have not yet been registered in your Firestore database.</li>
                        <li>AI metadata parsing of unmatched papers to index them cleanly.</li>
                      </ul>
-                     <div className="mt-2.5 pt-2 border-t border-gray-800 text-[10px] text-gray-500 italic font-sans">
+                     <div className="mt-2.5 pt-2 border-t border-lux-border text-[10px] text-lux-text italic font-sans">
                        Safe and secure: Existing items are protected against duplicates.
                      </div>
                    </div>
                  </div>
-                 <Button variant="outline" onClick={() => fetchPapers()} className="w-full sm:w-auto text-black border-black/10">
+                 <Button variant="outline" onClick={() => fetchPapers()} className="w-full sm:w-auto text-lux-bg border-black/10">
                     <Layout size={16} className="mr-2" /> Refresh
                  </Button>
               </div>
@@ -1151,14 +1151,14 @@ export function AdminPapersPage() {
                             onChange={(e) => setSelectedPapers(e.target.checked ? papers.map(p => p.id) : [])}
                           />
                        </th>
-                       <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-text-tertiary">Subject</th>
-                       <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-text-tertiary">Grade</th>
-                       <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-text-tertiary">Curriculum</th>
-                       <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-text-tertiary">Year</th>
-                       <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-text-tertiary">Paper</th>
-                       <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-text-tertiary">Type</th>
-                       <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-text-tertiary">Downloads</th>
-                       <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-text-tertiary text-right">Actions</th>
+                       <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-lux-text">Subject</th>
+                       <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-lux-text">Grade</th>
+                       <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-lux-text">Curriculum</th>
+                       <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-lux-text">Year</th>
+                       <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-lux-text">Paper</th>
+                       <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-lux-text">Type</th>
+                       <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-lux-text">Downloads</th>
+                       <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-lux-text text-right">Actions</th>
                     </tr>
                  </thead>
                  <tbody className="divide-y divide-border-subtle">
@@ -1183,10 +1183,10 @@ export function AdminPapersPage() {
                               <span className="text-sm font-bold text-text-primary">{p.subject}</span>
                            </td>
                            <td className="px-6 py-4">
-                              <span className="text-xs font-medium text-text-secondary">Grade {p.grade}</span>
+                              <span className="text-xs font-medium text-lux-text">Grade {p.grade}</span>
                            </td>
                            <td className="px-6 py-4">
-                              <span className="px-2 py-1 bg-surface border border-border-subtle rounded text-[10px] font-black text-text-tertiary">
+                              <span className="px-2 py-1 bg-surface border border-border-subtle rounded text-[10px] font-black text-lux-text">
                                 {p.curriculum}
                               </span>
                            </td>
@@ -1205,7 +1205,7 @@ export function AdminPapersPage() {
                               </span>
                            </td>
                            <td className="px-6 py-4">
-                              <div className="flex items-center gap-2 text-xs font-bold text-text-tertiary">
+                              <div className="flex items-center gap-2 text-xs font-bold text-lux-text">
                                 <Layout size={12} /> {p.downloadCount}
                               </div>
                            </td>
@@ -1213,13 +1213,13 @@ export function AdminPapersPage() {
                               <div className="flex items-center justify-end gap-2">
                                  <button 
                                    onClick={() => window.open(p.fileUrl)}
-                                   className="p-2 text-text-tertiary hover:text-primary transition-colors"
+                                   className="p-2 text-lux-text hover:text-primary transition-colors"
                                  >
                                    <Eye size={18} />
                                  </button>
                                  <button 
                                    onClick={() => handleDeletePaper(p.id)}
-                                   className="p-2 text-text-tertiary hover:text-red-500 transition-colors"
+                                   className="p-2 text-lux-text hover:text-red-500 transition-colors"
                                  >
                                    <Trash2 size={18} />
                                  </button>
@@ -1229,7 +1229,7 @@ export function AdminPapersPage() {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan={9} className="px-6 py-20 text-center text-text-tertiary text-sm italic">
+                        <td colSpan={9} className="px-6 py-20 text-center text-lux-text text-sm italic">
                            No papers found in the vault.
                         </td>
                       </tr>
@@ -1242,25 +1242,25 @@ export function AdminPapersPage() {
         {/* DATABASE STORAGE SYNCHRONIZATION MODAL */}
         {showSyncModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fade-in">
-            <div className="relative w-full max-w-2xl bg-[#0d0d0d] border border-gray-800 rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+            <div className="relative w-full max-w-2xl bg-[#0d0d0d] border border-lux-border rounded-[2rem] sm:rounded-[3rem] overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
               {/* Header */}
-              <div className="p-6 border-b border-gray-800 flex items-center justify-between bg-black/40">
+              <div className="p-6 border-b border-lux-border flex items-center justify-between bg-black/40">
                 <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-xl ${syncType === 'repair' ? 'bg-purple-600/10 text-purple-400' : 'bg-[#1D9E75]/10 text-[#1D9E75]'}`}>
+                  <div className={`p-2 rounded-xl ${syncType === 'repair' ? 'bg-purple-600/10 text-purple-400' : 'bg-[var(--color-lux-green-500)]/10 text-[var(--color-lux-green-500)]'}`}>
                     <Database size={20} className="animate-pulse" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-white">
+                    <h3 className="text-lg font-bold text-lux-text">
                       {syncType === 'repair' ? 'AI Metadata Repair Console' : 'Database & Storage Sync Utility'}
                     </h3>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-lux-text">
                       {syncType === 'repair' ? 'Live re-indexing and metadata repair with Gemini' : "Reconcile Storage Vault files into website's Firestore database"}
                     </p>
                   </div>
                 </div>
                 <button 
                   onClick={() => setShowSyncModal(false)}
-                  className="p-1.5 text-gray-500 hover:text-white hover:bg-gray-900 rounded-lg transition-colors cursor-pointer"
+                  className="p-1.5 text-lux-text hover:text-lux-text hover:bg-lux-bg rounded-lg transition-colors cursor-pointer"
                 >
                   <X size={20} />
                 </button>
@@ -1270,16 +1270,16 @@ export function AdminPapersPage() {
               <div className="p-6 overflow-y-auto space-y-6 flex-1 custom-scrollbar">
                 {syncStatus === 'idle' ? (
                   <div className="space-y-4">
-                    <p className="text-sm text-gray-300 leading-relaxed">
-                      This scanning suite traverses your Firebase Storage <code className="bg-black text-[#1D9E75] px-1.5 py-0.5 rounded font-mono text-xs font-bold">/past-papers</code> bucket directories and cross-examines every physical file against registered indices inside your Firestore database.
+                    <p className="text-sm text-lux-text leading-relaxed">
+                      This scanning suite traverses your Firebase Storage <code className="bg-black text-[var(--color-lux-green-500)] px-1.5 py-0.5 rounded font-mono text-xs font-bold">/past-papers</code> bucket directories and cross-examines every physical file against registered indices inside your Firestore database.
                     </p>
-                    <p className="text-sm text-gray-300 leading-relaxed">
+                    <p className="text-sm text-lux-text leading-relaxed">
                       Any paper, memorandum, or booklet discovered in Storage that hasn't been listed on the website yet will be imported in batches. Attributes like subject, curriculum alignment, grade, year, and paper type are automatically deduced with smart heuristic algorithms!
                     </p>
-                    <div className="p-4 bg-[#111111] border border-gray-800 rounded-2xl flex items-start gap-3">
-                      <AlertCircle className="text-[#1D9E75] shrink-0 mt-0.5" size={18} />
-                      <div className="text-xs text-gray-400 space-y-1">
-                        <p className="font-bold text-gray-300">Important details:</p>
+                    <div className="p-4 bg-[#111111] border border-lux-border rounded-2xl sm:rounded-3xl flex items-start gap-3">
+                      <AlertCircle className="text-[var(--color-lux-green-500)] shrink-0 mt-0.5" size={18} />
+                      <div className="text-xs text-lux-text space-y-1">
+                        <p className="font-bold text-lux-text">Important details:</p>
                         <p>• Avoid closing this tab or putting your browser to sleep during synchronization.</p>
                         <p>• Existing indexes with matching URLs or file paths are fully protected and will not duplicates.</p>
                         <p>• Expected Storage scope of files: 3,000+ items</p>
@@ -1290,58 +1290,58 @@ export function AdminPapersPage() {
                   <div className="space-y-6">
                     {/* Active Step Indicator */}
                     <div className="flex items-center justify-between pb-2">
-                      <span className={`text-xs font-bold uppercase tracking-widest ${syncType === 'repair' ? 'text-purple-400' : 'text-[#1D9E75]'}`}>
+                      <span className={`text-xs font-bold uppercase tracking-widest ${syncType === 'repair' ? 'text-purple-400' : 'text-[var(--color-lux-green-500)]'}`}>
                         CURRENT STEP: {syncStep || 'Processing...'}
                       </span>
                       {syncStatus === 'running' && (
-                        <span className="text-xs text-gray-500 flex items-center gap-2">
-                          <Loader2 size={12} className={`animate-spin ${syncType === 'repair' ? 'text-purple-400' : 'text-[#1D9E75]'}`} /> Operational feedback active...
+                        <span className="text-xs text-lux-text flex items-center gap-2">
+                          <Loader2 size={12} className={`animate-spin ${syncType === 'repair' ? 'text-purple-400' : 'text-[var(--color-lux-green-500)]'}`} /> Operational feedback active...
                         </span>
                       )}
                     </div>
 
                     {/* Progress grid indices */}
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                      <div className="p-4 bg-black border border-gray-800 rounded-2xl text-center">
-                        <span className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">
+                      <div className="p-4 bg-black border border-lux-border rounded-2xl sm:rounded-3xl text-center">
+                        <span className="text-[10px] uppercase font-bold text-lux-text tracking-wider">
                           {syncType === 'repair' ? 'Scope Total' : 'Storage Scanned'}
                         </span>
-                        <div className="text-xl font-black text-white mt-1">{syncCount.scanned}</div>
+                        <div className="text-xl font-black text-lux-text mt-1">{syncCount.scanned}</div>
                       </div>
-                      <div className="p-4 bg-black border border-gray-800 rounded-2xl text-center">
-                        <span className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">
+                      <div className="p-4 bg-black border border-lux-border rounded-2xl sm:rounded-3xl text-center">
+                        <span className="text-[10px] uppercase font-bold text-lux-text tracking-wider">
                           {syncType === 'repair' ? 'Type' : 'Database Checked'}
                         </span>
-                        <div className="text-xl font-black text-white mt-1">
+                        <div className="text-xl font-black text-lux-text mt-1">
                           {syncType === 'repair' ? 'AI REPAIR' : syncCount.checked}
                         </div>
                       </div>
-                      <div className="p-4 bg-black border border-gray-800 rounded-2xl text-center">
-                        <span className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">
+                      <div className="p-4 bg-black border border-lux-border rounded-2xl sm:rounded-3xl text-center">
+                        <span className="text-[10px] uppercase font-bold text-lux-text tracking-wider">
                           {syncType === 'repair' ? 'Total Queue' : 'To Import'}
                         </span>
-                        <div className={`text-xl font-black mt-1 ${syncType === 'repair' ? 'text-purple-400' : 'text-[#1D9E75]'}`}>{syncCount.totalToSync}</div>
+                        <div className={`text-xl font-black mt-1 ${syncType === 'repair' ? 'text-purple-400' : 'text-[var(--color-lux-green-500)]'}`}>{syncCount.totalToSync}</div>
                       </div>
-                      <div className={`p-4 bg-black border border-gray-800 rounded-2xl text-center ${syncType === 'repair' ? 'border-purple-600/20 bg-purple-600/5' : 'border-[#1D9E75]/20 bg-[#1D9E75]/5'}`}>
-                        <span className={`text-[10px] uppercase font-bold tracking-wider ${syncType === 'repair' ? 'text-purple-400' : 'text-[#1D9E75]/70'}`}>
+                      <div className={`p-4 bg-black border border-lux-border rounded-2xl sm:rounded-3xl text-center ${syncType === 'repair' ? 'border-purple-600/20 bg-purple-600/5' : 'border-[var(--color-lux-green-500)]/20 bg-[var(--color-lux-green-500)]/5'}`}>
+                        <span className={`text-[10px] uppercase font-bold tracking-wider ${syncType === 'repair' ? 'text-purple-400' : 'text-[var(--color-lux-green-500)]/70'}`}>
                           {syncType === 'repair' ? 'Completed' : 'Successfully Added'}
                         </span>
-                        <div className="text-xl font-black text-white mt-1">{syncCount.added}</div>
+                        <div className="text-xl font-black text-lux-text mt-1">{syncCount.added}</div>
                       </div>
                     </div>
 
                     {/* Sync progress bar */}
                     {syncStatus === 'running' && syncCount.totalToSync > 0 && (
                       <div className="space-y-2">
-                        <div className="flex items-center justify-between text-xs text-gray-400">
+                        <div className="flex items-center justify-between text-xs text-lux-text">
                           <span>{syncType === 'repair' ? 'Refining and committing metadata changes...' : 'Writing Indexed past-papers to Firestore...'}</span>
-                          <span className="font-bold text-white">
+                          <span className="font-bold text-lux-text">
                             {Math.round((syncCount.added / syncCount.totalToSync) * 100)}%
                           </span>
                         </div>
-                        <div className="w-full h-2.5 bg-black rounded-full overflow-hidden border border-gray-800">
+                        <div className="w-full h-2.5 bg-black rounded-full overflow-hidden border border-lux-border">
                           <div 
-                            className={`h-full bg-gradient-to-r transition-all duration-300 ${syncType === 'repair' ? 'from-purple-500 to-indigo-500' : 'from-teal-500 to-[#1D9E75]'}`}
+                            className={`h-full bg-gradient-to-r transition-all duration-300 ${syncType === 'repair' ? 'from-purple-500 to-indigo-500' : 'from-teal-500 to-[var(--color-lux-green-500)]'}`}
                             style={{ width: `${Math.round((syncCount.added / syncCount.totalToSync) * 100)}%` }}
                           />
                         </div>
@@ -1350,7 +1350,7 @@ export function AdminPapersPage() {
 
                     {/* Streaming Activity Logs Terminal */}
                     <div className="space-y-2">
-                      <div className="flex items-center justify-between text-xs text-gray-500">
+                      <div className="flex items-center justify-between text-xs text-lux-text">
                         <span className="flex items-center gap-1.5 font-bold"><Terminal size={14} /> SYSTEM FEED</span>
                         <span className="font-mono text-[10px]">
                           {syncType === 'repair' ? 'CWD: ~/api/ai/parse-metadata' : 'CWD: ~/storage/past-papers'}
@@ -1358,10 +1358,10 @@ export function AdminPapersPage() {
                       </div>
                       <div 
                         ref={logContainerRef}
-                        className="p-4 bg-black border border-gray-800 rounded-2xl h-64 overflow-y-auto font-mono text-[10px] text-green-400 space-y-1.5 custom-scrollbar"
+                        className="p-4 bg-black border border-lux-border rounded-2xl sm:rounded-3xl h-64 overflow-y-auto font-mono text-[10px] text-green-400 space-y-1.5 custom-scrollbar"
                       >
                         {syncLogs.length === 0 ? (
-                          <div className="text-gray-600 italic">No output. Waiting for engine...</div>
+                          <div className="text-lux-text italic">No output. Waiting for engine...</div>
                         ) : (
                           syncLogs.map((log, lidx) => (
                             <div key={lidx} className="leading-relaxed break-all">
@@ -1376,47 +1376,47 @@ export function AdminPapersPage() {
               </div>
 
               {/* Footer */}
-              <div className="p-6 border-t border-gray-800 bg-black/40 flex items-center justify-end gap-3">
+              <div className="p-6 border-t border-lux-border bg-black/40 flex items-center justify-end gap-3">
                 {syncStatus === 'idle' ? (
                   <>
                     <button 
                       onClick={() => setShowSyncModal(false)}
-                      className="px-5 py-2.5 rounded-xl border border-gray-800 hover:bg-gray-900 text-sm font-bold text-gray-400 hover:text-white transition-colors cursor-pointer"
+                      className="px-5 py-2.5 rounded-xl border border-lux-border hover:bg-lux-bg text-sm font-bold text-lux-text hover:text-lux-text transition-colors cursor-pointer"
                     >
                       Close
                     </button>
                     <button 
                       onClick={handleSyncStorage}
-                      className="px-6 py-2.5 rounded-xl bg-[#1D9E75] hover:bg-[#178562] text-sm font-bold text-white transition-all shadow-md flex items-center gap-2 cursor-pointer"
+                      className="px-6 py-2.5 rounded-xl bg-[var(--color-lux-green-500)] hover:bg-[#178562] text-sm font-bold text-lux-text transition-all shadow-md flex items-center gap-2 cursor-pointer"
                     >
                       <Database size={16} /> Scan Firebase Bucket
                     </button>
                     <button 
                       onClick={handleSyncLocalCodebase}
-                      className="px-6 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-sm font-bold text-white transition-all shadow-md flex items-center gap-2 cursor-pointer"
+                      className="px-6 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-sm font-bold text-lux-text transition-all shadow-md flex items-center gap-2 cursor-pointer"
                     >
                       <Database size={16} /> Scan Local Codebase /papers
                     </button>
                     <button 
                       onClick={handleSeedJSON}
-                      className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#D4AF37] to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-sm font-bold text-white transition-all shadow-md flex items-center gap-2 cursor-pointer border border-[#D4AF37]/20"
+                      className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#D4AF37] to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-sm font-bold text-lux-text transition-all shadow-md flex items-center gap-2 cursor-pointer border border-[#D4AF37]/20"
                     >
-                      <Database size={16} className="text-white animate-pulse" /> Ingest 100% Papers (JSON Seed)
+                      <Database size={16} className="text-lux-text animate-pulse" /> Ingest 100% Papers (JSON Seed)
                     </button>
                   </>
                 ) : syncStatus === 'running' ? (
                   <>
                     <button 
                       onClick={() => setShowSyncModal(false)}
-                      className="px-5 py-2.5 rounded-xl border border-gray-800 hover:bg-gray-900 text-sm font-bold text-gray-400 hover:text-white transition-colors cursor-pointer"
+                      className="px-5 py-2.5 rounded-xl border border-lux-border hover:bg-lux-bg text-sm font-bold text-lux-text hover:text-lux-text transition-colors cursor-pointer"
                     >
                       Hide
                     </button>
                     <button 
                       disabled
-                      className="px-6 py-2.5 rounded-xl bg-gray-900 text-gray-500 text-sm font-bold flex items-center gap-2 border border-gray-800"
+                      className="px-6 py-2.5 rounded-xl bg-lux-bg text-lux-text text-sm font-bold flex items-center gap-2 border border-lux-border"
                     >
-                      <Loader2 size={16} className={`animate-spin ${syncType === 'repair' ? 'text-purple-400' : 'text-[#1D9E75]'}`} /> {syncType === 'repair' ? 'Repairing and writing...' : 'Synchronization in progress...'}
+                      <Loader2 size={16} className={`animate-spin ${syncType === 'repair' ? 'text-purple-400' : 'text-[var(--color-lux-green-500)]'}`} /> {syncType === 'repair' ? 'Repairing and writing...' : 'Synchronization in progress...'}
                     </button>
                   </>
                 ) : syncStatus === 'completed' ? (
@@ -1425,7 +1425,7 @@ export function AdminPapersPage() {
                       setShowSyncModal(false);
                       setSyncStatus('idle');
                     }}
-                    className={`px-6 py-2.5 rounded-xl text-sm font-bold text-white transition-all shadow-md flex items-center gap-2 cursor-pointer ${syncType === 'repair' ? 'bg-purple-600 hover:bg-purple-700' : 'bg-[#1D9E75] hover:bg-[#178562]'}`}
+                    className={`px-6 py-2.5 rounded-xl text-sm font-bold text-lux-text transition-all shadow-md flex items-center gap-2 cursor-pointer ${syncType === 'repair' ? 'bg-purple-600 hover:bg-purple-700' : 'bg-[var(--color-lux-green-500)] hover:bg-[#178562]'}`}
                   >
                     <Check size={16} /> Finish & Done
                   </button>
@@ -1436,13 +1436,13 @@ export function AdminPapersPage() {
                         setShowSyncModal(false);
                         setSyncStatus('idle');
                       }}
-                      className="px-5 py-2.5 rounded-xl border border-gray-800 hover:bg-gray-900 text-sm font-bold text-gray-400 hover:text-white transition-colors cursor-pointer"
+                      className="px-5 py-2.5 rounded-xl border border-lux-border hover:bg-lux-bg text-sm font-bold text-lux-text hover:text-lux-text transition-colors cursor-pointer"
                     >
                       Close
                     </button>
                     <button 
                       onClick={syncType === 'repair' ? handleBulkRepair : handleSyncStorage}
-                      className="px-6 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-sm font-bold text-white transition-colors cursor-pointer"
+                      className="px-6 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-sm font-bold text-lux-text transition-colors cursor-pointer"
                     >
                       Retry {syncType === 'repair' ? 'Repair' : 'Sync'}
                     </button>

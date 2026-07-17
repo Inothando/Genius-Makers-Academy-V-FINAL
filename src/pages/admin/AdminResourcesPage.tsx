@@ -84,31 +84,31 @@ export function AdminResourcesPage() {
   };
 
   return (
-    <div className="bg-white border border-border-subtle rounded-[32px] sm:rounded-[40px] shadow-sm overflow-hidden text-black">
-        <div className="p-6 sm:p-10 border-b border-border-subtle flex flex-col lg:flex-row lg:items-center justify-between gap-8 text-black">
-           <div className="flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-10 flex-1 text-black">
+    <div className="bg-white border border-border-subtle rounded-[32px] sm:rounded-[40px] shadow-sm overflow-hidden text-lux-bg">
+        <div className="p-6 sm:p-10 border-b border-border-subtle flex flex-col lg:flex-row lg:items-center justify-between gap-8 text-lux-bg">
+           <div className="flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-10 flex-1 text-lux-bg">
               <div className="shrink-0">
                 <h3 className="text-xl font-serif text-text-primary mb-1">Student Library</h3>
-                <p className="text-xs text-text-tertiary font-bold uppercase tracking-widest">Publically uploaded study materials</p>
+                <p className="text-xs text-lux-text font-bold uppercase tracking-widest">Publically uploaded study materials</p>
               </div>
               <div className="relative flex-1 w-full max-w-md">
-                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-text-tertiary" size={18} />
+                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-lux-text" size={18} />
                  <input 
                    type="text" 
                    placeholder="Search by title, subject or author..." 
-                   className="w-full pl-12 pr-4 py-3 bg-surface border border-border-subtle rounded-2xl text-xs font-bold outline-none focus:border-primary/30"
+                   className="w-full pl-12 pr-4 py-3 bg-surface border border-border-subtle rounded-2xl sm:rounded-3xl text-xs font-bold outline-none focus:border-primary/30"
                    value={search}
                    onChange={(e) => setSearch(e.target.value)}
                  />
               </div>
            </div>
-           <div className="flex flex-col sm:flex-row items-center gap-4 text-black">
+           <div className="flex flex-col sm:flex-row items-center gap-4 text-lux-bg">
               {selectedResources.length > 0 && (
                 <Button variant="outline" className="w-full sm:w-auto text-red-500 border-red-200" onClick={handleBulkDelete}>
                   Delete ({selectedResources.length})
                 </Button>
               )}
-              <Button variant="outline" onClick={fetchResources} className="w-full sm:w-auto rounded-xl text-black border-black/10">
+              <Button variant="outline" onClick={fetchResources} className="w-full sm:w-auto rounded-xl text-lux-bg border-black/10">
                  <RefreshCw size={16} className={cn("mr-2", loading && "animate-spin")} /> Refresh
               </Button>
            </div>
@@ -125,12 +125,12 @@ export function AdminResourcesPage() {
                         onChange={(e) => setSelectedResources(e.target.checked ? resources.map(r => r.id) : [])}
                       />
                    </th>
-                   <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-text-tertiary">Title</th>
-                   <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-text-tertiary">Subject & Grade</th>
-                   <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-text-tertiary">Uploader</th>
-                   <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-text-tertiary text-center">Downloads</th>
-                   <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-text-tertiary text-center">Status</th>
-                   <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-text-tertiary text-right">Actions</th>
+                   <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-lux-text">Title</th>
+                   <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-lux-text">Subject & Grade</th>
+                   <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-lux-text">Uploader</th>
+                   <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-lux-text text-center">Downloads</th>
+                   <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-lux-text text-center">Status</th>
+                   <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-lux-text text-right">Actions</th>
                 </tr>
              </thead>
              <tbody className="divide-y divide-border-subtle">
@@ -159,26 +159,26 @@ export function AdminResourcesPage() {
                           <div className="flex items-center gap-4">
                              <div className="w-12 h-12 bg-white rounded-xl border border-border-subtle flex items-center justify-center text-secondary relative group-hover:scale-110 transition-transform">
                                 <BookOpen size={20} />
-                                {r.fileType === 'PDF' && <div className="absolute -bottom-1 -right-1 px-1 bg-red-500 text-white text-[8px] font-black rounded">PDF</div>}
+                                {r.fileType === 'PDF' && <div className="absolute -bottom-1 -right-1 px-1 bg-red-500 text-lux-text text-[8px] font-black rounded">PDF</div>}
                              </div>
                              <div className="min-w-0">
                                 <p className="text-sm font-bold text-text-primary line-clamp-1">{r.title}</p>
-                                <p className="text-[10px] font-medium text-text-tertiary">{new Date(r.createdAt.seconds * 1000).toLocaleDateString()}</p>
+                                <p className="text-[10px] font-medium text-lux-text">{new Date(r.createdAt.seconds * 1000).toLocaleDateString()}</p>
                              </div>
                           </div>
                        </td>
                        <td className="px-8 py-5">
                           <div className="flex flex-col">
                              <span className="text-[10px] font-black uppercase tracking-widest text-primary mb-1">{r.subject}</span>
-                             <span className="text-xs font-bold text-text-secondary">Grade {r.grade} • {r.curriculum}</span>
+                             <span className="text-xs font-bold text-lux-text">Grade {r.grade} • {r.curriculum}</span>
                           </div>
                        </td>
                        <td className="px-8 py-5">
                           <span className="text-xs font-bold text-text-primary">{r.uploaderName}</span>
-                          {r.isGuest && <span className="ml-2 text-[8px] font-black uppercase bg-surface border border-border-subtle px-1.5 py-0.5 rounded text-text-tertiary">Guest</span>}
+                          {r.isGuest && <span className="ml-2 text-[8px] font-black uppercase bg-surface border border-border-subtle px-1.5 py-0.5 rounded text-lux-text">Guest</span>}
                        </td>
                        <td className="px-8 py-5 text-center">
-                          <div className="inline-flex items-center gap-1.5 text-xs font-bold text-text-tertiary">
+                          <div className="inline-flex items-center gap-1.5 text-xs font-bold text-lux-text">
                              <Download size={14} />
                              {r.downloadCount}
                           </div>
@@ -205,7 +205,7 @@ export function AdminResourcesPage() {
                                className="h-9 w-9 p-0 rounded-lg group-hover:border-primary/20"
                                onClick={() => window.open(r.fileUrl)}
                              >
-                                <Eye size={16} className="text-text-tertiary" />
+                                <Eye size={16} className="text-lux-text" />
                              </Button>
                              <Button 
                                variant="outline" 
@@ -213,7 +213,7 @@ export function AdminResourcesPage() {
                                className="h-9 w-9 p-0 rounded-lg hover:border-red-100 hover:bg-red-50"
                                onClick={() => handleDelete(r.id)}
                              >
-                                <Trash2 size={16} className="text-text-tertiary hover:text-red-500" />
+                                <Trash2 size={16} className="text-lux-text hover:text-red-500" />
                              </Button>
                           </div>
                        </td>
@@ -221,7 +221,7 @@ export function AdminResourcesPage() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={7} className="px-8 py-20 text-center text-text-tertiary italic text-sm">
+                    <td colSpan={7} className="px-8 py-20 text-center text-lux-text italic text-sm">
                        No resources found.
                     </td>
                   </tr>

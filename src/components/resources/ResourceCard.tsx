@@ -54,7 +54,7 @@ export function ResourceCard({ resource, onPreview }: ResourceCardProps) {
   return (
     <motion.div
       whileHover={{ y: -5 }}
-      className="group bg-white rounded-2xl border border-border-subtle overflow-hidden hover:shadow-xl hover:border-primary/20 transition-all duration-300 flex flex-col h-full"
+      className="group bg-white rounded-2xl sm:rounded-3xl border border-border-subtle overflow-hidden hover:shadow-xl hover:border-primary/20 transition-all duration-300 flex flex-col h-full"
     >
       <div className="relative aspect-video overflow-hidden">
         <img 
@@ -73,11 +73,11 @@ export function ResourceCard({ resource, onPreview }: ResourceCardProps) {
           <CurriculumTag type={resource.curriculum as any} size="sm" />
         </div>
 
-        <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2 min-h-[3.5rem]">
+        <h3 className="text-lg font-semibold text-lux-text mb-2 line-clamp-2 min-h-[3.5rem]">
           {resource.title}
         </h3>
 
-        <p className="text-sm text-text-secondary line-clamp-2 mb-4 flex-1">
+        <p className="text-sm text-lux-text line-clamp-2 mb-4 flex-1">
           {resource.description}
         </p>
 
@@ -86,11 +86,11 @@ export function ResourceCard({ resource, onPreview }: ResourceCardProps) {
             <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center">
               <User size={14} className="text-primary" />
             </div>
-            <span className="text-xs font-medium text-text-secondary truncate max-w-[100px]">
+            <span className="text-xs font-medium text-lux-text truncate max-w-[100px]">
               {resource.uploaderName}
             </span>
           </div>
-          <div className="flex items-center gap-3 text-text-tertiary">
+          <div className="flex items-center gap-3 text-lux-text">
             <div className="flex items-center gap-1">
               <Icon size={14} />
               <span className="text-[10px] font-bold uppercase">{resource.fileType}</span>
@@ -112,7 +112,7 @@ export function ResourceCard({ resource, onPreview }: ResourceCardProps) {
           </button>
           <button 
             onClick={handleDownload}
-            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-primary text-white rounded-xl text-sm font-semibold hover:bg-primary-dark transition-colors shadow-sm"
+            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-primary text-lux-text rounded-xl text-sm font-semibold hover:bg-primary-dark transition-colors shadow-sm"
           >
             <Download size={16} />
             Download

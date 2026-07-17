@@ -2,7 +2,7 @@ import { cn } from '../../lib/utils';
 
 export function YoutubeEmbed({ videoId, className }: { videoId: string; className?: string }) {
   return (
-    <div className={cn('relative aspect-video w-full overflow-hidden rounded-2xl border border-border-subtle shadow-lg', className)}>
+    <div className={cn('relative aspect-video w-full overflow-hidden rounded-2xl sm:rounded-3xl border border-border-subtle shadow-lg', className)}>
       <iframe
         src={`https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1`}
         title="YouTube video player"

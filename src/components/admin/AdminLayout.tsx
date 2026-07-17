@@ -32,8 +32,8 @@ export function AdminLayout() {
     return (
       <div className="min-h-screen bg-[#0A0A0A] flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <Loader2 className="animate-spin text-[#1D9E75]" size={48} />
-          <p className="text-gray-500 font-medium">Authenticating Admin...</p>
+          <Loader2 className="animate-spin text-[var(--color-lux-green-500)]" size={48} />
+          <p className="text-lux-text font-medium">Authenticating Admin...</p>
         </div>
       </div>
     );
@@ -50,8 +50,8 @@ export function AdminLayout() {
           <div className="w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center text-red-500 mx-auto mb-6">
             <ShieldAlert size={40} />
           </div>
-          <h1 className="text-2xl font-bold text-white mb-2">Access Suspended</h1>
-          <p className="text-gray-500 mb-8">
+          <h1 className="text-2xl font-bold text-lux-text mb-2">Access Suspended</h1>
+          <p className="text-lux-text mb-8">
             Your admin access has been suspended. Contact the Super Admin for more information.
           </p>
           <Button onClick={() => auth.signOut()} className="w-full h-12 rounded-xl bg-red-600 hover:bg-red-700 font-bold">
@@ -81,6 +81,7 @@ export function AdminLayout() {
       items: [
         { name: 'Content Hub', path: '/admin/content', icon: Layers },
         { name: 'Past Papers', path: '/admin/papers', icon: FileText },
+        { name: 'Exam Timetables', path: '/admin/exam-timetables', icon: Clock },
         { name: 'Resources', path: '/admin/resources', icon: BookOpen },
         { name: 'Video Lessons', path: '/admin/videos', icon: Video },
         { name: 'Study Packs', path: '/admin/study-packs', icon: Package },
@@ -90,6 +91,7 @@ export function AdminLayout() {
       label: "Community",
       items: [
         { name: 'Discussions', path: '/admin/discussions', icon: MessageSquare },
+        ...(isSuperAdmin || adminUser?.permissions.canReviewRoomSafety ? [{ name: 'Room Safety', path: '/admin/safety', icon: ShieldAlert }] : []),
       ]
     }] : []),
     ...(isSuperAdmin ? [{
@@ -121,25 +123,25 @@ export function AdminLayout() {
 
       {/* Sidebar */}
       <aside className={cn(
-        "bg-[#0A0A0A] border-r border-gray-800 flex flex-col fixed inset-y-0 z-[70] transition-transform duration-300 transform lg:relative lg:translate-x-0 w-64",
+        "bg-[#0A0A0A] border-r border-lux-border flex flex-col fixed inset-y-0 z-[70] transition-transform duration-300 transform lg:relative lg:translate-x-0 w-64",
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       )}>
         <div className="p-6 h-full flex flex-col">
           <div className="flex items-center justify-between mb-8">
             <Link to="/admin" className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-[#1D9E75] rounded-full flex items-center justify-center text-white shadow-lg shadow-[#1D9E75]/20">
+              <div className="w-8 h-8 bg-[var(--color-lux-green-500)] rounded-full flex items-center justify-center text-lux-text shadow-lg shadow-[var(--color-lux-green-500)]/20">
                 <span className="font-bold">G</span>
               </div>
-              <span className="font-bold text-white text-sm">GMA Admin</span>
+              <span className="font-bold text-lux-text text-sm">GMA Admin</span>
             </Link>
-            <button className="lg:hidden text-gray-500 hover:text-white" onClick={() => setSidebarOpen(false)}>
+            <button className="lg:hidden text-lux-text hover:text-lux-text" onClick={() => setSidebarOpen(false)}>
               <X size={20} />
             </button>
           </div>
 
-          <div className="mb-8 p-3 bg-gray-900/50 border border-gray-800 rounded-xl">
+          <div className="mb-8 p-3 bg-lux-bg/50 border border-lux-border rounded-xl">
             <div className="flex flex-col gap-2">
-              <span className="text-xs font-bold text-white truncate">{adminUser?.displayName}</span>
+              <span className="text-xs font-bold text-lux-text truncate">{adminUser?.displayName}</span>
               {adminUser?.role && roleBadges[adminUser.role]}
             </div>
           </div>
@@ -147,7 +149,7 @@ export function AdminLayout() {
           <nav className="space-y-6 overflow-y-auto max-h-[calc(100vh-300px)] pr-2 custom-scrollbar">
             {navGroups.map((group) => (
               <div key={group.label}>
-                <h3 className="text-[10px] font-bold text-gray-600 uppercase tracking-widest px-4 mb-2">{group.label}</h3>
+                <h3 className="text-[10px] font-bold text-lux-text uppercase tracking-widest px-4 mb-2">{group.label}</h3>
                 <div className="space-y-1">
                   {group.items.map((item) => (
                     <Link
@@ -156,13 +158,13 @@ export function AdminLayout() {
                       className={cn(
                         "flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all group relative",
                         location.pathname === item.path 
-                          ? "bg-[#1D9E75]/10 text-[#1D9E75] border-l-2 border-[#1D9E75]" 
-                          : "text-gray-400 hover:text-white hover:bg-gray-800"
+                          ? "bg-[var(--color-lux-green-500)]/10 text-[var(--color-lux-green-500)] border-l-2 border-[var(--color-lux-green-500)]" 
+                          : "text-lux-text hover:text-lux-text hover:bg-lux-surface-alt"
                       )}
                     >
                       <item.icon size={18} className={cn(
                         "transition-colors",
-                        location.pathname === item.path ? "text-[#1D9E75]" : "text-gray-600 group-hover:text-gray-400"
+                        location.pathname === item.path ? "text-[var(--color-lux-green-500)]" : "text-lux-text group-hover:text-lux-text"
                       )} />
                       {item.name}
                       {location.pathname === item.path && (
@@ -176,8 +178,8 @@ export function AdminLayout() {
           </nav>
         </div>
 
-        <div className="mt-auto p-4 border-t border-gray-800 space-y-2">
-          <Link to="/" className="flex items-center gap-3 p-2 text-gray-500 hover:text-white text-xs transition-all">
+        <div className="mt-auto p-4 border-t border-lux-border space-y-2">
+          <Link to="/" className="flex items-center gap-3 p-2 text-lux-text hover:text-lux-text text-xs transition-all">
             <ArrowLeft size={14} /> Back to GMA
           </Link>
           <button 
@@ -202,27 +204,27 @@ export function AdminLayout() {
             </div>
           </div>
         )}
-        <header className="h-16 lg:h-14 bg-[#111111] border-b border-gray-800 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-40">
+        <header className="h-16 lg:h-14 bg-[#111111] border-b border-lux-border flex items-center justify-between px-4 lg:px-8 sticky top-0 z-40">
           <div className="flex items-center gap-4">
             <button 
-              className="lg:hidden p-2 -ml-2 text-gray-400 hover:text-white transition-colors"
+              className="lg:hidden p-2 -ml-2 text-lux-text hover:text-lux-text transition-colors"
               onClick={() => setSidebarOpen(true)}
             >
               <Menu size={20} />
             </button>
-            <h2 className="text-white font-bold text-sm truncate max-w-[150px] sm:max-w-none">
+            <h2 className="text-lux-text font-bold text-sm truncate max-w-[150px] sm:max-w-none">
               {currentPageTitle}
             </h2>
           </div>
           
           <div className="flex items-center gap-4 sm:gap-6">
-            <div className="hidden sm:flex text-[10px] font-mono text-gray-500 uppercase tracking-wider items-center gap-2">
-              <Clock size={12} className="text-[#1D9E75]" />
+            <div className="hidden sm:flex text-[10px] font-mono text-lux-text uppercase tracking-wider items-center gap-2">
+              <Clock size={12} className="text-[var(--color-lux-green-500)]" />
               {currentTime.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}
             </div>
             
-            <div className="flex items-center gap-3 sm:pl-6 sm:border-l border-gray-800">
-              <div className="w-8 h-8 rounded-full bg-gray-800 border border-gray-700 flex items-center justify-center text-xs font-bold text-gray-400 overflow-hidden shrink-0">
+            <div className="flex items-center gap-3 sm:pl-6 sm:border-l border-lux-border">
+              <div className="w-8 h-8 rounded-full bg-lux-surface-alt border border-lux-border flex items-center justify-center text-xs font-bold text-lux-text overflow-hidden shrink-0">
                 {adminUser?.displayName?.charAt(0)}
               </div>
             </div>

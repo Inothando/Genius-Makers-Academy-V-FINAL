@@ -123,6 +123,13 @@ service cloud.firestore {
       allow create: if hasPermission('canAddVideos');
       allow update: if hasPermission('canAddVideos');
       allow delete: if hasPermission('canDeleteContent');
+
+      match /comments/{commentId} {
+        allow read: if true;
+        allow create: if true;
+        allow update: if true; // to allow editing or adding replies / AI assists
+        allow delete: if isAnyAdmin() || (isSignedIn() && resource.data.authorId == request.auth.uid);
+      }
     }
 
     // STUDY PACKS

@@ -123,18 +123,18 @@ export function AdminOverviewPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1 }}
-            className="bg-[#111111] border border-gray-800 rounded-2xl p-6 relative overflow-hidden group"
+            className="bg-[#111111] border border-lux-border rounded-2xl sm:rounded-3xl p-6 relative overflow-hidden group"
           >
             <div className="flex items-center justify-between mb-4">
-              <div className={cn("p-3 rounded-xl bg-gray-900 group-hover:bg-gray-800 transition-colors", card.color.replace('text', 'bg').replace('-500', '-500/10'))}>
+              <div className={cn("p-3 rounded-xl bg-lux-bg group-hover:bg-lux-surface-alt transition-colors", card.color.replace('text', 'bg').replace('-500', '-500/10'))}>
                 <card.icon size={20} className={card.color} />
               </div>
               <span className="text-[10px] text-green-500 font-bold bg-green-500/10 px-2 py-1 rounded-full">
                 {card.change} this week
               </span>
             </div>
-            <h4 className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">{card.title}</h4>
-            <p className="text-3xl font-bold text-white mt-1">
+            <h4 className="text-[10px] text-lux-text font-bold uppercase tracking-widest">{card.title}</h4>
+            <p className="text-3xl font-bold text-lux-text mt-1">
               {loading ? <span className="animate-pulse">...</span> : card.value.toLocaleString()}
             </p>
           </motion.div>
@@ -145,23 +145,23 @@ export function AdminOverviewPage() {
         {/* Left Column: Actions & Chart */}
         <div className="lg:col-span-8 space-y-8">
           {isSuperAdmin && (
-            <section className="bg-[#111111] border border-gray-800 rounded-2xl p-6">
-              <h3 className="text-white font-bold text-sm mb-6 flex items-center gap-2">
-                <Shield size={16} className="text-[#1D9E75]" /> Quick Actions
+            <section className="bg-[#111111] border border-lux-border rounded-2xl sm:rounded-3xl p-6">
+              <h3 className="text-lux-text font-bold text-sm mb-6 flex items-center gap-2">
+                <Shield size={16} className="text-[var(--color-lux-green-500)]" /> Quick Actions
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
                 <Link to="/admin/papers" className="w-full">
-                  <button className="w-full flex items-center justify-center gap-3 px-6 py-3 bg-[#1D9E75] hover:bg-[#166B51] text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-[#1D9E75]/20">
+                  <button className="w-full flex items-center justify-center gap-3 px-6 py-3 bg-[var(--color-lux-green-500)] hover:bg-[#166B51] text-lux-text rounded-xl text-sm font-bold transition-all shadow-lg shadow-[var(--color-lux-green-500)]/20">
                     <Plus size={18} /> Quick Upload
                   </button>
                 </Link>
                 <Link to="/admin/manage" className="w-full">
-                  <button className="w-full flex items-center justify-center gap-3 px-6 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-xl text-sm font-bold transition-all border border-gray-700">
+                  <button className="w-full flex items-center justify-center gap-3 px-6 py-3 bg-lux-surface-alt hover:bg-lux-surface-alt text-lux-text rounded-xl text-sm font-bold transition-all border border-lux-border">
                     <Plus size={18} /> Add Admin
                   </button>
                 </Link>
                 <Link to="/admin/discussions" className="w-full">
-                  <button className="w-full flex items-center justify-center gap-3 px-6 py-3 bg-gray-950 hover:bg-gray-900 text-gray-400 hover:text-white rounded-xl text-sm font-bold transition-all border border-gray-800">
+                  <button className="w-full flex items-center justify-center gap-3 px-6 py-3 bg-gray-950 hover:bg-lux-bg text-lux-text hover:text-lux-text rounded-xl text-sm font-bold transition-all border border-lux-border">
                     <MessageSquare size={18} /> Moderate Forum
                   </button>
                 </Link>
@@ -170,11 +170,11 @@ export function AdminOverviewPage() {
           )}
 
           {/* SVG Bar Chart */}
-          <section className="bg-[#111111] border border-gray-800 rounded-2xl p-8">
+          <section className="bg-[#111111] border border-lux-border rounded-2xl sm:rounded-3xl p-8">
             <div className="flex items-center justify-between mb-8">
               <div>
-                <h3 className="text-white font-bold text-lg mb-1">New Learners</h3>
-                <p className="text-xs text-gray-500 uppercase tracking-wider font-bold">Last 14 Days Growth</p>
+                <h3 className="text-lux-text font-bold text-lg mb-1">New Learners</h3>
+                <p className="text-xs text-lux-text uppercase tracking-wider font-bold">Last 14 Days Growth</p>
               </div>
               <div className="px-3 py-1 bg-green-500/10 text-green-500 text-[10px] font-bold uppercase tracking-wider rounded-lg border border-green-500/20">
                 +124% Overall
@@ -190,12 +190,12 @@ export function AdminOverviewPage() {
                     <div 
                       className={cn(
                         "w-full rounded-t-sm transition-all duration-500 ease-out flex flex-col items-center justify-end group-hover:opacity-80 cursor-pointer",
-                        isToday ? "bg-[#1D9E75]" : "bg-gray-800"
+                        isToday ? "bg-[var(--color-lux-green-500)]" : "bg-lux-surface-alt"
                       )}
                       style={{ height: `${height}%` }}
                     >
                       <div className="absolute -top-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                        <span className="text-[10px] font-bold text-white bg-gray-800 px-2 py-1 rounded shadow-xl">
+                        <span className="text-[10px] font-bold text-lux-text bg-lux-surface-alt px-2 py-1 rounded shadow-xl">
                           {val} signups
                         </span>
                       </div>
@@ -205,21 +205,21 @@ export function AdminOverviewPage() {
               })}
             </div>
             <div className="flex justify-between mt-4 px-2">
-              <span className="text-[10px] font-bold text-gray-600 uppercase">14 days ago</span>
-              <span className="text-[10px] font-bold text-[#1D9E75] uppercase">Today</span>
+              <span className="text-[10px] font-bold text-lux-text uppercase">14 days ago</span>
+              <span className="text-[10px] font-bold text-[var(--color-lux-green-500)] uppercase">Today</span>
             </div>
           </section>
         </div>
 
         {/* Right Column: Live Activity */}
         <div className="lg:col-span-4">
-          <section className="bg-[#111111] border border-gray-800 rounded-2xl p-6 h-full flex flex-col">
+          <section className="bg-[#111111] border border-lux-border rounded-2xl sm:rounded-3xl p-6 h-full flex flex-col">
             <div className="flex items-center justify-between mb-8">
-              <h3 className="text-white font-bold text-sm flex items-center gap-2">
-                <Activity size={16} className="text-[#1D9E75]" /> Live Activity
+              <h3 className="text-lux-text font-bold text-sm flex items-center gap-2">
+                <Activity size={16} className="text-[var(--color-lux-green-500)]" /> Live Activity
                 <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse shadow-sm shadow-green-500" />
               </h3>
-              <Link to="/admin/audit" className="text-[10px] font-bold text-gray-500 hover:text-white uppercase tracking-widest transition-colors flex items-center gap-1">
+              <Link to="/admin/audit" className="text-[10px] font-bold text-lux-text hover:text-lux-text uppercase tracking-widest transition-colors flex items-center gap-1">
                 <History size={12} /> View All
               </Link>
             </div>
@@ -229,18 +229,18 @@ export function AdminOverviewPage() {
                 auditLogs.map((log) => {
                   const style = getActionStyles(log.action);
                   return (
-                    <div key={log.id} className="flex gap-4 p-3 hover:bg-gray-900/50 rounded-xl transition-all group border border-transparent hover:border-gray-800">
+                    <div key={log.id} className="flex gap-4 p-3 hover:bg-lux-bg/50 rounded-xl transition-all group border border-transparent hover:border-lux-border">
                       <div className={cn("w-10 h-10 shrink-0 rounded-xl flex items-center justify-center text-lg", style.bg)}>
                         {style.icon}
                       </div>
                       <div className="min-w-0">
-                        <p className="text-[11px] text-gray-400 mb-0.5">
-                          <span className="text-white font-bold">{log.actorName}</span>
+                        <p className="text-[11px] text-lux-text mb-0.5">
+                          <span className="text-lux-text font-bold">{log.actorName}</span>
                         </p>
-                        <p className="text-xs text-white/90 leading-relaxed truncate group-hover:text-clip">
+                        <p className="text-xs text-lux-text leading-relaxed truncate group-hover:text-clip">
                           {log.details}
                         </p>
-                        <span className="text-[10px] text-gray-600 mt-1 block">
+                        <span className="text-[10px] text-lux-text mt-1 block">
                           {getTimeAgo(log.timestamp)}
                         </span>
                       </div>
@@ -248,7 +248,7 @@ export function AdminOverviewPage() {
                   );
                 })
               ) : (
-                <div className="h-40 flex flex-col items-center justify-center text-gray-600 border-2 border-dashed border-gray-800 rounded-2xl">
+                <div className="h-40 flex flex-col items-center justify-center text-lux-text border-2 border-dashed border-lux-border rounded-2xl sm:rounded-3xl">
                   <Clock size={24} className="mb-2 opacity-20" />
                   <p className="text-xs">No activity yet</p>
                 </div>

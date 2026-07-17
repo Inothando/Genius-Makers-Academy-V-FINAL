@@ -18,19 +18,9 @@ import { collection, addDoc, serverTimestamp, writeBatch, doc } from 'firebase/f
 import { cn } from '../../lib/utils';
 
 // Consts
-const SUBJECTS = [
-  'MATHEMATICS', 'PHYSICAL SCIENCES', 'LIFE SCIENCES', 'HISTORY', 'GEOGRAPHY', 
-  'ACCOUNTING', 'BUSINESS STUDIES', 'ECONOMICS', 'ENGLISH HL', 'AFRIKAANS FAL'
-];
+const SUBJECTS = ['Mathematics', 'Physical Sciences'];
 
-const GRADES = [
-  { value: 8, label: 'Grade 8' },
-  { value: 9, label: 'Grade 9' },
-  { value: 10, label: 'Grade 10' },
-  { value: 11, label: 'Grade 11' },
-  { value: 12, label: 'Grade 12' },
-  { value: 0, label: 'All Grades' } 
-];
+const GRADES = [{ value: 12, label: 'Grade 12' }];
 
 const CURRICULUMS = ['NSC', 'All'];
 
@@ -38,15 +28,15 @@ interface BulkVideo {
   url: string;
   id: string;
   title: string;
-  channelName: string;
+  creatorName: string;
+  creatorChannelUrl: string;
   thumbnailUrl: string;
   subject: string;
-  grade: number | null;
+  grade: number;
   curriculum: string;
   topic: string;
-  isShort: boolean;
-  duration: string;
-  isVerified: boolean;
+  durationSeconds: number;
+  isActive: boolean;
   status: 'pending' | 'loading' | 'success' | 'error';
 }
 
@@ -55,18 +45,16 @@ export function AddVideoPage() {
   const [url, setUrl] = useState('');
   const [formData, setFormData] = useState({
     title: '',
-    youtubeId: '',
+    youtubeVideoId: '',
     thumbnailUrl: '',
-    channelName: '',
-    channelId: '',
+    creatorName: '',
+    creatorChannelUrl: '',
     subject: '',
-    grade: 12 as number | null,
+    grade: 12 as number,
     curriculum: 'Both',
     topic: '',
-    duration: '00:00',
-    isVerified: true,
-    isShort: false,
-    playlistId: ''
+    durationSeconds: 0,
+    isActive: true,
   });
   const [isFetching, setIsFetching] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -77,9 +65,9 @@ export function AddVideoPage() {
   const [isProcessingBulk, setIsProcessingBulk] = useState(false);
 
   const extractYoutubeId = (url: string) => {
-    const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+    const regExp = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
     const match = url.match(regExp);
-    return (match && match[7].length === 11) ? match[7] : url;
+    return (match && match[1]?.length === 11) ? match[1] : url;
   };
 
   const fetchOEmbed = async (videoUrl: string) => {
@@ -103,41 +91,37 @@ export function AddVideoPage() {
       setFormData(prev => ({
         ...prev,
         title: details.title,
-        youtubeId: videoId,
+        youtubeVideoId: videoId,
         thumbnailUrl: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
-        channelName: details.author_name,
-        channelId: details.author_url.split('@')[1] || '',
-        isShort: details.title.toLowerCase().includes('#short')
+        creatorName: details.author_name,
+        creatorChannelUrl: details.author_url || '',
       }));
     }
     setIsFetching(false);
   };
 
   const handleSave = async () => {
-    if (!formData.youtubeId || !formData.subject) return;
+    if (!formData.youtubeVideoId || !formData.subject) return;
     setIsSaving(true);
     try {
-      await addDoc(collection(db, 'videos'), {
+      await addDoc(collection(db, 'videoLessons'), {
         ...formData,
-        grade: formData.grade === 0 ? null : formData.grade,
-        viewCount: 0,
-        createdAt: serverTimestamp()
+        viewCountOnGMA: 0,
+        addedAt: serverTimestamp()
       });
       setUrl('');
       setFormData({
         title: '',
-        youtubeId: '',
+        youtubeVideoId: '',
         thumbnailUrl: '',
-        channelName: '',
-        channelId: '',
+        creatorName: '',
+        creatorChannelUrl: '',
         subject: '',
         grade: 12,
         curriculum: 'Both',
         topic: '',
-        duration: '00:00',
-        isVerified: true,
-        isShort: false,
-        playlistId: ''
+        durationSeconds: 0,
+        isActive: true,
       });
       alert('Video saved successfully!');
     } catch (err) {
@@ -161,15 +145,15 @@ export function AddVideoPage() {
         url: videoUrl,
         id: videoId,
         title: 'Fetching...',
-        channelName: '',
+        creatorName: '',
+        creatorChannelUrl: '',
         thumbnailUrl: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
         subject: '',
         grade: 12,
         curriculum: 'Both',
         topic: '',
-        isShort: false,
-        duration: '10:00',
-        isVerified: true,
+        durationSeconds: 0,
+        isActive: true,
         status: 'loading'
       });
     }
@@ -184,7 +168,8 @@ export function AddVideoPage() {
           const details = await fetchOEmbed(processedVideos[i].url.includes('http') ? processedVideos[i].url : `https://www.youtube.com/watch?v=${processedVideos[i].id}`);
           if (details) {
             processedVideos[i].title = details.title;
-            processedVideos[i].channelName = details.author_name;
+            processedVideos[i].creatorName = details.author_name;
+            processedVideos[i].creatorChannelUrl = details.author_url;
             processedVideos[i].status = 'success';
           } else {
             processedVideos[i].status = 'error';
@@ -204,23 +189,21 @@ export function AddVideoPage() {
       const batch = writeBatch(db);
       bulkVideos.forEach(v => {
         if (v.status === 'success' && v.subject) {
-          const newDocRef = doc(collection(db, 'videos'));
+          const newDocRef = doc(collection(db, 'videoLessons'));
           batch.set(newDocRef, {
-            youtubeId: v.id,
+            youtubeVideoId: v.id,
             title: v.title,
             thumbnailUrl: v.thumbnailUrl,
-            channelName: v.channelName,
-            channelId: '', // Would need more API calls
+            creatorName: v.creatorName,
+            creatorChannelUrl: v.creatorChannelUrl,
             subject: v.subject,
             grade: v.grade,
             curriculum: v.curriculum,
             topic: v.topic,
-            isShort: v.isShort,
-            duration: v.duration,
-            isVerified: v.isVerified,
-            playlistId: null,
-            viewCount: 0,
-            createdAt: serverTimestamp()
+            durationSeconds: v.durationSeconds,
+            isActive: v.isActive,
+            viewCountOnGMA: 0,
+            addedAt: serverTimestamp()
           });
         }
       });
@@ -250,16 +233,16 @@ export function AddVideoPage() {
 
               <div className="space-y-6">
                 <div>
-                   <label className="block text-xs font-black uppercase tracking-widest text-text-tertiary mb-2">YouTube URL / ID</label>
+                   <label className="block text-xs font-black uppercase tracking-widest text-lux-text mb-2">YouTube URL / ID</label>
                    <div className="relative">
-                     <Play className="absolute left-4 top-1/2 -translate-y-1/2 text-text-tertiary" size={18} />
+                     <Play className="absolute left-4 top-1/2 -translate-y-1/2 text-lux-text" size={18} />
                      <input 
                        type="text"
                        placeholder="Paste URL or ID here..."
                        value={url}
                        onChange={(e) => setUrl(e.target.value)}
                        onBlur={handleUrlBlur}
-                       className="w-full pl-12 pr-4 py-3 bg-surface border border-border-subtle rounded-2xl text-sm outline-none focus:border-primary/30 transition-all font-medium"
+                       className="w-full pl-12 pr-4 py-3 bg-surface border border-border-subtle rounded-2xl sm:rounded-3xl text-sm outline-none focus:border-primary/30 transition-all font-medium"
                      />
                      {isFetching && (
                        <div className="absolute right-4 top-1/2 -translate-y-1/2">
@@ -269,11 +252,11 @@ export function AddVideoPage() {
                    </div>
                 </div>
 
-                {formData.youtubeId && (
-                  <div className="p-4 bg-surface rounded-2xl border border-border-subtle flex gap-4">
+                {formData.youtubeVideoId && (
+                  <div className="p-4 bg-surface rounded-2xl sm:rounded-3xl border border-border-subtle flex gap-4">
                     <img src={formData.thumbnailUrl} className="w-32 aspect-video object-cover rounded-xl shadow-sm" alt="Thumbnail" />
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-black text-primary uppercase tracking-widest mb-1">{formData.channelName}</p>
+                      <p className="text-xs font-black text-primary uppercase tracking-widest mb-1">{formData.creatorName}</p>
                       <h4 className="text-sm font-bold text-text-primary line-clamp-2">{formData.title}</h4>
                     </div>
                   </div>
@@ -281,22 +264,22 @@ export function AddVideoPage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-black uppercase tracking-widest text-text-tertiary mb-2">Subject</label>
+                    <label className="block text-xs font-black uppercase tracking-widest text-lux-text mb-2">Subject</label>
                     <select 
                       value={formData.subject}
                       onChange={(e) => setFormData({...formData, subject: e.target.value})}
-                      className="w-full p-3 bg-surface border border-border-subtle rounded-2xl text-sm outline-none focus:border-primary/30"
+                      className="w-full p-3 bg-surface border border-border-subtle rounded-2xl sm:rounded-3xl text-sm outline-none focus:border-primary/30"
                     >
                       <option value="">Select Subject</option>
                       {SUBJECTS.map(s => <option key={s} value={s}>{s}</option>)}
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs font-black uppercase tracking-widest text-text-tertiary mb-2">Grade</label>
+                    <label className="block text-xs font-black uppercase tracking-widest text-lux-text mb-2">Grade</label>
                     <select 
                       value={formData.grade || 0}
                       onChange={(e) => setFormData({...formData, grade: parseInt(e.target.value)})}
-                      className="w-full p-3 bg-surface border border-border-subtle rounded-2xl text-sm outline-none focus:border-primary/30"
+                      className="w-full p-3 bg-surface border border-border-subtle rounded-2xl sm:rounded-3xl text-sm outline-none focus:border-primary/30"
                     >
                       {GRADES.map(g => <option key={g.value} value={g.value}>{g.label}</option>)}
                     </select>
@@ -305,55 +288,47 @@ export function AddVideoPage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-black uppercase tracking-widest text-text-tertiary mb-2">Curriculum</label>
+                    <label className="block text-xs font-black uppercase tracking-widest text-lux-text mb-2">Curriculum</label>
                     <select 
                       value={formData.curriculum}
                       onChange={(e) => setFormData({...formData, curriculum: e.target.value})}
-                      className="w-full p-3 bg-surface border border-border-subtle rounded-2xl text-sm outline-none focus:border-primary/30"
+                      className="w-full p-3 bg-surface border border-border-subtle rounded-2xl sm:rounded-3xl text-sm outline-none focus:border-primary/30"
                     >
                       {CURRICULUMS.map(c => <option key={c} value={c}>{c}</option>)}
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs font-black uppercase tracking-widest text-text-tertiary mb-2">Topic</label>
+                    <label className="block text-xs font-black uppercase tracking-widest text-lux-text mb-2">Topic</label>
                     <input 
                       type="text"
                       placeholder="e.g. Calculus"
                       value={formData.topic}
                       onChange={(e) => setFormData({...formData, topic: e.target.value})}
-                      className="w-full p-3 bg-surface border border-border-subtle rounded-2xl text-sm outline-none focus:border-primary/30"
+                      className="w-full p-3 bg-surface border border-border-subtle rounded-2xl sm:rounded-3xl text-sm outline-none focus:border-primary/30"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-black uppercase tracking-widest text-text-tertiary mb-2">Duration (MM:SS)</label>
+                    <label className="block text-xs font-black uppercase tracking-widest text-lux-text mb-2">Duration (Seconds)</label>
                     <input 
-                      type="text"
-                      placeholder="12:34"
-                      value={formData.duration}
-                      onChange={(e) => setFormData({...formData, duration: e.target.value})}
-                      className="w-full p-3 bg-surface border border-border-subtle rounded-2xl text-sm outline-none focus:border-primary/30"
+                      type="number"
+                      placeholder="754"
+                      value={formData.durationSeconds}
+                      onChange={(e) => setFormData({...formData, durationSeconds: parseInt(e.target.value) || 0})}
+                      className="w-full p-3 bg-surface border border-border-subtle rounded-2xl sm:rounded-3xl text-sm outline-none focus:border-primary/30"
                     />
                   </div>
                   <div className="flex items-center gap-4 pt-6">
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.isVerified}
-                        onChange={(e) => setFormData({...formData, isVerified: e.target.checked})}
-                        className="w-4 h-4 rounded text-primary border-border-subtle focus:ring-primary"
-                      />
-                      <span className="text-xs font-bold text-text-secondary">Verified Provider</span>
-                    </label>
+
                   </div>
                 </div>
 
                 <Button 
-                  className="w-full py-4 text-base rounded-2xl"
+                  className="w-full py-4 text-base rounded-2xl sm:rounded-3xl"
                   onClick={handleSave}
-                  disabled={isSaving || !formData.youtubeId || !formData.subject}
+                  disabled={isSaving || !formData.youtubeVideoId || !formData.subject}
                 >
                   {isSaving ? <Loader2 className="animate-spin mr-2" /> : <Save className="mr-2" size={20} />}
                   Save to Video Library
@@ -381,17 +356,17 @@ export function AddVideoPage() {
 
               <div className="space-y-6">
                 <div>
-                  <label className="block text-xs font-black uppercase tracking-widest text-text-tertiary mb-2">YouTube URLs (one per line)</label>
+                  <label className="block text-xs font-black uppercase tracking-widest text-lux-text mb-2">YouTube URLs (one per line)</label>
                   <textarea 
                     placeholder="https://www.youtube.com/watch?v=...&#10;https://www.youtube.com/watch?v=..."
                     value={bulkInput}
                     onChange={(e) => setBulkInput(e.target.value)}
-                    className="w-full h-40 p-4 bg-surface border border-border-subtle rounded-3xl text-sm outline-none focus:border-primary/30 resize-none font-mono"
+                    className="w-full h-40 p-4 bg-surface border border-border-subtle rounded-[2rem] sm:rounded-[3rem] text-sm outline-none focus:border-primary/30 resize-none font-mono"
                   />
                 </div>
 
                 <Button 
-                  className="w-full py-4 rounded-2xl bg-secondary hover:bg-secondary/90 text-white"
+                  className="w-full py-4 rounded-2xl sm:rounded-3xl bg-secondary hover:bg-secondary/90 text-lux-text"
                   onClick={handleBulkProcess}
                   disabled={isProcessingBulk || !bulkInput.trim()}
                 >
@@ -403,7 +378,7 @@ export function AddVideoPage() {
                   <div className="space-y-4">
                     <div className="max-h-[500px] overflow-y-auto pr-2 space-y-3 custom-scrollbar">
                       {bulkVideos.map((video, idx) => (
-                        <div key={idx} className="p-4 bg-surface rounded-2xl border border-border-subtle group">
+                        <div key={idx} className="p-4 bg-surface rounded-2xl sm:rounded-3xl border border-border-subtle group">
                           <div className="flex gap-4 mb-4">
                             <img src={video.thumbnailUrl} className="w-24 aspect-video object-cover rounded-lg" alt="Thumbnail" />
                             <div className="flex-1 min-w-0">
@@ -414,7 +389,7 @@ export function AddVideoPage() {
                                   {video.status === 'error' && <AlertCircle size={12} className="text-red-500" />}
                                   <span className={cn(
                                     "text-[10px] font-black uppercase tracking-widest",
-                                    video.status === 'success' ? "text-primary" : "text-text-tertiary"
+                                    video.status === 'success' ? "text-primary" : "text-lux-text"
                                   )}>
                                     {video.status}
                                   </span>
@@ -454,7 +429,7 @@ export function AddVideoPage() {
                     </div>
 
                     <Button 
-                      className="w-full py-4 rounded-2xl"
+                      className="w-full py-4 rounded-2xl sm:rounded-3xl"
                       disabled={isSaving || bulkVideos.every(v => v.status !== 'success')}
                       onClick={handleBulkSaveAll}
                     >

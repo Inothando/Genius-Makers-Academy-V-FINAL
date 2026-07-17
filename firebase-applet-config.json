@@ -1,10 +1,10 @@
 {
-  "projectId": "sala-innovation-labs-website",
-  "appId": "1:772109089552:web:6fa4d9b567823b79318395",
-  "apiKey": "AIzaSyC02DjPOiMtHb_KUMwjvdXNaBcqhaVH8As",
-  "authDomain": "sala-innovation-labs-website.firebaseapp.com",
-  "firestoreDatabaseId": "ai-studio-4b2a9c5a-dce4-41b1-ad09-7b9eb0cddaef",
-  "storageBucket": "genius-makers-academy",
-  "messagingSenderId": "772109089552",
+  "projectId": "picshare-vdg8u",
+  "appId": "1:934257963701:web:5ef7754ecfec9d92d7c4fc",
+  "apiKey": "AIzaSyCSf_u4SwfrHUJRXRUHStI4PiMpE3Cv5ME",
+  "authDomain": "picshare-vdg8u.firebaseapp.com",
+  "firestoreDatabaseId": "(default)",
+  "storageBucket": "picshare-vdg8u.firebasestorage.app",
+  "messagingSenderId": "934257963701",
   "measurementId": ""
 }

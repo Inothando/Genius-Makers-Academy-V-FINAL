@@ -17,7 +17,7 @@ interface FilterBarProps {
 
 export function FilterBar({ onChange }: FilterBarProps) {
   const [filters, setFilters] = useState<FilterState>({
-    grade: 'All',
+    grade: '12',
     curriculum: 'All',
     subject: 'All',
     year: 'All',
@@ -36,25 +36,22 @@ export function FilterBar({ onChange }: FilterBarProps) {
     updateFilter(key, 'All');
   };
 
-  const subjects = [
-    'Mathematics', 'Physical Sciences', 'Life Sciences', 'English', 
-    'Afrikaans', 'History', 'Geography', 'Accounting', 'Business Studies'
-  ];
+  const subjects = ['Mathematics', 'Physical Sciences'];
 
-  const grades = ['All', '8', '9', '10', '11', '12'];
+  const grades = ['12'];
   const curricula = ['All', 'NSC'];
   const years = ['All', ...Array.from({ length: 12 }, (_, i) => (2025 - i).toString())];
 
   return (
     <div className="space-y-4">
       {/* Search & Main Desktop Bar */}
-      <div className="bg-white border border-gray-200/90 rounded-[22px] p-2 md:p-2.5 shadow-sm hover:shadow-md transition-all duration-300 flex items-center gap-3">
+      <div className="bg-white border border-lux-border/90 rounded-[22px] p-2 md:p-2.5 shadow-sm hover:shadow-md transition-all duration-300 flex items-center gap-3">
         <div className="flex-1 relative group">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#1D9E75] transition-colors" size={18} />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-lux-text group-focus-within:text-[var(--color-lux-green-500)] transition-colors" size={18} />
           <input
             type="text"
             placeholder="Search our database of academic papers..."
-            className="w-full bg-[#FDFDFD] border border-gray-150 rounded-xl py-2.5 pl-12 pr-4 text-xs font-bold outline-none transition-all focus:bg-white focus:border-[#1D9E75]/40 text-gray-800 placeholder:text-gray-400"
+            className="w-full bg-[#FDFDFD] border border-gray-150 rounded-xl py-2.5 pl-12 pr-4 text-xs font-bold outline-none transition-all focus:bg-white focus:border-[var(--color-lux-green-500)]/40 text-lux-text placeholder:text-lux-text"
             value={filters.search}
             onChange={(e) => updateFilter('search', e.target.value)}
           />
@@ -69,12 +66,12 @@ export function FilterBar({ onChange }: FilterBarProps) {
             placeholder="Grade"
           />
           {/* Custom segmented selector for curriculum containing active NSC */}
-          <div className="flex items-center gap-1 bg-gray-50 border border-gray-200/80 rounded-xl p-1 text-xs">
+          <div className="flex items-center gap-1 bg-lux-surface0 border border-lux-border/80 rounded-xl p-1 text-xs">
             <button
               onClick={() => updateFilter('curriculum', 'All')}
               className={cn(
                 "px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer",
-                filters.curriculum === 'All' ? "bg-white text-primary shadow-xs" : "text-gray-500 hover:text-gray-800"
+                filters.curriculum === 'All' ? "bg-white text-primary shadow-xs" : "text-lux-text hover:text-lux-text"
               )}
             >
               All
@@ -83,7 +80,7 @@ export function FilterBar({ onChange }: FilterBarProps) {
               onClick={() => updateFilter('curriculum', 'NSC')}
               className={cn(
                 "px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer",
-                filters.curriculum === 'NSC' ? "bg-[#1D9E75] text-white shadow-xs" : "text-gray-500 hover:text-gray-800"
+                filters.curriculum === 'NSC' ? "bg-[var(--color-lux-green-500)] text-lux-text shadow-xs" : "text-lux-text hover:text-lux-text"
               )}
             >
               NSC
@@ -191,7 +188,7 @@ function Select({ value, options, onChange, placeholder }: { value: string; opti
     <select
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="bg-[#FDFDFD] border border-gray-200/90 shadow-sm px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider text-gray-700 outline-none hover:border-primary/30 hover:shadow-xs focus:border-primary/45 focus:bg-white transition-all appearance-none cursor-pointer pr-9 bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%231D9E75%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C/polyline%3E%3C/svg%3E')] bg-[length:12px] bg-[right_12px_center] bg-no-repeat"
+      className="bg-[#FDFDFD] border border-lux-border/90 shadow-sm px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider text-lux-text outline-none hover:border-primary/30 hover:shadow-xs focus:border-primary/45 focus:bg-white transition-all appearance-none cursor-pointer pr-9 bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%231D9E75%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C/polyline%3E%3C/svg%3E')] bg-[length:12px] bg-[right_12px_center] bg-no-repeat"
     >
       <option value="All">{placeholder}</option>
       {options.filter(o => o !== 'All').map(o => (
@@ -205,7 +202,7 @@ function MobileFilterSection({ label, value, options, onChange }: { label: strin
   if (label === 'Curriculum') {
     return (
       <div>
-        <div className="text-xs font-bold uppercase tracking-wider text-text-tertiary mb-3">{label}</div>
+        <div className="text-xs font-bold uppercase tracking-wider text-lux-text mb-3">{label}</div>
         <div className="flex flex-wrap gap-2">
           {options.map(o => (
             <button
@@ -214,8 +211,8 @@ function MobileFilterSection({ label, value, options, onChange }: { label: strin
               className={cn(
                 'px-4 py-2 rounded-full border text-sm font-medium transition-all active:scale-95 cursor-pointer',
                 value === o 
-                  ? 'bg-[#1D9E75] border-[#1D9E75] text-white active:bg-[#157c5b] active:text-white' 
-                  : 'bg-white border-border-subtle text-text-secondary hover:border-primary/20 hover:text-primary active:bg-surface active:text-primary'
+                  ? 'bg-[var(--color-lux-green-500)] border-[var(--color-lux-green-500)] text-lux-text active:bg-[var(--color-lux-green-800)] active:text-lux-text' 
+                  : 'bg-white border-border-subtle text-lux-text hover:border-primary/20 hover:text-primary active:bg-surface active:text-primary'
               )}
             >
               {o === 'All' ? 'All Curricula' : o}
@@ -228,7 +225,7 @@ function MobileFilterSection({ label, value, options, onChange }: { label: strin
 
   return (
     <div>
-      <div className="text-xs font-bold uppercase tracking-wider text-text-tertiary mb-3">{label}</div>
+      <div className="text-xs font-bold uppercase tracking-wider text-lux-text mb-3">{label}</div>
       <div className="flex flex-wrap gap-2">
         {options.map(o => (
           <button
@@ -237,8 +234,8 @@ function MobileFilterSection({ label, value, options, onChange }: { label: strin
             className={cn(
               'px-4 py-2 rounded-full border text-sm font-medium transition-all active:scale-95 cursor-pointer',
               value === o 
-                ? 'bg-primary border-primary text-white active:bg-primary-dark active:text-white' 
-                : 'bg-white border-border-subtle text-text-secondary hover:border-primary/20 hover:text-primary active:bg-surface active:text-primary'
+                ? 'bg-primary border-primary text-lux-text active:bg-primary-dark active:text-lux-text' 
+                : 'bg-white border-border-subtle text-lux-text hover:border-primary/20 hover:text-primary active:bg-surface active:text-primary'
             )}
           >
             {o}

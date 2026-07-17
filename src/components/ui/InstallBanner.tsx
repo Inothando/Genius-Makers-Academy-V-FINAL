@@ -76,12 +76,12 @@ export function InstallBanner() {
           exit={{ y: 100, opacity: 0 }}
           className="fixed bottom-6 left-4 right-4 z-50 md:left-1/2 md:right-auto md:-translate-x-1/2 md:w-[480px]"
         >
-          <div className="bg-primary rounded-3xl p-5 shadow-2xl border border-white/10 flex items-center gap-4 text-white relative overflow-hidden">
+          <div className="bg-primary rounded-[2rem] sm:rounded-[3rem] p-5 shadow-2xl border border-lux-border flex items-center gap-4 text-lux-text relative overflow-hidden">
             {/* Background Accent */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16 blur-2xl" />
+            <div className="absolute top-0 right-0 w-32 h-32 bg-lux-surface0 rounded-full -mr-16 -mt-16 blur-2xl" />
             
-            <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center shrink-0 border border-white/20">
-              <Download size={24} className="text-white" />
+            <div className="w-12 h-12 bg-lux-surface00 rounded-2xl sm:rounded-3xl flex items-center justify-center shrink-0 border border-lux-border">
+              <Download size={24} className="text-lux-text" />
             </div>
 
             <div className="flex-1 min-w-0">
@@ -105,7 +105,7 @@ export function InstallBanner() {
               )}
               <button 
                 onClick={dismiss}
-                className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                className="p-2 hover:bg-lux-surface00 rounded-full transition-colors"
                 aria-label="Dismiss"
               >
                 <X size={18} />

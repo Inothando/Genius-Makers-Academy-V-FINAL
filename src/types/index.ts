@@ -71,21 +71,19 @@ export interface DiscussionReply {
 
 export interface VideoLesson {
   id: string;
-  youtubeId: string;
+  youtubeVideoId: string;
   title: string;
+  creatorName: string;
+  creatorChannelUrl: string;
   subject: string;
-  grade: 8 | 9 | 10 | 11 | 12 | null;
-  curriculum: 'NSC' | 'IEB' | 'Both' | 'All';
+  grade: number;
+  curriculum: string;
   topic: string;
-  duration: string;
-  channelName: string;
-  channelId: string;
-  isVerified: boolean;
+  durationSeconds: number;
   thumbnailUrl: string;
-  playlistId: string | null;
-  isShort: boolean;
-  viewCount: number;
-  createdAt: Timestamp;
+  viewCountOnGMA: number;
+  addedAt: any;
+  isActive: boolean;
 }
 
 export interface StudyPackItem {
@@ -119,10 +117,22 @@ export interface UserProfile {
   email: string | null;
   grade: 8 | 9 | 10 | 11 | 12 | null;
   curriculum: 'NSC' | 'IEB' | null;
+  province?: string;
   subjects: string[];
   tier: 'free' | 'scholar' | 'pro' | 'elite' | 'master';
   uploadCount: number;
   downloadCount: number;
+  aiRememberPatterns?: boolean;
+  currentStreak?: number;
+  longestStreak?: number;
+  lastActivityDate?: string;
+  streakFreezesAvailable?: number;
+  streakFreezesUsedThisMonth?: number;
+  totalActiveDays?: number;
+  optedInLeaderboard?: boolean;
+  leaderboardNameAnonymized?: boolean;
+  friendsList?: string[]; // array of UIDs
+  schoolId?: string;
   createdAt: Timestamp;
 }
 

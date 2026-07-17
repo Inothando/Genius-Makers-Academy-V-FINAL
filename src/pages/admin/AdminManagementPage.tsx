@@ -97,9 +97,11 @@ export function AdminManagementPage() {
         canModerateDiscussions: true,
         canDeleteContent: true,
         canViewUsers: true,
+        canManageExamTimetables: true,
         canManageAdmins: true,
         canViewRevenue: true,
-        canChangePlatformSettings: true
+        canChangePlatformSettings: true,
+        canReviewRoomSafety: true
       };
     }
     if (role === 'content_admin') {
@@ -111,9 +113,11 @@ export function AdminManagementPage() {
         canModerateDiscussions: true,
         canDeleteContent: true,
         canViewUsers: false,
+        canManageExamTimetables: true,
         canManageAdmins: false,
         canViewRevenue: false,
-        canChangePlatformSettings: false
+        canChangePlatformSettings: false,
+        canReviewRoomSafety: false
       };
     }
     return {
@@ -124,9 +128,11 @@ export function AdminManagementPage() {
       canModerateDiscussions: false,
       canDeleteContent: false,
       canViewUsers: false,
+      canManageExamTimetables: false,
       canManageAdmins: false,
       canViewRevenue: false,
-      canChangePlatformSettings: false
+      canChangePlatformSettings: false,
+      canReviewRoomSafety: false
     };
   };
 
@@ -339,8 +345,8 @@ export function AdminManagementPage() {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center">
         <ShieldAlert size={64} className="text-red-500 mb-4" />
-        <h1 className="text-2xl font-bold text-white mb-2">Restricted Area</h1>
-        <p className="text-gray-500">Only Super Admins can access this page.</p>
+        <h1 className="text-2xl font-bold text-lux-text mb-2">Restricted Area</h1>
+        <p className="text-lux-text">Only Super Admins can access this page.</p>
         <Button className="mt-8" onClick={() => window.history.back()}>Go Back</Button>
       </div>
     );
@@ -362,43 +368,43 @@ export function AdminManagementPage() {
   return (
     <div className="space-y-8 max-w-[1600px] mx-auto pb-20">
       <header>
-        <h1 className="text-2xl font-bold text-white mb-1">Admin Management</h1>
-        <p className="text-sm text-gray-500">Manage who has access to the GMA Admin Desk. You are the Super Admin.</p>
+        <h1 className="text-2xl font-bold text-lux-text mb-1">Admin Management</h1>
+        <p className="text-sm text-lux-text">Manage who has access to the GMA Admin Desk. You are the Super Admin.</p>
       </header>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         {[
-          { label: 'Total Admins', value: adminStats.total, color: 'text-white' },
+          { label: 'Total Admins', value: adminStats.total, color: 'text-lux-text' },
           { label: 'Content Admins', value: adminStats.content, color: 'text-blue-500' },
           { label: 'Read-Only', value: adminStats.readonly, color: 'text-purple-500' },
           { label: 'Pending Sign-up', value: adminStats.pending, color: 'text-amber-500' },
           { label: 'Suspended', value: adminStats.suspended, color: 'text-red-500' },
         ].map(stat => (
-          <div key={stat.label} className="bg-[#111111] border border-gray-800 rounded-xl p-4">
-            <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">{stat.label}</p>
+          <div key={stat.label} className="bg-[#111111] border border-lux-border rounded-xl p-4">
+            <p className="text-[10px] font-bold text-lux-text uppercase tracking-widest">{stat.label}</p>
             <p className={cn("text-2xl font-bold mt-1", stat.color)}>{stat.value}</p>
           </div>
         ))}
       </div>
 
       {/* Add Admin Panel */}
-      <section className="bg-[#111111] border border-gray-800 rounded-2xl p-8 relative overflow-hidden group/form">
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#1D9E75]/30 to-transparent opacity-0 group-hover/form:opacity-100 transition-opacity" />
+      <section className="bg-[#111111] border border-lux-border rounded-2xl sm:rounded-3xl p-8 relative overflow-hidden group/form">
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[var(--color-lux-green-500)]/30 to-transparent opacity-0 group-hover/form:opacity-100 transition-opacity" />
         
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
           <div>
-            <h3 className="text-white font-bold flex items-center gap-2 mb-1">
-              <UserPlus size={18} className="text-[#1D9E75]" /> Quick Grant
+            <h3 className="text-lux-text font-bold flex items-center gap-2 mb-1">
+              <UserPlus size={18} className="text-[var(--color-lux-green-500)]" /> Quick Grant
             </h3>
-            <p className="text-xs text-gray-500">Provide admin access to authenticated users by email.</p>
+            <p className="text-xs text-lux-text">Provide admin access to authenticated users by email.</p>
           </div>
           
-          <div className="flex items-center bg-black/50 p-1 rounded-xl border border-gray-800 overflow-x-auto scrollbar-hide whitespace-nowrap max-w-full">
+          <div className="flex items-center bg-black/50 p-1 rounded-xl border border-lux-border overflow-x-auto scrollbar-hide whitespace-nowrap max-w-full">
             <button 
               onClick={() => setAddMode('single')}
               className={cn(
                 "px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-2 shrink-0",
-                addMode === 'single' ? "bg-gray-800 text-white shadow-sm" : "text-gray-500 hover:text-gray-300"
+                addMode === 'single' ? "bg-lux-surface-alt text-lux-text shadow-sm" : "text-lux-text hover:text-lux-text"
               )}
             >
               <User size={14} /> Single
@@ -407,7 +413,7 @@ export function AdminManagementPage() {
               onClick={() => setAddMode('bulk')}
               className={cn(
                 "px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-2 shrink-0",
-                addMode === 'bulk' ? "bg-gray-800 text-white shadow-sm" : "text-gray-500 hover:text-gray-300"
+                addMode === 'bulk' ? "bg-lux-surface-alt text-lux-text shadow-sm" : "text-lux-text hover:text-lux-text"
               )}
             >
               <ListChecks size={14} /> Bulk ({admins.length})
@@ -418,11 +424,11 @@ export function AdminManagementPage() {
                 setFormError(null);
                 setFormSuccess(null);
               }}
-              className="px-4 py-2 rounded-lg text-xs font-bold text-gray-500 hover:text-red-500 transition-all flex items-center gap-2 shrink-0"
+              className="px-4 py-2 rounded-lg text-xs font-bold text-lux-text hover:text-red-500 transition-all flex items-center gap-2 shrink-0"
             >
               <Trash2 size={14} /> Clear
             </button>
-            <label className="cursor-pointer px-4 py-2 rounded-lg text-xs font-bold text-gray-500 hover:text-[#1D9E75] transition-all flex items-center gap-2 shrink-0">
+            <label className="cursor-pointer px-4 py-2 rounded-lg text-xs font-bold text-lux-text hover:text-[var(--color-lux-green-500)] transition-all flex items-center gap-2 shrink-0">
               <FileUp size={14} /> Import CSV
               <input type="file" accept=".csv,.txt" onChange={handleFileUpload} className="hidden" />
             </label>
@@ -434,36 +440,36 @@ export function AdminManagementPage() {
             {addMode === 'single' ? (
               <>
                 <div className="md:col-span-4">
-                  <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 opacity-60">1. Email Address</label>
+                  <label className="block text-[10px] font-bold text-lux-text uppercase tracking-widest mb-2 opacity-60">1. Email Address</label>
                   <div className="relative group/input">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600 group-focus-within/input:text-[#1D9E75] transition-colors" size={16} />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-lux-text group-focus-within/input:text-[var(--color-lux-green-500)] transition-colors" size={16} />
                     <input
                       type="email"
                       required
                       value={newEmail}
                       onChange={e => setNewEmail(e.target.value)}
                       placeholder="admin@email.com"
-                      className="w-full bg-black border border-gray-800 rounded-xl py-3 pl-10 pr-4 text-sm text-white focus:border-[#1D9E75] focus:ring-1 focus:ring-[#1D9E75]/20 outline-none transition-all placeholder:text-gray-700"
+                      className="w-full bg-black border border-lux-border rounded-xl py-3 pl-10 pr-4 text-sm text-lux-text focus:border-[var(--color-lux-green-500)] focus:ring-1 focus:ring-[var(--color-lux-green-500)]/20 outline-none transition-all placeholder:text-lux-text"
                     />
                   </div>
                 </div>
                 <div className="md:col-span-4">
-                  <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 opacity-60">2. Display Name (Optional)</label>
+                  <label className="block text-[10px] font-bold text-lux-text uppercase tracking-widest mb-2 opacity-60">2. Display Name (Optional)</label>
                   <div className="relative group/input">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600 group-focus-within/input:text-[#1D9E75] transition-colors" size={16} />
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 text-lux-text group-focus-within/input:text-[var(--color-lux-green-500)] transition-colors" size={16} />
                     <input
                       type="text"
                       value={newName}
                       onChange={e => setNewName(e.target.value)}
                       placeholder="Auto-derived from email"
-                      className="w-full bg-black border border-gray-800 rounded-xl py-3 pl-10 pr-4 text-sm text-white focus:border-[#1D9E75] focus:ring-1 focus:ring-[#1D9E75]/20 outline-none transition-all placeholder:text-gray-700"
+                      className="w-full bg-black border border-lux-border rounded-xl py-3 pl-10 pr-4 text-sm text-lux-text focus:border-[var(--color-lux-green-500)] focus:ring-1 focus:ring-[var(--color-lux-green-500)]/20 outline-none transition-all placeholder:text-lux-text"
                     />
                   </div>
                 </div>
               </>
             ) : (
               <div className="md:col-span-8">
-                <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 opacity-60">1. Paste Email List (Comma or Newline separated)</label>
+                <label className="block text-[10px] font-bold text-lux-text uppercase tracking-widest mb-2 opacity-60">1. Paste Email List (Comma or Newline separated)</label>
                 <div className="relative group/input">
                   <textarea
                     required
@@ -471,9 +477,9 @@ export function AdminManagementPage() {
                     onChange={e => setBulkEmails(e.target.value)}
                     placeholder="email1@test.com&#10;email2@test.com&#10;email3@test.com"
                     rows={4}
-                    className="w-full bg-black border border-gray-800 rounded-xl py-3 px-4 text-sm text-white focus:border-[#1D9E75] focus:ring-1 focus:ring-[#1D9E75]/20 outline-none transition-all placeholder:text-gray-700 font-mono resize-none"
+                    className="w-full bg-black border border-lux-border rounded-xl py-3 px-4 text-sm text-lux-text focus:border-[var(--color-lux-green-500)] focus:ring-1 focus:ring-[var(--color-lux-green-500)]/20 outline-none transition-all placeholder:text-lux-text font-mono resize-none"
                   />
-                  <div className="absolute bottom-3 right-3 text-[10px] text-gray-600 font-bold bg-black/50 px-2 py-1 rounded border border-gray-800">
+                  <div className="absolute bottom-3 right-3 text-[10px] text-lux-text font-bold bg-black/50 px-2 py-1 rounded border border-lux-border">
                     {bulkEmails.split(/[\n,;]/).filter(e => e.trim()).length} detected
                   </div>
                 </div>
@@ -481,7 +487,7 @@ export function AdminManagementPage() {
             )}
             
             <div className="md:col-span-4">
-              <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 opacity-60">
+              <label className="block text-[10px] font-bold text-lux-text uppercase tracking-widest mb-2 opacity-60">
                 {addMode === 'single' ? '3.' : '2.'} Select Default Role
               </label>
               <div className="grid grid-cols-2 gap-2">
@@ -490,15 +496,15 @@ export function AdminManagementPage() {
                   onClick={() => setNewRole('content_admin')}
                   className={cn(
                     "flex items-center gap-3 p-3 rounded-xl border transition-all text-left",
-                    newRole === 'content_admin' ? "bg-blue-500/10 border-blue-500" : "bg-black border-gray-800 hover:border-gray-700"
+                    newRole === 'content_admin' ? "bg-blue-500/10 border-blue-500" : "bg-black border-lux-border hover:border-lux-border"
                   )}
                 >
-                  <div className={cn("p-1.5 rounded-lg", newRole === 'content_admin' ? "bg-blue-500 text-white" : "bg-gray-900 text-gray-500")}>
+                  <div className={cn("p-1.5 rounded-lg", newRole === 'content_admin' ? "bg-blue-500 text-lux-text" : "bg-lux-bg text-lux-text")}>
                     <ShieldCheck size={14} />
                   </div>
                   <div className="flex flex-col">
-                    <span className={cn("text-[10px] font-bold uppercase", newRole === 'content_admin' ? "text-blue-500" : "text-gray-500")}>Content</span>
-                    <span className="text-[10px] text-gray-600 font-medium whitespace-nowrap">Full Access</span>
+                    <span className={cn("text-[10px] font-bold uppercase", newRole === 'content_admin' ? "text-blue-500" : "text-lux-text")}>Content</span>
+                    <span className="text-[10px] text-lux-text font-medium whitespace-nowrap">Full Access</span>
                   </div>
                 </button>
                 <button
@@ -506,23 +512,23 @@ export function AdminManagementPage() {
                   onClick={() => setNewRole('readonly_admin')}
                   className={cn(
                     "flex items-center gap-3 p-3 rounded-xl border transition-all text-left",
-                    newRole === 'readonly_admin' ? "bg-purple-500/10 border-purple-500" : "bg-black border-gray-800 hover:border-gray-700"
+                    newRole === 'readonly_admin' ? "bg-purple-500/10 border-purple-500" : "bg-black border-lux-border hover:border-lux-border"
                   )}
                 >
-                  <div className={cn("p-1.5 rounded-lg", newRole === 'readonly_admin' ? "bg-purple-500 text-white" : "bg-gray-900 text-gray-500")}>
+                  <div className={cn("p-1.5 rounded-lg", newRole === 'readonly_admin' ? "bg-purple-500 text-lux-text" : "bg-lux-bg text-lux-text")}>
                     <Shield size={14} />
                   </div>
                   <div className="flex flex-col">
-                    <span className={cn("text-[10px] font-bold uppercase", newRole === 'readonly_admin' ? "text-purple-500" : "text-gray-500")}>Read Only</span>
-                    <span className="text-[10px] text-gray-600 font-medium whitespace-nowrap">View Only</span>
+                    <span className={cn("text-[10px] font-bold uppercase", newRole === 'readonly_admin' ? "text-purple-500" : "text-lux-text")}>Read Only</span>
+                    <span className="text-[10px] text-lux-text font-medium whitespace-nowrap">View Only</span>
                   </div>
                 </button>
               </div>
             </div>
           </div>
 
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-4 border-t border-gray-800/50">
-            <div className="text-xs text-gray-500 flex items-center gap-2">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-4 border-t border-lux-border/50">
+            <div className="text-xs text-lux-text flex items-center gap-2">
               <Info size={14} className="text-blue-500" />
               {addMode === 'bulk' ? 'Batch processing up to 500 records. Non-blocking UI.' : 'Immediate grant for single user.'}
             </div>
@@ -536,8 +542,8 @@ export function AdminManagementPage() {
                   type="submit"
                   disabled={isSubmitting || (addMode === 'single' && !newEmail.trim())}
                   className={cn(
-                    "w-full h-[46px] text-white rounded-xl font-bold flex items-center justify-center gap-3 transition-all duration-200",
-                    isSubmitting ? "bg-gray-800" : "bg-[#1D9E75] hover:bg-[#168a65] shadow-[0_0_20px_rgba(29,158,117,0.2)]"
+                    "w-full h-[46px] text-lux-text rounded-xl font-bold flex items-center justify-center gap-3 transition-all duration-200",
+                    isSubmitting ? "bg-lux-surface-alt" : "bg-[var(--color-lux-green-500)] hover:bg-[var(--color-lux-green-800)] shadow-[0_0_20px_rgba(29,158,117,0.2)]"
                   )}
                 >
                   {isSubmitting ? (
@@ -588,19 +594,19 @@ export function AdminManagementPage() {
       </section>
 
       {/* Admin Table */}
-      <section className="bg-[#111111] border border-gray-800 rounded-2xl overflow-hidden">
-        <div className="p-6 border-b border-gray-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <section className="bg-[#111111] border border-lux-border rounded-2xl sm:rounded-3xl overflow-hidden">
+        <div className="p-6 border-b border-lux-border flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="relative w-full md:w-96">
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={16} />
+            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-lux-text" size={16} />
             <input 
               type="text"
               placeholder="Search admins by name or email..."
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
-              className="w-full bg-black border border-gray-800 rounded-xl py-2.5 pl-10 pr-4 text-sm text-white focus:border-[#1D9E75] outline-none transition-all"
+              className="w-full bg-black border border-lux-border rounded-xl py-2.5 pl-10 pr-4 text-sm text-lux-text focus:border-[var(--color-lux-green-500)] outline-none transition-all"
             />
           </div>
-          <div className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">
+          <div className="text-[10px] text-lux-text font-bold uppercase tracking-widest">
             Showing {filteredAdmins.length} of {admins.length} Admins
           </div>
         </div>
@@ -608,25 +614,25 @@ export function AdminManagementPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-gray-800">
-                <th className="px-6 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Admin</th>
-                <th className="px-6 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Role</th>
-                <th className="px-6 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Status</th>
-                <th className="px-6 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Last Active</th>
-                <th className="px-6 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest text-right">Actions</th>
+              <tr className="border-b border-lux-border">
+                <th className="px-6 py-4 text-[10px] font-bold text-lux-text uppercase tracking-widest">Admin</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-lux-text uppercase tracking-widest">Role</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-lux-text uppercase tracking-widest">Status</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-lux-text uppercase tracking-widest">Last Active</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-lux-text uppercase tracking-widest text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-800/50">
               {filteredAdmins.map((admin) => (
-                <tr key={admin.uid} className="hover:bg-gray-900/30 transition-colors group">
+                <tr key={admin.uid} className="hover:bg-lux-bg/30 transition-colors group">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-gray-800 border border-gray-700 flex items-center justify-center text-xs font-bold text-white uppercase">
+                      <div className="w-10 h-10 rounded-full bg-lux-surface-alt border border-lux-border flex items-center justify-center text-xs font-bold text-lux-text uppercase">
                         {admin.displayName?.charAt(0)}
                       </div>
                       <div className="flex flex-col">
                         <div className="flex items-center gap-2">
-                          <span className="font-bold text-white">{admin.displayName}</span>
+                          <span className="font-bold text-lux-text">{admin.displayName}</span>
                           {!/^[A-Za-z0-9]{20,}$/.test(admin.uid) && (
                             <div className="flex items-center gap-1.5">
                               <span className="px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-500 text-[8px] font-black uppercase tracking-tighter border border-amber-500/20">
@@ -640,7 +646,7 @@ export function AdminManagementPage() {
                                   setFormSuccess(`Invite link for ${admin.email} copied!`);
                                   setTimeout(() => setFormSuccess(null), 2000);
                                 }}
-                                className="p-1 hover:bg-gray-800 rounded transition-colors"
+                                className="p-1 hover:bg-lux-surface-alt rounded transition-colors"
                                 title="Copy Signup Link"
                               >
                                 <Mail size={10} className="text-amber-500/60" />
@@ -648,7 +654,7 @@ export function AdminManagementPage() {
                             </div>
                           )}
                         </div>
-                        <span className="text-xs text-gray-500 font-mono">{admin.email}</span>
+                        <span className="text-xs text-lux-text font-mono">{admin.email}</span>
                       </div>
                     </div>
                   </td>
@@ -668,13 +674,13 @@ export function AdminManagementPage() {
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
-                      <div className={cn("w-2 h-2 rounded-full", admin.isActive ? "bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" : "bg-gray-600")} />
-                      <span className={cn("text-xs font-bold", admin.isActive ? "text-green-500" : "text-gray-500")}>
+                      <div className={cn("w-2 h-2 rounded-full", admin.isActive ? "bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" : "bg-lux-surface-alt")} />
+                      <span className={cn("text-xs font-bold", admin.isActive ? "text-green-500" : "text-lux-text")}>
                         {admin.isActive ? "Active" : "Suspended"}
                       </span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-xs text-gray-500">
+                  <td className="px-6 py-4 text-xs text-lux-text">
                     {admin.lastActive ? admin.lastActive.toDate().toLocaleDateString() : 'Never'}
                   </td>
                   <td className="px-6 py-4 text-right">
@@ -683,7 +689,7 @@ export function AdminManagementPage() {
                         <select 
                           value={admin.role}
                           onChange={(e) => changeRole(admin, e.target.value as AdminRole)}
-                          className="bg-black border border-gray-800 text-gray-400 text-[10px] font-bold uppercase rounded p-1 outline-none hover:border-gray-700"
+                          className="bg-black border border-lux-border text-lux-text text-[10px] font-bold uppercase rounded p-1 outline-none hover:border-lux-border"
                         >
                           <option value="content_admin">Content Admin</option>
                           <option value="readonly_admin">Read Only</option>
@@ -694,7 +700,7 @@ export function AdminManagementPage() {
                           title={admin.isActive ? "Suspend Admin" : "Reactivate Admin"}
                           className={cn(
                             "p-2 rounded-lg transition-all",
-                            admin.isActive ? "text-gray-500 hover:text-amber-500 hover:bg-amber-500/10" : "text-green-500 hover:bg-green-500/10"
+                            admin.isActive ? "text-lux-text hover:text-amber-500 hover:bg-amber-500/10" : "text-green-500 hover:bg-green-500/10"
                           )}
                         >
                           {admin.isActive ? <Lock size={16} /> : <Unlock size={16} />}
@@ -702,7 +708,7 @@ export function AdminManagementPage() {
 
                         <button 
                           onClick={() => removeAdmin(admin)}
-                          className="p-2 text-gray-500 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all"
+                          className="p-2 text-lux-text hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all"
                         >
                           <Trash2 size={16} />
                         </button>
@@ -731,12 +737,12 @@ export function AdminManagementPage() {
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-lg bg-[#111111] border border-gray-800 rounded-[32px] overflow-hidden"
+              className="relative w-full max-w-lg bg-[#111111] border border-lux-border rounded-[32px] overflow-hidden"
             >
-              <div className="p-8 border-b border-gray-800">
-                <h3 className="text-xl font-bold text-white mb-1">Permissions Preview</h3>
-                <p className="text-sm text-gray-500 uppercase tracking-widest font-bold">
-                  Role: <span className="text-white">{selectedAdminPerms.role.replace('_', ' ')}</span>
+              <div className="p-8 border-b border-lux-border">
+                <h3 className="text-xl font-bold text-lux-text mb-1">Permissions Preview</h3>
+                <p className="text-sm text-lux-text uppercase tracking-widest font-bold">
+                  Role: <span className="text-lux-text">{selectedAdminPerms.role.replace('_', ' ')}</span>
                 </p>
               </div>
               
@@ -749,8 +755,8 @@ export function AdminManagementPage() {
                     {Object.entries(selectedAdminPerms.permissions)
                       .filter(([_, val]) => val === true)
                       .map(([key]) => (
-                        <li key={key} className="text-xs text-gray-300 flex items-start gap-2">
-                          <CheckCircle2 size={14} className="text-[#1D9E75] shrink-0 mt-0.5" />
+                        <li key={key} className="text-xs text-lux-text flex items-start gap-2">
+                          <CheckCircle2 size={14} className="text-[var(--color-lux-green-500)] shrink-0 mt-0.5" />
                           {key.replace(/can([A-Z])/, '$1').replace(/([A-Z])/g, ' $1')}
                         </li>
                       ))}
@@ -764,7 +770,7 @@ export function AdminManagementPage() {
                     {Object.entries(selectedAdminPerms.permissions)
                       .filter(([_, val]) => val === false)
                       .map(([key]) => (
-                        <li key={key} className="text-xs text-gray-500 flex items-start gap-2">
+                        <li key={key} className="text-xs text-lux-text flex items-start gap-2">
                           <AlertTriangle size={14} className="text-red-500/50 shrink-0 mt-0.5" />
                           {key.replace(/can([A-Z])/, '$1').replace(/([A-Z])/g, ' $1')}
                         </li>

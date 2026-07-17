@@ -10,7 +10,7 @@ export function LoadingSkeleton({ count = 3 }: { count?: number }) {
         >
           {/* Thumbnail area mimic */}
           <div className="aspect-[4/3] bg-surface rounded-xl mb-6 flex items-center justify-center">
-            <div className="w-12 h-16 bg-white/50 rounded-md" />
+            <div className="w-12 h-16 bg-lux-surface00 rounded-md" />
           </div>
 
           {/* Text lines */}

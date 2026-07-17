@@ -13,7 +13,7 @@ export function EmptyState({ icon = '🧐', title, description, actionLabel, onA
     <div className="flex flex-col items-center justify-center py-20 px-8 text-center bg-surface border border-dashed border-border-subtle rounded-[48px]">
       <div className="text-6xl mb-6 filter drop-shadow-lg">{icon}</div>
       <h3 className="text-2xl font-serif mb-4 leading-tight">{title}</h3>
-      <p className="text-text-secondary max-w-md mb-10 leading-relaxed">{description}</p>
+      <p className="text-lux-text max-w-md mb-10 leading-relaxed">{description}</p>
       {actionLabel && (
         <Button onClick={onAction} size="lg">
           {actionLabel}
